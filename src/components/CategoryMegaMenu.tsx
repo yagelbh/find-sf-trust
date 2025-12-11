@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { ChevronRight, Home, Shirt, Footprints, Sparkles, Dumbbell, Baby, Briefcase, Gem, HeartPulse, Gamepad2, Car, Watch, Flame } from 'lucide-react';
+import { ChevronRight, Home, Shirt, Footprints, Sparkles, Dumbbell, Baby, Briefcase, Gem, HeartPulse, Gamepad2, Car, Flame } from 'lucide-react';
 
 interface Category {
   name: string;
   icon: React.ReactNode;
-  subcategories: { name: string; hot?: boolean }[];
+  subcategories: { name: string; emoji: string; hot?: boolean }[];
 }
 
 interface CategoryMegaMenuProps {
@@ -15,136 +15,136 @@ interface CategoryMegaMenuProps {
 const categories: Category[] = [
   {
     name: "Trending Now",
-    icon: <Flame className="w-5 h-5" />,
+    icon: <Flame className="w-5 h-5 text-deal" />,
     subcategories: [
-      { name: "Daily Deals", hot: true },
-      { name: "Seasonal Picks" },
-      { name: "Limited Edition" },
-      { name: "Flash Sales", hot: true },
+      { name: "Daily Deals", emoji: "🏷️", hot: true },
+      { name: "Seasonal Picks", emoji: "🎁" },
+      { name: "Limited Edition", emoji: "💎" },
+      { name: "Flash Sales", emoji: "⚡", hot: true },
     ]
   },
   {
     name: "Home & Living",
     icon: <Home className="w-5 h-5" />,
     subcategories: [
-      { name: "Home Décor" },
-      { name: "Kitchen Essentials", hot: true },
-      { name: "Bedding & Bath" },
-      { name: "Storage Solutions" },
-      { name: "Lighting" },
+      { name: "Home Décor", emoji: "🏠" },
+      { name: "Kitchen Essentials", emoji: "🍳", hot: true },
+      { name: "Bedding & Bath", emoji: "🛏️" },
+      { name: "Storage Solutions", emoji: "📦" },
+      { name: "Lighting", emoji: "💡" },
     ]
   },
   {
     name: "Women's Style",
     icon: <Shirt className="w-5 h-5" />,
     subcategories: [
-      { name: "Dresses & Skirts", hot: true },
-      { name: "Tops & Blouses" },
-      { name: "Coats & Jackets" },
-      { name: "Activewear" },
-      { name: "Plus Size Fashion" },
+      { name: "Dresses & Skirts", emoji: "👗", hot: true },
+      { name: "Tops & Blouses", emoji: "👚" },
+      { name: "Coats & Jackets", emoji: "🧥" },
+      { name: "Activewear", emoji: "🏃‍♀️" },
+      { name: "Plus Size Fashion", emoji: "✨" },
     ]
   },
   {
     name: "Men's Wear",
     icon: <Shirt className="w-5 h-5" />,
     subcategories: [
-      { name: "Casual Shirts" },
-      { name: "T-Shirts & Polos", hot: true },
-      { name: "Jackets & Coats" },
-      { name: "Sportswear" },
-      { name: "Big & Tall" },
+      { name: "Casual Shirts", emoji: "👔" },
+      { name: "T-Shirts & Polos", emoji: "👕", hot: true },
+      { name: "Jackets & Coats", emoji: "🧥" },
+      { name: "Sportswear", emoji: "🏋️" },
+      { name: "Big & Tall", emoji: "📏" },
     ]
   },
   {
     name: "Footwear",
     icon: <Footprints className="w-5 h-5" />,
     subcategories: [
-      { name: "Women's Shoes" },
-      { name: "Men's Shoes" },
-      { name: "Sneakers", hot: true },
-      { name: "Boots & Heels" },
-      { name: "Kids' Shoes" },
+      { name: "Women's Shoes", emoji: "👠" },
+      { name: "Men's Shoes", emoji: "👞" },
+      { name: "Sneakers", emoji: "👟", hot: true },
+      { name: "Boots & Heels", emoji: "👢" },
+      { name: "Kids' Shoes", emoji: "🧦" },
     ]
   },
   {
     name: "Beauty & Care",
     icon: <Sparkles className="w-5 h-5" />,
     subcategories: [
-      { name: "Skincare", hot: true },
-      { name: "Makeup" },
-      { name: "Hair Care" },
-      { name: "Fragrances" },
-      { name: "Personal Care" },
+      { name: "Skincare", emoji: "🧴", hot: true },
+      { name: "Makeup", emoji: "💄" },
+      { name: "Hair Care", emoji: "💇‍♀️" },
+      { name: "Fragrances", emoji: "🌸" },
+      { name: "Personal Care", emoji: "🪥" },
     ]
   },
   {
     name: "Sports & Fitness",
     icon: <Dumbbell className="w-5 h-5" />,
     subcategories: [
-      { name: "Gym Equipment" },
-      { name: "Outdoor Gear", hot: true },
-      { name: "Yoga & Pilates" },
-      { name: "Cycling" },
-      { name: "Team Sports" },
+      { name: "Gym Equipment", emoji: "🏋️" },
+      { name: "Outdoor Gear", emoji: "🏕️", hot: true },
+      { name: "Yoga & Pilates", emoji: "🧘" },
+      { name: "Cycling", emoji: "🚴" },
+      { name: "Team Sports", emoji: "⚽" },
     ]
   },
   {
     name: "Kids & Baby",
     icon: <Baby className="w-5 h-5" />,
     subcategories: [
-      { name: "Baby Essentials", hot: true },
-      { name: "Kids' Clothing" },
-      { name: "Toys & Games" },
-      { name: "School Supplies" },
+      { name: "Baby Essentials", emoji: "👶", hot: true },
+      { name: "Kids' Clothing", emoji: "🧒" },
+      { name: "Toys & Games", emoji: "🧸" },
+      { name: "School Supplies", emoji: "📚" },
     ]
   },
   {
     name: "Jewelry & Watches",
     icon: <Gem className="w-5 h-5" />,
     subcategories: [
-      { name: "Women's Jewelry", hot: true },
-      { name: "Men's Accessories" },
-      { name: "Watches" },
-      { name: "Fashion Jewelry" },
+      { name: "Women's Jewelry", emoji: "💍", hot: true },
+      { name: "Men's Accessories", emoji: "⌚" },
+      { name: "Watches", emoji: "🕐" },
+      { name: "Fashion Jewelry", emoji: "📿" },
     ]
   },
   {
     name: "Health & Wellness",
     icon: <HeartPulse className="w-5 h-5" />,
     subcategories: [
-      { name: "Supplements" },
-      { name: "Medical Supplies" },
-      { name: "Massage & Relaxation", hot: true },
+      { name: "Supplements", emoji: "💊" },
+      { name: "Medical Supplies", emoji: "🩺" },
+      { name: "Massage & Relaxation", emoji: "💆", hot: true },
     ]
   },
   {
     name: "Toys & Hobbies",
     icon: <Gamepad2 className="w-5 h-5" />,
     subcategories: [
-      { name: "Action Figures" },
-      { name: "Board Games", hot: true },
-      { name: "Puzzles" },
-      { name: "RC & Drones" },
+      { name: "Action Figures", emoji: "🦸" },
+      { name: "Board Games", emoji: "🎲", hot: true },
+      { name: "Puzzles", emoji: "🧩" },
+      { name: "RC & Drones", emoji: "🚁" },
     ]
   },
   {
     name: "Auto & Moto",
     icon: <Car className="w-5 h-5" />,
     subcategories: [
-      { name: "Car Accessories" },
-      { name: "Motorcycle Gear", hot: true },
-      { name: "Tools & Equipment" },
+      { name: "Car Accessories", emoji: "🚗" },
+      { name: "Motorcycle Gear", emoji: "🏍️", hot: true },
+      { name: "Tools & Equipment", emoji: "🔧" },
     ]
   },
   {
     name: "Bags & Luggage",
     icon: <Briefcase className="w-5 h-5" />,
     subcategories: [
-      { name: "Handbags", hot: true },
-      { name: "Backpacks" },
-      { name: "Travel Luggage" },
-      { name: "Wallets" },
+      { name: "Handbags", emoji: "👜", hot: true },
+      { name: "Backpacks", emoji: "🎒" },
+      { name: "Travel Luggage", emoji: "🧳" },
+      { name: "Wallets", emoji: "👛" },
     ]
   },
 ];
@@ -188,25 +188,25 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
             </div>
 
             {/* Right content - Subcategories with images */}
-            <div className="flex-1 p-6">
+            <div className="flex-1 p-8">
               {activeCategory && (
                 <div className="animate-fade-in">
-                  <h3 className="text-lg font-semibold mb-4 text-foreground">{activeCategory.name}</h3>
-                  <div className="grid grid-cols-4 gap-4">
+                  <h3 className="text-lg font-semibold mb-6 text-foreground">{activeCategory.name}</h3>
+                  <div className="grid grid-cols-4 gap-6">
                     {activeCategory.subcategories.map((sub) => (
                       <button
                         key={sub.name}
-                        className="group flex flex-col items-center gap-2 p-3 rounded-lg hover:bg-muted transition-colors"
+                        className="group flex flex-col items-center gap-3 p-4 rounded-xl hover:bg-muted transition-all hover:shadow-md"
                       >
-                        <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center overflow-hidden group-hover:shadow-md transition-shadow">
-                          <span className="text-2xl">🛍️</span>
+                        <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-muted to-background flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                          <span className="text-3xl">{sub.emoji}</span>
                           {sub.hot && (
-                            <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] px-1.5 py-0.5 rounded-full font-medium">
-                              HOT
+                            <span className="absolute -top-2 -right-2 bg-deal text-primary-foreground text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase">
+                              Hot
                             </span>
                           )}
                         </div>
-                        <span className="text-sm text-foreground group-hover:text-primary transition-colors text-center">
+                        <span className="text-sm text-foreground group-hover:text-primary transition-colors text-center font-medium">
                           {sub.name}
                         </span>
                       </button>

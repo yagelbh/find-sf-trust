@@ -3,7 +3,8 @@ import {
   Facebook, 
   Twitter, 
   Youtube, 
-  Shield
+  Shield,
+  CreditCard
 } from 'lucide-react';
 
 const Footer = () => {
@@ -32,7 +33,13 @@ const Footer = () => {
   ];
 
   const paymentMethods = [
-    "Visa", "Mastercard", "Amex", "PayPal", "Apple Pay", "Google Pay"
+    { name: "PayPal", color: "bg-[#003087]", textColor: "text-white" },
+    { name: "VISA", color: "bg-[#1A1F71]", textColor: "text-white" },
+    { name: "Mastercard", color: "bg-gradient-to-r from-[#EB001B] to-[#F79E1B]", textColor: "text-white" },
+    { name: "Amex", color: "bg-[#006FCF]", textColor: "text-white" },
+    { name: "Discover", color: "bg-[#FF6000]", textColor: "text-white" },
+    { name: "Apple Pay", color: "bg-foreground", textColor: "text-background" },
+    { name: "Google Pay", color: "bg-card", textColor: "text-foreground border border-border" },
   ];
 
   const certifications = [
@@ -115,22 +122,31 @@ const Footer = () => {
         <div className="border-t border-secondary-foreground/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between gap-8">
             <div>
-              <h4 className="font-semibold text-sm mb-3">Security certification</h4>
+              <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                Security certification
+              </h4>
               <div className="flex items-center gap-4">
                 {certifications.map((cert) => (
-                  <div key={cert} className="flex items-center gap-1 text-xs text-secondary-foreground/60">
-                    <Shield className="w-4 h-4" />
+                  <div key={cert} className="flex items-center gap-1 text-xs text-secondary-foreground/60 bg-secondary-foreground/10 px-2 py-1 rounded">
+                    <Shield className="w-3 h-3" />
                     <span>{cert}</span>
                   </div>
                 ))}
               </div>
             </div>
             <div>
-              <h4 className="font-semibold text-sm mb-3">We accept</h4>
-              <div className="flex items-center gap-3">
+              <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                <CreditCard className="w-4 h-4" />
+                We accept
+              </h4>
+              <div className="flex items-center gap-2 flex-wrap">
                 {paymentMethods.map((method) => (
-                  <div key={method} className="bg-card text-foreground px-2 py-1 rounded text-xs font-medium">
-                    {method}
+                  <div 
+                    key={method.name} 
+                    className={`${method.color} ${method.textColor} px-3 py-1.5 rounded text-xs font-bold min-w-[60px] text-center`}
+                  >
+                    {method.name}
                   </div>
                 ))}
               </div>

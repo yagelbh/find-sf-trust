@@ -36,11 +36,14 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
       <div className="bg-card">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center gap-6">
-            {/* Logo - Much bigger and prominent */}
+            {/* Logo - Unified one-piece design */}
             <div className="flex-shrink-0">
-              <a href="/" className="flex items-center gap-3">
-                <img src={findsafeLogo} alt="Findsfae" className="h-14 w-auto" />
-                <span className="text-2xl font-display font-bold text-primary hidden sm:block">Findsfae</span>
+              <a href="/" className="flex items-center">
+                <img 
+                  src={findsafeLogo} 
+                  alt="Findsfae" 
+                  className="h-12 md:h-14 w-auto object-contain"
+                />
               </a>
             </div>
 

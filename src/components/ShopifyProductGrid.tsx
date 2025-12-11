@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ShopifyProduct, fetchProducts } from '@/lib/shopify';
 import ShopifyProductCard from './ShopifyProductCard';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ShopifyProductGrid = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState("All");
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const categories = [
-    "All", "Electronics", "Fashion", "Home & Garden", "Beauty", "Sports", "Toys", "Automotive"
+    "All", "Fashion", "Home & Garden", "Beauty", "Sports", "Toys", "Automotive", "Electronics", "Jewelry", "Health", "Kids", "Bags"
   ];
 
   useEffect(() => {
@@ -27,6 +29,16 @@ const ShopifyProductGrid = () => {
 
     loadProducts();
   }, []);
+
+  const scrollCategories = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 200;
+      scrollRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -71,18 +83,27 @@ const ShopifyProductGrid = () => {
   return (
     <section className="py-8">
       <div className="container mx-auto px-4">
-        {/* Section Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-display font-bold text-foreground">
-            Recommended For You
-          </h2>
-          <div className="flex gap-2 overflow-x-auto pb-2">
-            {categories.map((cat, index) => (
+        {/* Category Pills with Scroll */}
+        <div className="relative mb-6">
+          <button 
+            onClick={() => scrollCategories('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-md rounded-full flex items-center justify-center hover:bg-muted transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          
+          <div 
+            ref={scrollRef}
+            className="flex gap-2 overflow-x-auto scrollbar-hide px-10 py-2"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {categories.map((cat) => (
               <button
                 key={cat}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                  index === 0 
-                    ? 'bg-primary text-primary-foreground' 
+                onClick={() => setActiveCategory(cat)}
+                className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                  activeCategory === cat 
+                    ? 'bg-primary text-primary-foreground shadow-md' 
                     : 'bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary'
                 }`}
               >
@@ -90,6 +111,13 @@ const ShopifyProductGrid = () => {
               </button>
             ))}
           </div>
+
+          <button 
+            onClick={() => scrollCategories('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-md rounded-full flex items-center justify-center hover:bg-muted transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
 
         {/* Products Grid */}

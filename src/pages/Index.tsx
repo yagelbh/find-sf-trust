@@ -3,14 +3,17 @@ import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import TrustBar from '@/components/TrustBar';
 import HeroCarousel from '@/components/HeroCarousel';
+import DealsCountdown from '@/components/DealsCountdown';
 import ShopifyProductGrid from '@/components/ShopifyProductGrid';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CountryModal from '@/components/CountryModal';
+import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 const Index = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCountryModal, setShowCountryModal] = useState(false);
+  const [dealProducts, setDealProducts] = useState<ShopifyProduct[]>([]);
   const [currentCountry, setCurrentCountry] = useState({
     code: 'US',
     name: 'United States',
@@ -18,6 +21,19 @@ const Index = () => {
     currency: 'USD',
     currencySymbol: '$'
   });
+
+  // Load products for deals section
+  useEffect(() => {
+    const loadDealProducts = async () => {
+      try {
+        const products = await fetchProducts(10);
+        setDealProducts(products);
+      } catch (error) {
+        console.error('Failed to load deal products:', error);
+      }
+    };
+    loadDealProducts();
+  }, []);
 
   // Auto-detect country on mount (simulated)
   useEffect(() => {
@@ -50,26 +66,14 @@ const Index = () => {
       {/* Hero Carousel */}
       <HeroCarousel />
 
+      {/* Deals Countdown Section */}
+      <DealsCountdown products={dealProducts} />
+
       {/* Main Content */}
-      <main className="container mx-auto px-4">
+      <main>
         {/* Shopify Products */}
         <ShopifyProductGrid />
-
-        {/* More Products Section */}
-        <section className="py-8">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-display font-bold text-foreground mb-2">
-              Top Rated Products
-            </h2>
-            <p className="text-muted-foreground">
-              Trusted by millions of happy customers
-            </p>
-          </div>
-        </section>
       </main>
-
-      {/* Footer */}
-      <Footer />
 
       {/* Modals */}
       <AuthModal 

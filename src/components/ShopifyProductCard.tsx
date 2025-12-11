@@ -1,4 +1,4 @@
-import { Star, Heart, Truck, ShoppingCart } from 'lucide-react';
+import { Star, Heart, Truck, ShoppingCart, Clock, Award } from 'lucide-react';
 import { useState } from 'react';
 import { ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
@@ -25,6 +25,12 @@ const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
     : null;
   const imageUrl = node.images.edges[0]?.node.url || 'https://via.placeholder.com/300';
   const firstVariant = node.variants.edges[0]?.node;
+
+  // Check for special tags from Shopify
+  const tags = node.tags || [];
+  const isBestSeller = tags.some(tag => tag.toLowerCase().includes('best') || tag.toLowerCase().includes('popular'));
+  const isDeal = tags.some(tag => tag.toLowerCase().includes('deal') || tag.toLowerCase().includes('sale'));
+  const isLimited = tags.some(tag => tag.toLowerCase().includes('limited') || tag.toLowerCase().includes('last'));
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -68,6 +74,27 @@ const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
         {discount && (
           <div className="absolute top-2 left-2 bg-deal text-primary-foreground text-xs font-bold px-2 py-1 rounded">
             -{discount}%
+          </div>
+        )}
+
+        {/* Special Labels from Shopify Tags */}
+        {isBestSeller && (
+          <div className="absolute top-2 left-2 bg-warning text-foreground text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
+            <Award className="w-3 h-3" />
+            Top Seller
+          </div>
+        )}
+        
+        {isDeal && !isBestSeller && (
+          <div className="absolute top-2 left-2 bg-deal text-primary-foreground text-[10px] font-bold px-2 py-1 rounded">
+            🔥 Hot Deal
+          </div>
+        )}
+
+        {isLimited && (
+          <div className="absolute bottom-2 left-2 bg-secondary/90 text-secondary-foreground text-[10px] font-medium px-2 py-1 rounded flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            Limited Time
           </div>
         )}
 
