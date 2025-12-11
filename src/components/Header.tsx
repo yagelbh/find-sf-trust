@@ -83,7 +83,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               </Link>
               <Link 
                 to="/clearance"
-                className="px-3 py-2 text-sm font-semibold bg-destructive/20 text-destructive hover:bg-destructive/30 rounded-lg transition-colors flex items-center gap-1.5"
+                className="px-3 py-2 text-sm font-semibold bg-violet-500/20 text-violet-600 hover:bg-violet-500/30 rounded-lg transition-colors flex items-center gap-1.5"
               >
                 <Tag className="w-4 h-4" />
                 Value Finds

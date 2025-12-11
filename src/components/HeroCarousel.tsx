@@ -5,7 +5,7 @@ const HeroCarousel = () => {
   return (
     <div className="relative">
       <Link to="/flash-deals" className="block">
-        <div className="h-[100px] md:h-[140px] bg-gradient-to-r from-rose-600 via-red-500 to-orange-500 relative overflow-hidden cursor-pointer group">
+        <div className="h-[140px] md:h-[180px] bg-gradient-to-r from-rose-600 via-red-500 to-orange-500 relative overflow-hidden cursor-pointer group">
           {/* Decorative circles */}
           <div className="absolute -left-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
           <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-yellow-400/20 rounded-full blur-2xl" />
