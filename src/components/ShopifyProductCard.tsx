@@ -64,6 +64,9 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
       selectedOptions: firstVariant.selectedOptions || [],
     });
 
+    // Dispatch event to open cart drawer
+    window.dispatchEvent(new CustomEvent('openCartDrawer'));
+    
     toast.success('Added to cart!', {
       description: node.title,
       position: 'top-center',
