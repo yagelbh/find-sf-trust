@@ -5,7 +5,6 @@ import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
-import CountryModal from '@/components/CountryModal';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
@@ -131,14 +130,6 @@ const TopSellers = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [activeCategory, setActiveCategory] = useState('all');
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showCountryModal, setShowCountryModal] = useState(false);
-  const [currentCountry, setCurrentCountry] = useState({
-    code: 'US',
-    name: 'United States',
-    flag: '🇺🇸',
-    currency: 'USD',
-    currencySymbol: '$'
-  });
 
   const timeFilters = [
     { id: 'all', label: 'Top Sellers' },
@@ -173,11 +164,11 @@ const TopSellers = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
+      <TopBar />
       <Header
         onAuthClick={() => setShowAuthModal(true)}
-        onCountryClick={() => setShowCountryModal(true)}
-        currentCountry={currentCountry}
+        onCountryClick={() => {}}
+        currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
       {/* Hero Banner */}
@@ -272,12 +263,6 @@ const TopSellers = () => {
       <Footer />
 
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-      <CountryModal
-        isOpen={showCountryModal}
-        onClose={() => setShowCountryModal(false)}
-        currentCountry={currentCountry}
-        onCountryChange={setCurrentCountry}
-      />
     </div>
   );
 };

@@ -116,10 +116,10 @@ const CategoryBar = ({ activeCategory, onCategoryChange }: CategoryBarProps) => 
                   )}
                 </div>
                 {/* Category name */}
-                <span className={`text-xs text-center font-medium leading-tight max-w-[80px] ${
+                <span className={`text-xs text-center font-semibold leading-tight max-w-[80px] ${
                   activeCategory === cat.name 
                     ? 'text-primary' 
-                    : 'text-foreground/80 group-hover:text-foreground'
+                    : 'text-foreground group-hover:text-primary'
                 }`}>
                   {cat.name}
                 </span>

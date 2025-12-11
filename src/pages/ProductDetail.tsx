@@ -9,8 +9,8 @@ import Header from '@/components/Header';
 import TopBar from '@/components/TopBar';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
-import CountryModal from '@/components/CountryModal';
 import WhyChooseFindsfae from '@/components/WhyChooseFindsfae';
+import CartDrawer from '@/components/CartDrawer';
 
 
 // Countdown Timer Component
@@ -53,14 +53,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showCountryModal, setShowCountryModal] = useState(false);
-  const [currentCountry, setCurrentCountry] = useState({
-    code: 'US',
-    name: 'United States',
-    flag: '🇺🇸',
-    currency: 'USD',
-    currencySymbol: '$'
-  });
+  const [showCartDrawer, setShowCartDrawer] = useState(false);
   const addItem = useCartStore(state => state.addItem);
 
   // Get source and rank from URL params
@@ -85,19 +78,9 @@ const ProductDetail = () => {
     return end;
   }, []);
 
-  // Country-based shipping estimate
+  // US-only shipping estimate
   const shippingEstimate = useMemo(() => {
-    const estimates: Record<string, { min: number; max: number; courier: string }> = {
-      'US': { min: 7, max: 14, courier: 'USPS / FedEx' },
-      'GB': { min: 10, max: 18, courier: 'Royal Mail' },
-      'CA': { min: 8, max: 15, courier: 'Canada Post' },
-      'AU': { min: 12, max: 20, courier: 'Australia Post' },
-      'DE': { min: 10, max: 16, courier: 'DHL' },
-      'FR': { min: 10, max: 16, courier: 'La Poste' },
-      'JP': { min: 8, max: 14, courier: 'Japan Post' },
-      'IL': { min: 12, max: 20, courier: 'Israel Post' },
-    };
-    const estimate = estimates[currentCountry.code] || { min: 10, max: 20, courier: 'Standard Shipping' };
+    const estimate = { min: 7, max: 14, courier: 'USPS / FedEx' };
     const startDate = new Date();
     const endDate = new Date();
     startDate.setDate(startDate.getDate() + estimate.min);
@@ -108,7 +91,7 @@ const ProductDetail = () => {
       startDate: startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       endDate: endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
     };
-  }, [currentCountry.code]);
+  }, []);
 
   // Simulated sold count
   const soldCount = useMemo(() => {
@@ -184,11 +167,11 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
+      <TopBar />
       <Header
         onAuthClick={() => setShowAuthModal(true)}
-        onCountryClick={() => setShowCountryModal(true)}
-        currentCountry={currentCountry}
+        onCountryClick={() => {}}
+        currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
       
       <main className="container mx-auto px-4 py-8">
@@ -359,7 +342,7 @@ const ProductDetail = () => {
                     Courier company: {shippingEstimate.courier}
                   </p>
                   <p className="text-sm text-muted-foreground flex items-center gap-1">
-                    Shipping to: <span className="text-lg">{currentCountry.flag}</span> {currentCountry.name}
+                    Shipping to: <span className="text-lg">🇺🇸</span> United States
                   </p>
                 </div>
               </div>
@@ -404,12 +387,7 @@ const ProductDetail = () => {
       <Footer />
 
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-      <CountryModal
-        isOpen={showCountryModal}
-        onClose={() => setShowCountryModal(false)}
-        currentCountry={currentCountry}
-        onCountryChange={setCurrentCountry}
-      />
+      <CartDrawer isOpen={showCartDrawer} onClose={() => setShowCartDrawer(false)} />
     </div>
   );
 };

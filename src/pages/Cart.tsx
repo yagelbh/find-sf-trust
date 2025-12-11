@@ -5,7 +5,6 @@ import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
-import CountryModal from '@/components/CountryModal';
 import { useCartStore, CartItem } from '@/stores/cartStore';
 import { toast } from 'sonner';
 
@@ -71,14 +70,6 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
 const Cart = () => {
   const { items, clearCart, getTotalItems, getTotalPrice, initiateCheckout, isLoading } = useCartStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showCountryModal, setShowCountryModal] = useState(false);
-  const [currentCountry, setCurrentCountry] = useState({
-    code: 'US',
-    name: 'United States',
-    flag: '🇺🇸',
-    currency: 'USD',
-    currencySymbol: '$'
-  });
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
@@ -96,11 +87,11 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
+      <TopBar />
       <Header
         onAuthClick={() => setShowAuthModal(true)}
-        onCountryClick={() => setShowCountryModal(true)}
-        currentCountry={currentCountry}
+        onCountryClick={() => {}}
+        currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
       <main className="container mx-auto px-4 py-8">
@@ -196,12 +187,6 @@ const Cart = () => {
       <Footer />
 
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
-      <CountryModal
-        isOpen={showCountryModal}
-        onClose={() => setShowCountryModal(false)}
-        currentCountry={currentCountry}
-        onCountryChange={setCurrentCountry}
-      />
     </div>
   );
 };

@@ -7,23 +7,16 @@ import DealsCountdown from '@/components/DealsCountdown';
 import ShopifyProductGrid from '@/components/ShopifyProductGrid';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
-import CountryModal from '@/components/CountryModal';
 import SecurityPuzzle from '@/components/SecurityPuzzle';
 import ChatWidget from '@/components/ChatWidget';
+import CartDrawer from '@/components/CartDrawer';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 const Index = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showCountryModal, setShowCountryModal] = useState(false);
   const [showSecurityPuzzle, setShowSecurityPuzzle] = useState(false);
+  const [showCartDrawer, setShowCartDrawer] = useState(false);
   const [dealProducts, setDealProducts] = useState<ShopifyProduct[]>([]);
-  const [currentCountry, setCurrentCountry] = useState({
-    code: 'US',
-    name: 'United States',
-    flag: '🇺🇸',
-    currency: 'USD',
-    currencySymbol: '$'
-  });
 
   // Show security puzzle after 10 seconds for trust building
   useEffect(() => {
@@ -49,46 +42,23 @@ const Index = () => {
     loadDealProducts();
   }, []);
 
-  // Auto-detect country on mount
+  // Listen for cart drawer open events
   useEffect(() => {
-    const detectCountry = () => {
-      try {
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const tzCountryMap: Record<string, { code: string; name: string; flag: string; currency: string; currencySymbol: string }> = {
-          'America/New_York': { code: 'US', name: 'United States', flag: '🇺🇸', currency: 'USD', currencySymbol: '$' },
-          'America/Los_Angeles': { code: 'US', name: 'United States', flag: '🇺🇸', currency: 'USD', currencySymbol: '$' },
-          'America/Chicago': { code: 'US', name: 'United States', flag: '🇺🇸', currency: 'USD', currencySymbol: '$' },
-          'Europe/London': { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', currency: 'GBP', currencySymbol: '£' },
-          'Europe/Paris': { code: 'FR', name: 'France', flag: '🇫🇷', currency: 'EUR', currencySymbol: '€' },
-          'Europe/Berlin': { code: 'DE', name: 'Germany', flag: '🇩🇪', currency: 'EUR', currencySymbol: '€' },
-          'Asia/Tokyo': { code: 'JP', name: 'Japan', flag: '🇯🇵', currency: 'JPY', currencySymbol: '¥' },
-          'Asia/Shanghai': { code: 'CN', name: 'China', flag: '🇨🇳', currency: 'CNY', currencySymbol: '¥' },
-          'Asia/Jerusalem': { code: 'IL', name: 'Israel', flag: '🇮🇱', currency: 'ILS', currencySymbol: '₪' },
-          'Australia/Sydney': { code: 'AU', name: 'Australia', flag: '🇦🇺', currency: 'AUD', currencySymbol: '$' },
-          'America/Toronto': { code: 'CA', name: 'Canada', flag: '🇨🇦', currency: 'CAD', currencySymbol: '$' },
-        };
-        
-        const detected = tzCountryMap[timezone];
-        if (detected) {
-          setCurrentCountry(detected);
-        }
-      } catch (error) {
-        console.error('Country detection failed:', error);
-      }
-    };
-    detectCountry();
+    const handleOpenCartDrawer = () => setShowCartDrawer(true);
+    window.addEventListener('openCartDrawer', handleOpenCartDrawer);
+    return () => window.removeEventListener('openCartDrawer', handleOpenCartDrawer);
   }, []);
 
   return (
     <div className="min-h-screen bg-background">
       {/* Top Announcement Bar */}
-      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
+      <TopBar />
 
       {/* Main Header */}
       <Header
         onAuthClick={() => setShowAuthModal(true)}
-        onCountryClick={() => setShowCountryModal(true)}
-        currentCountry={currentCountry}
+        onCountryClick={() => {}}
+        currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
       {/* Hero Carousel */}
@@ -114,13 +84,6 @@ const Index = () => {
         isOpen={showAuthModal} 
         onClose={() => setShowAuthModal(false)} 
       />
-      
-      <CountryModal
-        isOpen={showCountryModal}
-        onClose={() => setShowCountryModal(false)}
-        currentCountry={currentCountry}
-        onCountryChange={setCurrentCountry}
-      />
 
       <SecurityPuzzle
         isOpen={showSecurityPuzzle}
@@ -128,6 +91,12 @@ const Index = () => {
         onVerify={() => {
           sessionStorage.setItem('securityVerified', 'true');
         }}
+      />
+
+      {/* Cart Drawer */}
+      <CartDrawer 
+        isOpen={showCartDrawer} 
+        onClose={() => setShowCartDrawer(false)} 
       />
 
       {/* Chat Widget */}
