@@ -273,3 +273,57 @@ export async function createCheckout(items: Array<{ variantId: string; quantity:
   url.searchParams.set('channel', 'online_store');
   return url.toString();
 }
+
+// Category mapping from tags
+const CATEGORY_KEYWORDS: Record<string, string[]> = {
+  'Electronics': ['electronics', 'electronic', 'tech', 'gadget', 'phone', 'computer', 'laptop'],
+  'Home & Garden': ['home', 'garden', 'furniture', 'decor', 'kitchen', 'household'],
+  'Beauty & Health': ['beauty', 'health', 'skincare', 'makeup', 'cosmetic', 'wellness'],
+  'Fashion - Women': ['women', 'womens', "women's", 'ladies', 'female'],
+  'Fashion - Men': ['men', 'mens', "men's", 'male'],
+  'Fashion - Kids': ['kids', 'children', 'baby', 'toddler', 'infant'],
+  'Bags & Luggage': ['bag', 'bags', 'luggage', 'backpack', 'purse', 'handbag'],
+  'Sports & Outdoors': ['sports', 'outdoor', 'fitness', 'exercise', 'gym', 'athletic'],
+  'Toys & Games': ['toys', 'games', 'toy', 'game', 'puzzle', 'play'],
+  'Pet Supplies': ['pet', 'pets', 'dog', 'cat', 'animal'],
+  'Automotive': ['automotive', 'car', 'auto', 'vehicle', 'motor'],
+  'Jewelry & Accessories': ['jewelry', 'jewellery', 'accessory', 'accessories', 'watch', 'watches'],
+  'Office & School': ['office', 'school', 'stationery', 'desk'],
+  'Tools & Hardware': ['tools', 'hardware', 'tool', 'drill', 'wrench'],
+};
+
+// Extract category from product tags
+export function getCategoryFromTags(tags: string[], productType?: string): string {
+  // First, check if any tag directly matches a category name
+  const normalizedTags = tags.map(t => t.toLowerCase().trim());
+  
+  for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+    // Check exact category name match in tags
+    if (normalizedTags.some(tag => tag === category.toLowerCase())) {
+      return category;
+    }
+    // Check keyword matches
+    for (const keyword of keywords) {
+      if (normalizedTags.some(tag => tag.includes(keyword))) {
+        return category;
+      }
+    }
+  }
+  
+  // Fallback to productType if available
+  if (productType) {
+    for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+      const normalizedType = productType.toLowerCase();
+      if (normalizedType === category.toLowerCase()) return category;
+      if (keywords.some(kw => normalizedType.includes(kw))) return category;
+    }
+  }
+  
+  // Default fallback
+  return tags[0] || productType || 'General Products';
+}
+
+// Check if product has promotional tag
+export function hasPromotionalTag(tags: string[], tagName: string): boolean {
+  return tags.some(t => t.toLowerCase().includes(tagName.toLowerCase()));
+}
