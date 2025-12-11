@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Search, User, Heart, ShoppingCart, ChevronDown, Sparkles, Flame, Award, Tag, LayoutGrid } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search, User, Heart, ShoppingCart, ChevronDown, Sparkles, Flame, Award, Tag } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/stores/cartStore';
 import CategoryMegaMenu from './CategoryMegaMenu';
 
@@ -15,6 +15,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
   const [isScrolled, setIsScrolled] = useState(false);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const totalItems = useCartStore(state => state.getTotalItems());
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,40 +25,47 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
       <div className="bg-secondary">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center gap-4 lg:gap-6">
-            {/* Logo with faerie element */}
+            {/* Logo - Made bigger */}
             <div className="flex-shrink-0">
               <Link to="/" className="flex items-center group">
                 <div className="relative">
-                  <div className="relative flex items-center bg-gradient-to-r from-primary via-deal to-warning px-3 py-1.5 rounded-lg shadow-md group-hover:shadow-lg transition-shadow">
-                    <svg className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-6 text-primary/60" viewBox="0 0 20 30" fill="currentColor">
+                  <div className="relative flex items-center bg-gradient-to-r from-primary via-deal to-warning px-4 py-2 rounded-lg shadow-md group-hover:shadow-lg transition-shadow">
+                    <svg className="absolute -left-3 top-1/2 -translate-y-1/2 w-5 h-8 text-primary/60" viewBox="0 0 20 30" fill="currentColor">
                       <path d="M18 15C18 15 15 5 8 2C8 2 12 10 10 15C8 20 8 28 8 28C8 28 15 25 18 15Z" />
                     </svg>
                     
-                    <span className="text-lg font-black text-primary-foreground tracking-tight">
+                    <span className="text-xl lg:text-2xl font-black text-primary-foreground tracking-tight">
                       FINDS
                     </span>
-                    <Sparkles className="w-3.5 h-3.5 text-yellow-300 mx-0.5" />
-                    <span className="text-lg font-black text-yellow-300 tracking-tight">
+                    <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-yellow-300 mx-0.5" />
+                    <span className="text-xl lg:text-2xl font-black text-yellow-300 tracking-tight">
                       FAE
                     </span>
                     
-                    <svg className="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-6 text-warning/60 scale-x-[-1]" viewBox="0 0 20 30" fill="currentColor">
+                    <svg className="absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-8 text-warning/60 scale-x-[-1]" viewBox="0 0 20 30" fill="currentColor">
                       <path d="M18 15C18 15 15 5 8 2C8 2 12 10 10 15C8 20 8 28 8 28C8 28 15 25 18 15Z" />
                     </svg>
                   </div>
                   
-                  <span className="absolute -top-1 -right-3 text-yellow-400 text-[10px] animate-pulse">✦</span>
-                  <span className="absolute -bottom-0.5 -left-2 text-primary text-[8px] animate-pulse delay-300">✦</span>
+                  <span className="absolute -top-1 -right-4 text-yellow-400 text-xs animate-pulse">✦</span>
+                  <span className="absolute -bottom-0.5 -left-3 text-primary text-[10px] animate-pulse delay-300">✦</span>
                 </div>
               </Link>
             </div>
 
-            {/* Navigation Links with Background Colors and Icons */}
+            {/* Navigation Links */}
             <nav className="hidden lg:flex items-center gap-2 relative">
               <Link 
                 to="/top-sellers"
@@ -80,18 +88,18 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 <Tag className="w-4 h-4" />
                 Clearance
               </Link>
+              {/* Simplified Categories button */}
               <button 
-                className="px-3 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/80 transition-colors flex items-center gap-1.5 bg-primary/90 rounded-lg"
+                className="px-3 py-2 text-sm font-medium text-secondary-foreground hover:text-primary transition-colors flex items-center gap-1"
                 onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
               >
-                <LayoutGrid className="w-4 h-4" />
                 Categories
                 <ChevronDown className={`w-4 h-4 transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} />
               </button>
             </nav>
 
             {/* Search */}
-            <div className="flex-1 max-w-2xl">
+            <form onSubmit={handleSearch} className="flex-1 max-w-2xl">
               <div className="relative">
                 <input
                   type="text"
@@ -100,23 +108,26 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full h-10 pl-4 pr-12 rounded-full border-2 border-border bg-card focus:border-primary focus:bg-card outline-none transition-all text-sm"
                 />
-                <button className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
+                <button 
+                  type="submit"
+                  className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors"
+                >
                   <Search className="w-4 h-4" />
                 </button>
               </div>
-            </div>
+            </form>
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              {/* Sign in / Register - Same background style */}
+              {/* Sign in / Register - White/neutral style */}
               <button
                 onClick={onAuthClick}
-                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                className="flex items-center gap-2 px-3 py-2 text-secondary-foreground hover:bg-muted rounded-lg transition-colors"
               >
-                <User className="w-4 h-4" />
+                <User className="w-5 h-5" />
                 <div className="hidden sm:flex flex-col items-start text-xs leading-tight">
                   <span className="font-semibold">Sign in / Register</span>
-                  <span className="text-[10px] opacity-80">Orders & Account</span>
+                  <span className="text-[10px] opacity-70">Orders & Account</span>
                 </div>
               </button>
 

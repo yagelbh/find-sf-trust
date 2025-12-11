@@ -10,6 +10,7 @@ import Clearance from "./pages/Clearance";
 import TopSellers from "./pages/TopSellers";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
+import Search from "./pages/Search";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/hot-selling" element={<TopSellers />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/search" element={<Search />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

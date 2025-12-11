@@ -10,11 +10,11 @@ const TopBar = () => {
   return (
     <div className="bg-foreground text-background">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-center py-2 text-sm">
-          <div className="flex items-center gap-6 lg:gap-8">
+        <div className="flex items-center justify-center py-3 text-sm">
+          <div className="flex items-center gap-12 lg:gap-20">
             {benefits.map((benefit, index) => (
               <div key={index} className="flex items-center gap-2">
-                <benefit.icon className="w-4 h-4 text-warning" />
+                <benefit.icon className="w-5 h-5 text-warning" />
                 <div className="flex flex-col">
                   <span className="font-semibold text-background flex items-center gap-1 text-xs lg:text-sm">
                     {benefit.text}
