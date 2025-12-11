@@ -7,12 +7,6 @@ interface CategoryMegaMenuProps {
   onClose: () => void;
 }
 
-// Reliable placeholder images using picsum.photos (always works)
-const getReliableImage = (index: number): string => {
-  // Use seed for consistent images
-  return `https://picsum.photos/seed/${index + 100}/120/120`;
-};
-
 const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
   const [hoveredCategory, setHoveredCategory] = useState<string>("Electronics");
 
@@ -82,10 +76,10 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                           onClose();
                         }}
                       >
-                        {/* Circular Image - Smaller */}
+                        {/* Circular Image - Using real category images */}
                         <div className="w-14 h-14 rounded-full overflow-hidden bg-muted mb-2 ring-2 ring-transparent group-hover:ring-primary transition-all flex-shrink-0">
                           <img 
-                            src={getReliableImage(categories.indexOf(activeCategory) * 10 + idx)} 
+                            src={sub.image} 
                             alt={sub.name}
                             className="w-full h-full object-cover"
                             loading="lazy"
