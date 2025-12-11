@@ -11,6 +11,7 @@ import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import WhyChooseFindsfae from '@/components/WhyChooseFindsfae';
 import CartDrawer from '@/components/CartDrawer';
+import VariantSelectionDrawer from '@/components/VariantSelectionDrawer';
 
 
 // Countdown Timer Component
@@ -54,6 +55,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCartDrawer, setShowCartDrawer] = useState(false);
+  const [showVariantDrawer, setShowVariantDrawer] = useState(false);
   const addItem = useCartStore(state => state.addItem);
 
   // Get source and rank from URL params
@@ -118,9 +120,14 @@ const ProductDetail = () => {
   }, [handle]);
 
   const handleAddToCart = () => {
-    if (!product || !selectedVariant) return;
+    // Always show the variant drawer for option selection
+    setShowVariantDrawer(true);
+  };
+
+  const handleVariantAddToCart = (variantId: string, qty: number) => {
+    if (!product) return;
     
-    const variant = product.variants.edges.find(v => v.node.id === selectedVariant)?.node;
+    const variant = product.variants.edges.find(v => v.node.id === variantId)?.node;
     if (!variant) return;
 
     addItem({
@@ -128,12 +135,15 @@ const ProductDetail = () => {
       variantId: variant.id,
       variantTitle: variant.title,
       price: variant.price,
-      quantity,
+      quantity: qty,
       selectedOptions: variant.selectedOptions,
     });
 
+    // Open cart drawer after adding
+    window.dispatchEvent(new CustomEvent('openCartDrawer'));
+
     toast.success('Added to cart!', {
-      description: `${product.title} x${quantity}`,
+      description: `${product.title} x${qty}`,
       position: 'top-center',
     });
   };
@@ -388,6 +398,13 @@ const ProductDetail = () => {
 
       <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       <CartDrawer isOpen={showCartDrawer} onClose={() => setShowCartDrawer(false)} />
+      <VariantSelectionDrawer 
+        isOpen={showVariantDrawer}
+        onClose={() => setShowVariantDrawer(false)}
+        product={product}
+        onAddToCart={handleVariantAddToCart}
+        selectedVariantId={selectedVariant}
+      />
     </div>
   );
 };

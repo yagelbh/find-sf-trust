@@ -10,7 +10,7 @@ const TopBar = () => {
   return (
     <div className="bg-foreground text-background">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-2 text-sm">
+        <div className="flex items-center justify-center py-2 text-sm">
           <div className="flex items-center gap-6 lg:gap-8">
             {benefits.map((benefit, index) => (
               <div key={index} className="flex items-center gap-2">
@@ -24,12 +24,6 @@ const TopBar = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* US Only indicator */}
-          <div className="flex items-center gap-1.5 px-2 py-1 text-background/80">
-            <span className="text-lg">🇺🇸</span>
-            <span className="text-xs font-medium hidden sm:inline">Ships to USA</span>
           </div>
         </div>
       </div>
