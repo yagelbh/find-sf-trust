@@ -92,33 +92,34 @@ const ShopifyProductGrid = () => {
   }
 
   return (
-    <section className="py-8">
+    <section className="py-6">
       <div className="container mx-auto px-4">
-        {/* Category Pills with Scroll */}
-        <div className="relative mb-6">
+        {/* Large Circular Category Icons */}
+        <div className="relative mb-8">
           <button 
             onClick={() => scrollCategories('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-md rounded-full flex items-center justify-center hover:bg-muted transition-colors"
+            className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-lg rounded-full flex items-center justify-center hover:bg-muted transition-colors border border-border"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           
           <div 
             ref={scrollRef}
-            className="flex gap-3 overflow-x-auto scrollbar-hide px-10 py-2"
+            className="flex gap-8 overflow-x-auto scrollbar-hide px-8 py-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categoryBar.map((cat) => (
               <button
                 key={cat.name}
                 onClick={() => setActiveCategory(cat.name)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
-                  activeCategory === cat.name 
-                    ? 'bg-primary text-primary-foreground shadow-md' 
-                    : 'bg-muted/60 text-foreground hover:bg-muted'
-                }`}
+                className="flex flex-col items-center gap-3 min-w-[90px] group"
               >
-                <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                {/* Large circular image */}
+                <div className={`w-20 h-20 rounded-full overflow-hidden border-3 transition-all duration-200 ${
+                  activeCategory === cat.name 
+                    ? 'border-primary shadow-lg ring-2 ring-primary/30 scale-105' 
+                    : 'border-border/50 group-hover:border-primary/50 group-hover:shadow-md'
+                }`}>
                   <img 
                     src={cat.image} 
                     alt={cat.name}
@@ -126,14 +127,21 @@ const ShopifyProductGrid = () => {
                     loading="lazy"
                   />
                 </div>
-                <span className="text-sm font-medium">{cat.name}</span>
+                {/* Category name */}
+                <span className={`text-xs text-center font-medium leading-tight max-w-[90px] line-clamp-2 ${
+                  activeCategory === cat.name 
+                    ? 'text-primary font-semibold' 
+                    : 'text-foreground/80 group-hover:text-foreground'
+                }`}>
+                  {cat.name}
+                </span>
               </button>
             ))}
           </div>
 
           <button 
             onClick={() => scrollCategories('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-md rounded-full flex items-center justify-center hover:bg-muted transition-colors"
+            className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-lg rounded-full flex items-center justify-center hover:bg-muted transition-colors border border-border"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
