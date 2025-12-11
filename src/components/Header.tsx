@@ -38,14 +38,13 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
       <div className="bg-secondary">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center gap-4 lg:gap-6">
-            {/* Logo - Using actual brand image */}
+            {/* Logo - Clean text logo */}
             <div className="flex-shrink-0">
-              <Link to="/" className="block group">
-                <img 
-                  src={findsfaeLogo} 
-                  alt="Findsfae" 
-                  className="h-9 w-auto object-contain group-hover:scale-105 transition-transform"
-                />
+              <Link to="/" className="flex items-center group">
+                <span className="text-2xl lg:text-3xl font-black tracking-tight">
+                  <span className="text-primary">Finds</span>
+                  <span className="text-warning">fae</span>
+                </span>
               </Link>
             </div>
 
