@@ -37,30 +37,15 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
       <div className="bg-secondary">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center gap-4 lg:gap-6">
-            {/* Logo - Made bigger */}
+            {/* Logo - Compact square format */}
             <div className="flex-shrink-0">
               <Link to="/" className="flex items-center group">
-                <div className="relative">
-                  <div className="relative flex items-center bg-gradient-to-r from-primary via-deal to-warning px-4 py-2 rounded-lg shadow-md group-hover:shadow-lg transition-shadow">
-                    <svg className="absolute -left-3 top-1/2 -translate-y-1/2 w-5 h-8 text-primary/60" viewBox="0 0 20 30" fill="currentColor">
-                      <path d="M18 15C18 15 15 5 8 2C8 2 12 10 10 15C8 20 8 28 8 28C8 28 15 25 18 15Z" />
-                    </svg>
-                    
-                    <span className="text-xl lg:text-2xl font-black text-primary-foreground tracking-tight">
-                      FINDS
-                    </span>
-                    <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-yellow-300 mx-0.5" />
-                    <span className="text-xl lg:text-2xl font-black text-yellow-300 tracking-tight">
-                      FAE
-                    </span>
-                    
-                    <svg className="absolute -right-3 top-1/2 -translate-y-1/2 w-5 h-8 text-warning/60 scale-x-[-1]" viewBox="0 0 20 30" fill="currentColor">
-                      <path d="M18 15C18 15 15 5 8 2C8 2 12 10 10 15C8 20 8 28 8 28C8 28 15 25 18 15Z" />
-                    </svg>
-                  </div>
-                  
-                  <span className="absolute -top-1 -right-4 text-yellow-400 text-xs animate-pulse">✦</span>
-                  <span className="absolute -bottom-0.5 -left-3 text-primary text-[10px] animate-pulse delay-300">✦</span>
+                <div className="relative w-10 h-10 bg-gradient-to-br from-primary to-deal rounded-lg shadow-md group-hover:shadow-lg transition-all flex items-center justify-center overflow-hidden">
+                  <span className="text-xs font-black text-primary-foreground leading-none text-center">
+                    <span className="block">FINDS</span>
+                    <span className="text-yellow-300">FAE</span>
+                  </span>
+                  <Sparkles className="absolute top-0.5 right-0.5 w-2 h-2 text-yellow-300" />
                 </div>
               </Link>
             </div>
