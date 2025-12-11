@@ -454,7 +454,7 @@ export const categories: Category[] = [
     subcategories: [
       { name: "Christmas Decorations", image: "https://images.unsplash.com/photo-1513297887119-d46091b24bfa?w=120&h=120&fit=crop" },
       { name: "Halloween Costumes", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=120&h=120&fit=crop" },
-      { name: "Easter Supplies", image: "https://images.unsplash.com/photo-1520213926620-52ae48e03692?w=120&h=120&fit=crop" },
+      { name: "Easter", image: "https://images.unsplash.com/photo-1520213926620-52ae48e03692?w=120&h=120&fit=crop" },
       { name: "Valentine's Day", image: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=120&h=120&fit=crop" },
       { name: "Summer & Beach", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=120&h=120&fit=crop" },
       { name: "Back to School", image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=120&h=120&fit=crop" },
