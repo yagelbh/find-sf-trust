@@ -37,15 +37,18 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
       <div className="bg-secondary">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center gap-4 lg:gap-6">
-            {/* Logo - Compact square format */}
+            {/* Logo - Creative compact design with faerie touch */}
             <div className="flex-shrink-0">
               <Link to="/" className="flex items-center group">
-                <div className="relative w-10 h-10 bg-gradient-to-br from-primary to-deal rounded-lg shadow-md group-hover:shadow-lg transition-all flex items-center justify-center overflow-hidden">
-                  <span className="text-xs font-black text-primary-foreground leading-none text-center">
-                    <span className="block">FINDS</span>
-                    <span className="text-yellow-300">FAE</span>
-                  </span>
-                  <Sparkles className="absolute top-0.5 right-0.5 w-2 h-2 text-yellow-300" />
+                <div className="relative">
+                  <div className="flex items-center gap-0.5 bg-gradient-to-r from-emerald-600 to-teal-500 px-3 py-1.5 rounded-xl shadow-md group-hover:shadow-lg transition-all">
+                    <span className="text-sm font-black text-white tracking-tight">finds</span>
+                    <span className="text-sm font-black text-yellow-300 tracking-tight">fae</span>
+                    <svg className="w-3 h-3 ml-0.5 text-yellow-300" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2L9 9H2L7.5 13.5L5.5 21L12 16.5L18.5 21L16.5 13.5L22 9H15L12 2Z" />
+                    </svg>
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
                 </div>
               </Link>
             </div>
