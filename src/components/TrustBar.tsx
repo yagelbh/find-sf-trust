@@ -9,7 +9,7 @@ const TrustBar = () => {
   ];
 
   return (
-    <div className="bg-trust text-primary-foreground">
+    <div className="bg-emerald-600/90 text-primary-foreground">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-2.5">
           <div className="flex items-center gap-8">

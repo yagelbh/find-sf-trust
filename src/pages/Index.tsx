@@ -25,14 +25,14 @@ const Index = () => {
     currencySymbol: '$'
   });
 
-  // Show security puzzle after 30 seconds for trust building
+  // Show security puzzle after 10 seconds for trust building
   useEffect(() => {
     const timer = setTimeout(() => {
       const hasVerified = sessionStorage.getItem('securityVerified');
       if (!hasVerified) {
         setShowSecurityPuzzle(true);
       }
-    }, 30000);
+    }, 10000);
     return () => clearTimeout(timer);
   }, []);
 

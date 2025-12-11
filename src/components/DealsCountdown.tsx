@@ -105,57 +105,33 @@ const DealCard = ({ product, dealEndTime }: { product: ShopifyProduct; dealEndTi
 
 const DealsCountdown = ({ products }: DealsCountdownProps) => {
   const dealEndTime = new Date(Date.now() + 4 * 60 * 60 * 1000);
-  const limitedEndTime = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
 
   if (products.length === 0) return null;
 
-  const flashDeals = products.slice(0, 4);
-  const limitedStock = products.slice(4, 8);
+  const flashDeals = products.slice(0, 8);
 
   return (
     <section className="py-6 bg-muted/30">
       <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Flash Deals Section */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-deal fill-deal" />
-                <h2 className="font-display font-extrabold text-xl text-deal tracking-tight">Quick Deals</h2>
-              </div>
-              <Link 
-                to="/flash-deals" 
-                className="flex items-center gap-1 text-sm font-semibold text-deal hover:underline"
-              >
-                Time-limited Offers <ChevronRight className="w-4 h-4" />
-              </Link>
+        {/* Flash Deals Section */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Zap className="w-5 h-5 text-deal fill-deal" />
+              <h2 className="font-display font-extrabold text-xl text-deal tracking-tight">Quick Deals</h2>
+              <span className="text-sm text-muted-foreground ml-2">Limited time offers</span>
             </div>
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {flashDeals.map((product) => (
-                <DealCard key={product.node.id} product={product} dealEndTime={dealEndTime} />
-              ))}
-            </div>
+            <Link 
+              to="/flash-deals" 
+              className="flex items-center gap-1 text-sm font-semibold text-deal hover:underline"
+            >
+              View All <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
-
-          {/* Limited Stock Section */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">🔥</span>
-                <h2 className="font-display font-extrabold text-xl text-warning tracking-tight">Clearance Zone</h2>
-              </div>
-              <Link 
-                to="/clearance" 
-                className="flex items-center gap-1 text-sm font-semibold text-warning hover:underline"
-              >
-                While Supplies Last <ChevronRight className="w-4 h-4" />
-              </Link>
-            </div>
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {limitedStock.map((product) => (
-                <DealCard key={product.node.id} product={product} dealEndTime={limitedEndTime} />
-              ))}
-            </div>
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {flashDeals.map((product) => (
+              <DealCard key={product.node.id} product={product} dealEndTime={dealEndTime} />
+            ))}
           </div>
         </div>
       </div>
