@@ -65,8 +65,8 @@ export interface ShopifyProduct {
 }
 
 const PRODUCTS_QUERY = `
-  query GetProducts($first: Int!) {
-    products(first: $first) {
+  query GetProducts($first: Int!, $query: String) {
+    products(first: $first, query: $query) {
       edges {
         node {
           id
@@ -207,10 +207,10 @@ export async function storefrontApiRequest<T>(query: string, variables: Record<s
   return data;
 }
 
-export async function fetchProducts(first: number = 20): Promise<ShopifyProduct[]> {
+export async function fetchProducts(first: number = 20, query?: string): Promise<ShopifyProduct[]> {
   const data = await storefrontApiRequest<{
     data: { products: { edges: ShopifyProduct[] } };
-  }>(PRODUCTS_QUERY, { first });
+  }>(PRODUCTS_QUERY, { first, query });
   
   return data.data.products.edges;
 }
