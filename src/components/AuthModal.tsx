@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, Truck, RotateCcw, Shield, Lock, Mail, Phone } from 'lucide-react';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
@@ -14,11 +14,8 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
   const handleClose = () => {
-    if (email.length > 0) {
-      setShowLeaveConfirm(true);
-    } else {
-      onClose();
-    }
+    // Always show leave confirmation when trying to close
+    setShowLeaveConfirm(true);
   };
 
   const handleConfirmLeave = () => {
@@ -34,7 +31,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
           <div className="p-6">
             <DialogHeader className="text-center mb-6">
               <DialogTitle className="text-2xl font-display font-bold">Sign in / Register</DialogTitle>
-              <div className="flex items-center justify-center gap-2 text-trust mt-2">
+              <div className="flex items-center justify-center gap-2 text-muted-foreground mt-2">
                 <Lock className="w-4 h-4" />
                 <span className="text-sm font-medium">All data is safeguarded</span>
               </div>

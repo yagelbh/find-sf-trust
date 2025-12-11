@@ -96,7 +96,7 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
+      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
       <Header
         onAuthClick={() => setShowAuthModal(true)}
         onCountryClick={() => setShowCountryModal(true)}
@@ -156,7 +156,7 @@ const Cart = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Shipping</span>
-                    <span className="text-trust">Free</span>
+                    <span className="font-medium">Free</span>
                   </div>
                   <div className="border-t border-border pt-3">
                     <div className="flex justify-between font-bold text-lg">

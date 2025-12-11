@@ -64,10 +64,10 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
             {/* Navigation Links */}
             <nav className="hidden lg:flex items-center gap-1 relative">
               <Link 
-                to="/hot-selling"
+                to="/top-sellers"
                 className="px-3 py-2 text-sm font-semibold text-warning hover:bg-warning/10 rounded-lg transition-colors flex items-center gap-1"
               >
-                Hot Items
+                Top Sellers
               </Link>
               <Link 
                 to="/flash-deals"

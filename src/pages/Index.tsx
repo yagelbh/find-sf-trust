@@ -48,12 +48,29 @@ const Index = () => {
     loadDealProducts();
   }, []);
 
-  // Auto-detect country on mount (simulated)
+  // Auto-detect country on mount
   useEffect(() => {
-    const detectCountry = async () => {
+    const detectCountry = () => {
       try {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.log('Detected timezone:', timezone);
+        const tzCountryMap: Record<string, { code: string; name: string; flag: string; currency: string; currencySymbol: string }> = {
+          'America/New_York': { code: 'US', name: 'United States', flag: '🇺🇸', currency: 'USD', currencySymbol: '$' },
+          'America/Los_Angeles': { code: 'US', name: 'United States', flag: '🇺🇸', currency: 'USD', currencySymbol: '$' },
+          'America/Chicago': { code: 'US', name: 'United States', flag: '🇺🇸', currency: 'USD', currencySymbol: '$' },
+          'Europe/London': { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', currency: 'GBP', currencySymbol: '£' },
+          'Europe/Paris': { code: 'FR', name: 'France', flag: '🇫🇷', currency: 'EUR', currencySymbol: '€' },
+          'Europe/Berlin': { code: 'DE', name: 'Germany', flag: '🇩🇪', currency: 'EUR', currencySymbol: '€' },
+          'Asia/Tokyo': { code: 'JP', name: 'Japan', flag: '🇯🇵', currency: 'JPY', currencySymbol: '¥' },
+          'Asia/Shanghai': { code: 'CN', name: 'China', flag: '🇨🇳', currency: 'CNY', currencySymbol: '¥' },
+          'Asia/Jerusalem': { code: 'IL', name: 'Israel', flag: '🇮🇱', currency: 'ILS', currencySymbol: '₪' },
+          'Australia/Sydney': { code: 'AU', name: 'Australia', flag: '🇦🇺', currency: 'AUD', currencySymbol: '$' },
+          'America/Toronto': { code: 'CA', name: 'Canada', flag: '🇨🇦', currency: 'CAD', currencySymbol: '$' },
+        };
+        
+        const detected = tzCountryMap[timezone];
+        if (detected) {
+          setCurrentCountry(detected);
+        }
       } catch (error) {
         console.error('Country detection failed:', error);
       }
@@ -64,7 +81,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Announcement Bar */}
-      <TopBar />
+      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
 
       {/* Main Header */}
       <Header
@@ -87,6 +104,9 @@ const Index = () => {
         {/* Shopify Products */}
         <ShopifyProductGrid />
       </main>
+
+      {/* Footer */}
+      <Footer />
 
       {/* Modals */}
       <AuthModal 

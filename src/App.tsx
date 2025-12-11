@@ -7,7 +7,7 @@ import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import FlashDeals from "./pages/FlashDeals";
 import Clearance from "./pages/Clearance";
-import HotSelling from "./pages/HotSelling";
+import TopSellers from "./pages/TopSellers";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
@@ -25,7 +25,8 @@ const App = () => (
           <Route path="/product/:handle" element={<ProductDetail />} />
           <Route path="/flash-deals" element={<FlashDeals />} />
           <Route path="/clearance" element={<Clearance />} />
-          <Route path="/hot-selling" element={<HotSelling />} />
+          <Route path="/top-sellers" element={<TopSellers />} />
+          <Route path="/hot-selling" element={<TopSellers />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

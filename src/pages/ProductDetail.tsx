@@ -1,22 +1,117 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useEffect, useState, useMemo } from 'react';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { fetchProductByHandle, ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Heart, Truck, Shield, Minus, Plus, ShoppingCart, Loader2 } from 'lucide-react';
+import { ChevronLeft, Heart, Truck, Shield, Minus, Plus, ShoppingCart, Loader2, Award, Clock, Package, CheckCircle, Globe } from 'lucide-react';
 import { toast } from 'sonner';
 import Header from '@/components/Header';
 import TopBar from '@/components/TopBar';
 import Footer from '@/components/Footer';
+import AuthModal from '@/components/AuthModal';
+import CountryModal from '@/components/CountryModal';
+
+// Countdown Timer Component
+const CountdownTimer = ({ endTime }: { endTime: Date }) => {
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date();
+      const diff = endTime.getTime() - now.getTime();
+      
+      if (diff > 0) {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        setTimeLeft({ hours, minutes, seconds });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [endTime]);
+
+  return (
+    <div className="flex items-center gap-1">
+      <span className="bg-foreground text-background px-2 py-1 rounded text-sm font-bold">{String(timeLeft.hours).padStart(2, '0')}</span>
+      <span className="text-foreground font-bold">:</span>
+      <span className="bg-foreground text-background px-2 py-1 rounded text-sm font-bold">{String(timeLeft.minutes).padStart(2, '0')}</span>
+      <span className="text-foreground font-bold">:</span>
+      <span className="bg-foreground text-background px-2 py-1 rounded text-sm font-bold">{String(timeLeft.seconds).padStart(2, '0')}</span>
+    </div>
+  );
+};
 
 const ProductDetail = () => {
   const { handle } = useParams<{ handle: string }>();
+  const [searchParams] = useSearchParams();
   const [product, setProduct] = useState<ShopifyProduct['node'] | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showCountryModal, setShowCountryModal] = useState(false);
+  const [currentCountry, setCurrentCountry] = useState({
+    code: 'US',
+    name: 'United States',
+    flag: '🇺🇸',
+    currency: 'USD',
+    currencySymbol: '$'
+  });
   const addItem = useCartStore(state => state.addItem);
+
+  // Get source and rank from URL params
+  const source = searchParams.get('source');
+  const rankParam = searchParams.get('rank');
+  
+  // Determine if product is from special pages (don't show Top Seller banner for these)
+  const isFromClearance = source === 'clearance';
+  const isFromFlashDeals = source === 'flash-deals';
+  const showTopSellerBanner = !isFromClearance && !isFromFlashDeals;
+  
+  // Random Top Seller rank for display
+  const topSellerRank = useMemo(() => {
+    if (rankParam) return parseInt(rankParam);
+    return Math.floor(Math.random() * 50) + 1;
+  }, [rankParam]);
+
+  // Deal end time (random time in next 24 hours)
+  const dealEndTime = useMemo(() => {
+    const end = new Date();
+    end.setHours(end.getHours() + Math.floor(Math.random() * 24) + 1);
+    return end;
+  }, []);
+
+  // Country-based shipping estimate
+  const shippingEstimate = useMemo(() => {
+    const estimates: Record<string, { min: number; max: number; courier: string }> = {
+      'US': { min: 7, max: 14, courier: 'USPS / FedEx' },
+      'GB': { min: 10, max: 18, courier: 'Royal Mail' },
+      'CA': { min: 8, max: 15, courier: 'Canada Post' },
+      'AU': { min: 12, max: 20, courier: 'Australia Post' },
+      'DE': { min: 10, max: 16, courier: 'DHL' },
+      'FR': { min: 10, max: 16, courier: 'La Poste' },
+      'JP': { min: 8, max: 14, courier: 'Japan Post' },
+      'IL': { min: 12, max: 20, courier: 'Israel Post' },
+    };
+    const estimate = estimates[currentCountry.code] || { min: 10, max: 20, courier: 'Standard Shipping' };
+    const startDate = new Date();
+    const endDate = new Date();
+    startDate.setDate(startDate.getDate() + estimate.min);
+    endDate.setDate(endDate.getDate() + estimate.max);
+    
+    return {
+      ...estimate,
+      startDate: startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      endDate: endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    };
+  }, [currentCountry.code]);
+
+  // Simulated sold count
+  const soldCount = useMemo(() => {
+    return Math.floor(Math.random() * 50000) + 1000;
+  }, []);
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -80,18 +175,18 @@ const ProductDetail = () => {
   const price = parseFloat(product.priceRange.minVariantPrice.amount);
   const compareAtPrice = product.compareAtPriceRange?.minVariantPrice 
     ? parseFloat(product.compareAtPriceRange.minVariantPrice.amount) 
-    : null;
+    : price * 1.4;
   const discount = compareAtPrice && compareAtPrice > price 
     ? Math.round((1 - price / compareAtPrice) * 100) 
     : null;
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
+      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
       <Header
-        onAuthClick={() => {}}
-        onCountryClick={() => {}}
-        currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
+        onAuthClick={() => setShowAuthModal(true)}
+        onCountryClick={() => setShowCountryModal(true)}
+        currentCountry={currentCountry}
       />
       
       <main className="container mx-auto px-4 py-8">
@@ -107,7 +202,7 @@ const ProductDetail = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Images */}
           <div className="space-y-4">
-            <div className="aspect-square bg-muted rounded-lg overflow-hidden">
+            <div className="aspect-square bg-muted rounded-lg overflow-hidden relative">
               {product.images.edges[selectedImage] && (
                 <img
                   src={product.images.edges[selectedImage].node.url}
@@ -134,41 +229,71 @@ const ProductDetail = () => {
           </div>
 
           {/* Product Info */}
-          <div className="space-y-6">
-            <h1 className="text-2xl md:text-3xl font-display font-bold">{product.title}</h1>
+          <div className="space-y-4">
+            {/* Top Banner - Free Shipping & Credit */}
+            <div className="bg-gradient-to-r from-primary to-deal text-primary-foreground p-3 rounded-lg flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">Free shipping</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="text-sm font-medium">$20 Credit for delay</span>
+                </div>
+              </div>
+            </div>
+
+            <h1 className="text-xl md:text-2xl font-display font-bold">{product.title}</h1>
+            
+            {/* Sold count & Rating */}
+            <div className="flex items-center gap-4 text-sm">
+              <span className="text-muted-foreground">{soldCount.toLocaleString()}+ sold</span>
+              <span className="text-muted-foreground">|</span>
+              <span className="text-foreground">4.8 ★★★★★</span>
+            </div>
+
+            {/* Top Seller Badge - Only show if not from Clearance/Flash Deals */}
+            {showTopSellerBanner && (
+              <div className="inline-flex items-center gap-2 bg-warning/20 text-warning px-3 py-2 rounded-lg">
+                <Award className="w-5 h-5" />
+                <span className="font-bold">#{topSellerRank} Top Seller</span>
+                <span className="text-sm">in General Products</span>
+              </div>
+            )}
             
             {/* Price */}
             <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-foreground">
+              <span className="text-3xl font-bold text-deal">
                 ${price.toFixed(2)}
               </span>
               {compareAtPrice && compareAtPrice > price && (
                 <>
                   <span className="text-lg text-muted-foreground line-through">
-                    ${compareAtPrice.toFixed(2)}
+                    RRP ${compareAtPrice.toFixed(2)}
                   </span>
-                  <span className="bg-deal text-primary-foreground px-2 py-1 rounded text-sm font-bold">
-                    -{discount}%
+                  <span className="bg-deal/10 text-deal px-2 py-1 rounded text-sm font-bold">
+                    -{discount}% limited time
                   </span>
                 </>
               )}
             </div>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap gap-4 p-4 bg-trust/10 rounded-lg">
-              <div className="flex items-center gap-2 text-trust">
-                <Truck className="w-5 h-5" />
-                <span className="text-sm font-medium">Free shipping</span>
-              </div>
-              <div className="flex items-center gap-2 text-trust">
-                <Shield className="w-5 h-5" />
-                <span className="text-sm font-medium">Buyer protection</span>
+            {/* Deal Countdown */}
+            <div className="bg-gradient-to-r from-deal/90 to-warning/90 text-primary-foreground p-4 rounded-xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-lg">Big sale</span>
+                  <span className="opacity-80">|</span>
+                  <span className="text-sm">Ends in</span>
+                </div>
+                <CountdownTimer endTime={dealEndTime} />
               </div>
             </div>
 
             {/* Variants */}
             {product.options.length > 0 && product.options[0].name !== 'Title' && (
-              <div className="space-y-4">
+              <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
                 {product.options.map((option) => (
                   <div key={option.name}>
                     <label className="block text-sm font-medium mb-2">{option.name}</label>
@@ -176,7 +301,7 @@ const ProductDetail = () => {
                       {option.values.map((value) => (
                         <button
                           key={value}
-                          className="px-4 py-2 border rounded-lg hover:border-primary transition-colors"
+                          className="px-4 py-2 border rounded-lg hover:border-primary transition-colors bg-card"
                         >
                           {value}
                         </button>
@@ -184,38 +309,78 @@ const ProductDetail = () => {
                     </div>
                   </div>
                 ))}
+
+                {/* Quantity */}
+                <div>
+                  <label className="block text-sm font-medium mb-2">Qty</label>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-10 h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-12 text-center font-medium">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-10 h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* Quantity */}
-            <div>
-              <label className="block text-sm font-medium mb-2">Quantity</label>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 rounded-lg border flex items-center justify-center hover:bg-muted"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="w-12 text-center font-medium">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 rounded-lg border flex items-center justify-center hover:bg-muted"
-                >
-                  <Plus className="w-4 h-4" />
-                </button>
+            {/* Add to Cart Button */}
+            <Button variant="cta" size="xl" className="w-full text-lg" onClick={handleAddToCart}>
+              <ShoppingCart className="w-5 h-5 mr-2" />
+              Add to Cart
+              {discount && <span className="ml-2 text-sm opacity-90">{discount}% OFF</span>}
+            </Button>
+
+            {/* Shipping Info */}
+            <div className="space-y-3 p-4 bg-card rounded-xl border border-border">
+              <div className="flex items-start gap-3">
+                <Truck className="w-5 h-5 text-primary mt-0.5" />
+                <div>
+                  <p className="font-medium text-primary">Free shipping for this item</p>
+                  <p className="text-sm text-muted-foreground">
+                    Delivery: {shippingEstimate.startDate} - {shippingEstimate.endDate}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Globe className="w-5 h-5 text-muted-foreground mt-0.5" />
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    Courier company: {shippingEstimate.courier}
+                  </p>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1">
+                    Shipping to: <span className="text-lg">{currentCountry.flag}</span> {currentCountry.name}
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-4">
-              <Button variant="cta" size="xl" className="flex-1" onClick={handleAddToCart}>
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Add to Cart
-              </Button>
-              <Button variant="outline" size="xl">
-                <Heart className="w-5 h-5" />
-              </Button>
+            {/* Trust badges */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg">
+                <Shield className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium text-sm">Security & Privacy</p>
+                  <p className="text-xs text-muted-foreground">Safe payments</p>
+                  <p className="text-xs text-muted-foreground">Secure privacy</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2 p-3 bg-muted/50 rounded-lg">
+                <Package className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="font-medium text-sm">Delivery guarantee</p>
+                  <p className="text-xs text-muted-foreground">$20 Credit for delay</p>
+                  <p className="text-xs text-muted-foreground">15-day no update refund</p>
+                </div>
+              </div>
             </div>
 
             {/* Description */}
@@ -232,6 +397,14 @@ const ProductDetail = () => {
       </main>
 
       <Footer />
+
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <CountryModal
+        isOpen={showCountryModal}
+        onClose={() => setShowCountryModal(false)}
+        currentCountry={currentCountry}
+        onCountryChange={setCurrentCountry}
+      />
     </div>
   );
 };

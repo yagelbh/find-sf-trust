@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Flame, ChevronLeft, Star, TrendingUp } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Award, ChevronLeft, Star, TrendingUp, Flame, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
@@ -10,7 +10,7 @@ import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
 
-const HotSellingCard = ({ product }: { product: ShopifyProduct }) => {
+const TopSellerCard = ({ product, rank }: { product: ShopifyProduct; rank: number }) => {
   const addItem = useCartStore(state => state.addItem);
   const { node } = product;
   const price = parseFloat(node.priceRange.minVariantPrice.amount);
@@ -20,7 +20,20 @@ const HotSellingCard = ({ product }: { product: ShopifyProduct }) => {
 
   const compareAtPrice = price * 1.4;
   const discount = Math.round((1 - price / compareAtPrice) * 100);
-  const soldCount = Math.floor(Math.random() * 50000) + 1000;
+  
+  // Randomized indicator
+  const indicator = useMemo(() => {
+    const showDaysLeft = Math.random() > 0.5;
+    if (showDaysLeft) {
+      const daysLeft = Math.floor(Math.random() * 7) + 1;
+      return { type: 'days', text: `Last ${daysLeft} days` };
+    } else {
+      const soldCount = Math.floor(Math.random() * 100) + 10;
+      const soldDisplay = soldCount > 50 ? `${Math.floor(soldCount / 10) * 10}K+` : `${soldCount * 100}+`;
+      return { type: 'sold', text: `${soldDisplay} sold` };
+    }
+  }, [node.id]);
+  
   const rating = (Math.random() * 1 + 4).toFixed(1);
   const reviews = Math.floor(Math.random() * 5000) + 100;
 
@@ -41,7 +54,7 @@ const HotSellingCard = ({ product }: { product: ShopifyProduct }) => {
 
   return (
     <Link 
-      to={`/product/${node.handle}`}
+      to={`/product/${node.handle}?source=top-sellers&rank=${rank}`}
       className="bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all group"
     >
       <div className="relative aspect-square bg-muted overflow-hidden">
@@ -55,9 +68,10 @@ const HotSellingCard = ({ product }: { product: ShopifyProduct }) => {
             -{discount}%
           </div>
         )}
+        {/* Top Seller Rank Badge */}
         <div className="absolute top-2 right-2 bg-warning text-warning-foreground text-[10px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
-          <Flame className="w-3 h-3" />
-          Best Seller
+          <Award className="w-3 h-3" />
+          #{rank} Top Seller
         </div>
       </div>
       
@@ -75,10 +89,19 @@ const HotSellingCard = ({ product }: { product: ShopifyProduct }) => {
           </span>
         </div>
 
-        {/* Sold count */}
-        <div className="flex items-center gap-2 mb-2 text-xs text-muted-foreground">
-          <TrendingUp className="w-3 h-3 text-deal" />
-          <span className="text-deal font-semibold">{soldCount.toLocaleString()}+ sold</span>
+        {/* Randomized Indicator */}
+        <div className="flex items-center gap-2 mb-2 text-xs">
+          {indicator.type === 'days' ? (
+            <span className="text-deal font-semibold flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              {indicator.text}
+            </span>
+          ) : (
+            <span className="text-muted-foreground flex items-center gap-1">
+              <TrendingUp className="w-3 h-3 text-deal" />
+              <span className="text-foreground font-medium">{indicator.text}</span>
+            </span>
+          )}
         </div>
 
         {/* Rating */}
@@ -102,10 +125,11 @@ const HotSellingCard = ({ product }: { product: ShopifyProduct }) => {
   );
 };
 
-const HotSelling = () => {
+const TopSellers = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCountryModal, setShowCountryModal] = useState(false);
   const [currentCountry, setCurrentCountry] = useState({
@@ -116,11 +140,21 @@ const HotSelling = () => {
     currencySymbol: '$'
   });
 
-  const filters = [
-    { id: 'all', label: 'Best-Selling Items' },
+  const timeFilters = [
+    { id: 'all', label: 'Top Sellers' },
     { id: '30days', label: 'Within last 30 days' },
     { id: '14days', label: 'Within last 14 days' },
     { id: '7days', label: 'Within last 7 days' },
+  ];
+
+  const categories = [
+    { id: 'all', label: 'All Categories' },
+    { id: 'electronics', label: 'Electronics' },
+    { id: 'fashion', label: 'Fashion' },
+    { id: 'home', label: 'Home & Garden' },
+    { id: 'beauty', label: 'Beauty' },
+    { id: 'toys', label: 'Toys & Games' },
+    { id: 'sports', label: 'Sports' },
   ];
 
   useEffect(() => {
@@ -139,7 +173,7 @@ const HotSelling = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <TopBar />
+      <TopBar onCountryClick={() => setShowCountryModal(true)} currentCountry={currentCountry} />
       <Header
         onAuthClick={() => setShowAuthModal(true)}
         onCountryClick={() => setShowCountryModal(true)}
@@ -155,25 +189,25 @@ const HotSelling = () => {
             </Link>
             <span className="text-sm opacity-80">Home</span>
             <span className="text-sm opacity-60">/</span>
-            <span className="text-sm">Hot-Selling Items</span>
+            <span className="text-sm">Top Sellers</span>
           </div>
           <div className="flex items-center gap-3">
-            <Flame className="w-8 h-8 fill-current" />
+            <Award className="w-8 h-8 fill-current" />
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
-                Hot-Selling Items
+                Top Sellers
               </h1>
-              <p className="text-sm opacity-90">Top picks this week • Trending now</p>
+              <p className="text-sm opacity-90">Best picks this week • Most popular items</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Time Filters */}
       <div className="border-b border-border bg-card sticky top-[72px] z-40">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
-            {filters.map((filter) => (
+            {timeFilters.map((filter) => (
               <button
                 key={filter.id}
                 onClick={() => setActiveFilter(filter.id)}
@@ -190,6 +224,28 @@ const HotSelling = () => {
         </div>
       </div>
 
+      {/* Category Filters */}
+      <div className="border-b border-border bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-2 py-2 overflow-x-auto scrollbar-hide">
+            <span className="text-sm font-medium text-muted-foreground mr-2">Filter by category:</span>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
+                  activeCategory === cat.id
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-card text-foreground hover:bg-card/80 border border-border'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Products Grid */}
       <main className="container mx-auto px-4 py-8">
         {loading ? (
@@ -200,14 +256,14 @@ const HotSelling = () => {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20">
-            <Flame className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No Hot Items Available</h2>
+            <Award className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <h2 className="text-xl font-semibold mb-2">No Top Sellers Available</h2>
             <p className="text-muted-foreground">Check back soon for trending products!</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {products.map((product) => (
-              <HotSellingCard key={product.node.id} product={product} />
+            {products.map((product, index) => (
+              <TopSellerCard key={product.node.id} product={product} rank={index + 1} />
             ))}
           </div>
         )}
@@ -226,4 +282,4 @@ const HotSelling = () => {
   );
 };
 
-export default HotSelling;
+export default TopSellers;
