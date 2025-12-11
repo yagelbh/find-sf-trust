@@ -90,7 +90,6 @@ const ProductDetail = () => {
       <TopBar />
       <Header
         onAuthClick={() => {}}
-        onMessagesClick={() => {}}
         onCountryClick={() => {}}
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
