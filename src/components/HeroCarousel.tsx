@@ -5,105 +5,129 @@ import { Link } from 'react-router-dom';
 const HeroCarousel = () => {
   return (
     <div className="relative overflow-hidden">
-      <div className="h-[180px] md:h-[220px] bg-gradient-to-r from-emerald-800 via-emerald-700 to-emerald-800 relative overflow-hidden">
-        {/* Decorative Elements */}
+      <div className="h-[200px] md:h-[240px] bg-gradient-to-r from-emerald-900 via-emerald-800 to-emerald-900 relative overflow-hidden">
+        {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* Pine branches top */}
-          <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-emerald-950/40 to-transparent" />
+          {/* Subtle pattern overlay */}
+          <div className="absolute inset-0 opacity-10" style={{ 
+            backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+            backgroundSize: '32px 32px'
+          }} />
           
-          {/* Floating decorations */}
-          <span className="absolute left-[3%] top-[20%] text-3xl animate-float opacity-90">🎄</span>
-          <span className="absolute left-[8%] bottom-[15%] text-2xl animate-float opacity-80" style={{ animationDelay: '0.5s' }}>🎁</span>
-          <span className="absolute right-[5%] top-[25%] text-2xl animate-float opacity-80" style={{ animationDelay: '1s' }}>❄️</span>
-          <span className="absolute right-[12%] bottom-[20%] text-3xl animate-float opacity-90" style={{ animationDelay: '0.3s' }}>✨</span>
-          <span className="absolute left-[20%] top-[10%] text-xl animate-pulse opacity-60">⭐</span>
-          <span className="absolute right-[25%] top-[15%] text-xl animate-pulse opacity-60" style={{ animationDelay: '0.7s' }}>⭐</span>
+          {/* Pine branch decorations - top */}
+          <div className="absolute top-0 left-0 w-40 h-24 bg-gradient-to-br from-emerald-950/60 to-transparent" />
+          <div className="absolute top-0 right-0 w-40 h-24 bg-gradient-to-bl from-emerald-950/60 to-transparent" />
           
-          {/* String lights effect */}
-          <div className="absolute bottom-0 left-0 w-full h-8 flex items-center justify-center gap-8 opacity-70">
-            {Array.from({ length: 15 }).map((_, i) => (
+          {/* Floating holiday elements */}
+          <span className="absolute left-[2%] top-[15%] text-4xl animate-float opacity-90">🎄</span>
+          <span className="absolute left-[6%] bottom-[20%] text-2xl animate-float opacity-80" style={{ animationDelay: '0.5s' }}>🎁</span>
+          <span className="absolute right-[3%] top-[20%] text-xl animate-float opacity-70" style={{ animationDelay: '1s' }}>❄️</span>
+          <span className="absolute right-[8%] bottom-[25%] text-2xl animate-float opacity-80" style={{ animationDelay: '0.3s' }}>✨</span>
+          
+          {/* String lights */}
+          <div className="absolute bottom-0 left-0 w-full h-6 flex items-center justify-center gap-6 opacity-80">
+            {Array.from({ length: 20 }).map((_, i) => (
               <div 
                 key={i} 
-                className="w-2 h-2 rounded-full animate-pulse" 
+                className="w-1.5 h-1.5 rounded-full animate-pulse shadow-lg" 
                 style={{ 
-                  backgroundColor: ['#fbbf24', '#ef4444', '#22c55e', '#3b82f6'][i % 4],
-                  animationDelay: `${i * 0.1}s`
+                  backgroundColor: ['#fbbf24', '#ef4444', '#22c55e', '#3b82f6', '#f472b6'][i % 5],
+                  animationDelay: `${i * 0.15}s`,
+                  boxShadow: `0 0 8px ${['#fbbf24', '#ef4444', '#22c55e', '#3b82f6', '#f472b6'][i % 5]}`
                 }} 
               />
             ))}
           </div>
 
-          {/* Sparkle effects */}
-          <Sparkles className="absolute top-8 left-[30%] w-5 h-5 text-yellow-400/60 animate-pulse" />
-          <Star className="absolute bottom-12 right-[35%] w-4 h-4 text-yellow-300/50 animate-pulse" style={{ animationDelay: '0.5s' }} />
+          {/* Sparkle accents */}
+          <Sparkles className="absolute top-10 left-[25%] w-4 h-4 text-yellow-400/50 animate-pulse" />
+          <Star className="absolute bottom-16 right-[30%] w-3 h-3 text-yellow-300/40 animate-pulse" style={{ animationDelay: '0.5s' }} />
         </div>
 
         {/* Main Content */}
         <div className="container mx-auto px-4 h-full flex items-center relative z-10">
           <div className="flex items-center justify-between w-full">
-            {/* Left side - Promo content */}
-            <div className="flex items-center gap-6">
-              {/* Sale badge */}
+            {/* Left side - Premium sale badge & offer */}
+            <div className="flex items-center gap-8">
+              {/* Premium Sale Badge */}
               <div className="hidden md:block relative">
-                <div className="bg-gradient-to-br from-red-700 via-red-600 to-red-800 rounded-lg p-4 shadow-xl transform -rotate-2 border-4 border-yellow-400">
-                  <div className="text-center">
-                    <span className="block text-yellow-300 text-xs font-bold tracking-wider">HOLIDAY</span>
-                    <span className="block text-white text-lg font-black leading-tight">MEGA</span>
-                    <span className="block text-yellow-300 text-lg font-black leading-tight">SALE</span>
-                    <Gift className="w-5 h-5 text-yellow-300 mx-auto mt-1" />
+                <div className="relative">
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-red-600 rounded-xl blur-lg opacity-40 animate-pulse" />
+                  
+                  {/* Badge container */}
+                  <div className="relative bg-gradient-to-br from-red-600 via-red-700 to-red-800 rounded-xl p-5 shadow-2xl border border-amber-400/30 overflow-hidden">
+                    {/* Shimmer effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+                    
+                    {/* Gold ribbon top */}
+                    <div className="absolute -top-1 left-0 right-0 h-2 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400" />
+                    
+                    <div className="text-center relative z-10">
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <Sparkles className="w-3 h-3 text-amber-300" />
+                        <span className="text-amber-200 text-[10px] font-bold tracking-[0.2em] uppercase">Holiday</span>
+                        <Sparkles className="w-3 h-3 text-amber-300" />
+                      </div>
+                      <span className="block text-white text-xl font-black tracking-tight leading-none">MEGA</span>
+                      <span className="block text-amber-300 text-xl font-black tracking-tight leading-none">SALE</span>
+                      <Gift className="w-5 h-5 text-amber-200 mx-auto mt-2" />
+                    </div>
                   </div>
-                </div>
-                {/* Ribbon */}
-                <div className="absolute -top-2 -right-2 bg-yellow-400 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded shadow-md transform rotate-12">
-                  HOT!
+                  
+                  {/* Decorative corner ribbons */}
+                  <div className="absolute -top-1 -right-1 w-6 h-6 bg-amber-400 transform rotate-45 translate-x-3 -translate-y-1" />
                 </div>
               </div>
 
-              {/* Discount display */}
+              {/* Discount display - tighter layout */}
               <div className="text-center md:text-left">
-                <div className="flex items-baseline gap-2 mb-1">
-                  <span className="text-white/90 text-base md:text-lg font-medium">Up to</span>
-                </div>
-                <div className="flex items-baseline">
-                  <span className="text-6xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-300 drop-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3)' }}>
+                <div className="flex items-baseline justify-center md:justify-start">
+                  <span className="text-white/80 text-sm md:text-base font-medium mr-2">Up to</span>
+                  <span className="text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-200 via-amber-400 to-orange-500 leading-none" style={{ 
+                    WebkitTextStroke: '1px rgba(255,255,255,0.1)',
+                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
+                  }}>
                     70
                   </span>
-                  <div className="flex flex-col ml-1">
-                    <span className="text-3xl md:text-4xl font-black text-yellow-300">%</span>
-                    <span className="text-xl md:text-2xl font-bold text-white -mt-1">OFF</span>
+                  <div className="flex flex-col items-start ml-1">
+                    <span className="text-4xl md:text-5xl font-black text-amber-400 leading-none">%</span>
+                    <span className="text-lg md:text-xl font-bold text-white leading-none mt-0.5">OFF</span>
                   </div>
                 </div>
+                
                 <Link to="/flash-deals">
                   <Button 
                     size="lg"
-                    className="mt-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold px-6 py-2.5 text-sm shadow-lg hover:shadow-xl transition-all hover:scale-105 rounded-full border-2 border-yellow-400/50"
+                    className="mt-4 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:from-amber-600 hover:via-orange-600 hover:to-red-600 text-white font-bold px-8 py-3 text-sm shadow-xl hover:shadow-2xl transition-all hover:scale-105 rounded-full border border-amber-300/30"
                   >
-                    SHOP NOW <ChevronRight className="w-4 h-4 ml-1" />
+                    <span className="drop-shadow-sm">SHOP NOW</span>
+                    <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
               </div>
             </div>
 
-            {/* Right side - Featured products preview */}
-            <div className="hidden lg:flex items-center gap-4">
-              <div className="bg-white rounded-xl p-2 shadow-xl transform rotate-2 hover:rotate-0 transition-transform">
+            {/* Right side - Featured products */}
+            <div className="hidden lg:flex items-center gap-3">
+              <div className="bg-white rounded-xl p-2 shadow-2xl transform rotate-3 hover:rotate-0 transition-all hover:scale-105 border-2 border-amber-200/50">
                 <img 
-                  src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=120&h=120&fit=crop" 
+                  src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop" 
                   alt="Featured product"
-                  className="w-24 h-24 object-cover rounded-lg"
+                  className="w-20 h-20 object-cover rounded-lg"
                 />
-                <div className="text-center mt-1">
-                  <span className="text-xs font-bold text-red-600">$12.99</span>
+                <div className="text-center mt-1.5 bg-red-500 rounded-full px-2 py-0.5">
+                  <span className="text-[10px] font-bold text-white">$12.99</span>
                 </div>
               </div>
-              <div className="bg-white rounded-xl p-2 shadow-xl transform -rotate-2 hover:rotate-0 transition-transform">
+              <div className="bg-white rounded-xl p-2 shadow-2xl transform -rotate-2 hover:rotate-0 transition-all hover:scale-105 border-2 border-amber-200/50">
                 <img 
-                  src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=120&h=120&fit=crop" 
+                  src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=100&h=100&fit=crop" 
                   alt="Featured product"
-                  className="w-24 h-24 object-cover rounded-lg"
+                  className="w-20 h-20 object-cover rounded-lg"
                 />
-                <div className="text-center mt-1">
-                  <span className="text-xs font-bold text-red-600">$24.99</span>
+                <div className="text-center mt-1.5 bg-red-500 rounded-full px-2 py-0.5">
+                  <span className="text-[10px] font-bold text-white">$24.99</span>
                 </div>
               </div>
             </div>
