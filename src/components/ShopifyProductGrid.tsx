@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { ShopifyProduct, fetchProducts } from '@/lib/shopify';
+import { useEffect, useState, useRef, useMemo } from 'react';
+import { ShopifyProduct, fetchProducts, getCategoryFromTags } from '@/lib/shopify';
 import ShopifyProductCard from './ShopifyProductCard';
 import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { categories as allCategories } from '@/data/categories';
@@ -8,28 +8,20 @@ const ShopifyProductGrid = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("Recommended");
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Build category bar with icons/images
+  // Build category bar from the 23 main categories
   const categoryBar = [
-    { name: "All", icon: "🏠", image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=60&h=60&fit=crop" },
-    { name: "Home Improvement", icon: "🔧", image: "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=60&h=60&fit=crop" },
-    { name: "Bags & Luggage", icon: "👜", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=60&h=60&fit=crop" },
-    { name: "Tools", icon: "🛠️", image: "https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=60&h=60&fit=crop" },
-    { name: "Home & Garden", icon: "🌿", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=60&h=60&fit=crop" },
-    { name: "Automotive", icon: "🚗", image: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=60&h=60&fit=crop" },
-    { name: "Home Appliances", icon: "🏠", image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop" },
-    { name: "Beauty & Health", icon: "💄", image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=60&h=60&fit=crop" },
-    { name: "Watches", icon: "⌚", image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=60&h=60&fit=crop" },
-    { name: "Sports Wear", icon: "🏃", image: "https://images.unsplash.com/photo-1571731956672-f2b94d7dd0cb?w=60&h=60&fit=crop" },
+    { name: "Recommended" },
+    ...allCategories.map(cat => ({ name: cat.name }))
   ];
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const data = await fetchProducts(20);
+        const data = await fetchProducts(50);
         setProducts(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load products');
@@ -41,9 +33,31 @@ const ShopifyProductGrid = () => {
     loadProducts();
   }, []);
 
+  // Filter products by category
+  const filteredProducts = useMemo(() => {
+    if (activeCategory === "Recommended") {
+      return products;
+    }
+    
+    return products.filter(product => {
+      const productCategory = getCategoryFromTags(
+        product.node.tags || [], 
+        product.node.productType
+      );
+      
+      // Match if the product's category contains or matches the active category
+      const categoryLower = activeCategory.toLowerCase();
+      const productCategoryLower = productCategory.toLowerCase();
+      
+      return productCategoryLower.includes(categoryLower) || 
+             categoryLower.includes(productCategoryLower) ||
+             productCategoryLower === categoryLower;
+    });
+  }, [products, activeCategory]);
+
   const scrollCategories = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 200;
+      const scrollAmount = 300;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -94,7 +108,7 @@ const ShopifyProductGrid = () => {
   return (
     <section className="py-6">
       <div className="container mx-auto px-4">
-        {/* Large Circular Category Icons */}
+        {/* Pill-style Category Bar */}
         <div className="relative mb-8">
           <button 
             onClick={() => scrollCategories('left')}
@@ -105,36 +119,20 @@ const ShopifyProductGrid = () => {
           
           <div 
             ref={scrollRef}
-            className="flex gap-8 overflow-x-auto scrollbar-hide px-8 py-4"
+            className="flex gap-3 overflow-x-auto scrollbar-hide px-8 py-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categoryBar.map((cat) => (
               <button
                 key={cat.name}
                 onClick={() => setActiveCategory(cat.name)}
-                className="flex flex-col items-center gap-3 min-w-[90px] group"
+                className={`px-5 py-2.5 rounded-full border text-sm font-medium whitespace-nowrap transition-all ${
+                  activeCategory === cat.name 
+                    ? 'bg-foreground text-background border-foreground' 
+                    : 'bg-card text-foreground border-border hover:border-foreground/50'
+                }`}
               >
-                {/* Large circular image */}
-                <div className={`w-20 h-20 rounded-full overflow-hidden border-3 transition-all duration-200 ${
-                  activeCategory === cat.name 
-                    ? 'border-primary shadow-lg ring-2 ring-primary/30 scale-105' 
-                    : 'border-border/50 group-hover:border-primary/50 group-hover:shadow-md'
-                }`}>
-                  <img 
-                    src={cat.image} 
-                    alt={cat.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                {/* Category name */}
-                <span className={`text-xs text-center font-medium leading-tight max-w-[90px] line-clamp-2 ${
-                  activeCategory === cat.name 
-                    ? 'text-primary font-semibold' 
-                    : 'text-foreground/80 group-hover:text-foreground'
-                }`}>
-                  {cat.name}
-                </span>
+                {cat.name}
               </button>
             ))}
           </div>
@@ -148,18 +146,29 @@ const ShopifyProductGrid = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {products.map((product) => (
-            <ShopifyProductCard key={product.node.id} product={product} />
-          ))}
-        </div>
+        {filteredProducts.length === 0 ? (
+          <div className="text-center py-16 bg-muted/50 rounded-xl">
+            <h3 className="text-lg font-semibold mb-2">No products in this category</h3>
+            <p className="text-muted-foreground text-sm">
+              Try selecting a different category or check back later!
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {filteredProducts.map((product) => (
+              <ShopifyProductCard key={product.node.id} product={product} />
+            ))}
+          </div>
+        )}
 
         {/* Load More */}
-        <div className="text-center mt-8">
-          <button className="px-8 py-3 bg-card border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-primary-foreground transition-colors">
-            Load More Products
-          </button>
-        </div>
+        {filteredProducts.length > 0 && (
+          <div className="text-center mt-8">
+            <button className="px-8 py-3 bg-card border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-primary-foreground transition-colors">
+              Load More Products
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
