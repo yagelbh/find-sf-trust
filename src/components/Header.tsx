@@ -1,29 +1,26 @@
 import { useState, useEffect } from 'react';
-import { Search, User, MessageCircle, Heart, ShoppingCart, ChevronDown, Globe } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, ChevronDown, Globe } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
 import findsafeLogo from '@/assets/findsfae-logo.png';
+import CategoryMegaMenu from './CategoryMegaMenu';
 
 interface HeaderProps {
   onAuthClick: () => void;
-  onMessagesClick: () => void;
   onCountryClick: () => void;
   currentCountry: { name: string; flag: string; currency: string };
 }
 
-const Header = ({ onAuthClick, onMessagesClick, onCountryClick, currentCountry }: HeaderProps) => {
+const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const totalItems = useCartStore(state => state.getTotalItems());
 
-  const categories = [
-    "Best-Selling Items",
-    "5-Star Rated",
-    "New In",
-    "Electronics",
-    "Fashion",
-    "Home & Garden",
-    "Beauty",
-    "Sports",
+  const navItems = [
+    "Top Picks",
+    "Highly Rated",
+    "Fresh Arrivals",
+    "Today's Deals",
   ];
 
   useEffect(() => {
@@ -39,28 +36,36 @@ const Header = ({ onAuthClick, onMessagesClick, onCountryClick, currentCountry }
       <div className="bg-card">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center gap-6">
-            {/* Logo */}
+            {/* Logo - Much bigger and prominent */}
             <div className="flex-shrink-0">
-              <a href="/" className="flex items-center gap-2">
-                <img src={findsafeLogo} alt="Findsfae" className="h-10 w-auto" />
+              <a href="/" className="flex items-center gap-3">
+                <img src={findsafeLogo} alt="Findsfae" className="h-14 w-auto" />
+                <span className="text-2xl font-display font-bold text-primary hidden sm:block">Findsfae</span>
               </a>
             </div>
 
             {/* Categories */}
-            <nav className="hidden lg:flex items-center gap-1">
-              {categories.slice(0, 4).map((cat, index) => (
+            <nav className="hidden lg:flex items-center gap-1 relative">
+              {navItems.map((item, index) => (
                 <button
                   key={index}
-                  className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1"
+                  className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
                 >
-                  {cat}
-                  {index === 3 && <ChevronDown className="w-4 h-4" />}
+                  {item}
                 </button>
               ))}
-              <button className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1">
-                Categories
-                <ChevronDown className="w-4 h-4" />
+              <button 
+                className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1 bg-muted rounded-lg"
+                onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
+              >
+                All Categories
+                <ChevronDown className={`w-4 h-4 transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} />
               </button>
+              
+              <CategoryMegaMenu 
+                isOpen={isCategoryMenuOpen} 
+                onClose={() => setIsCategoryMenuOpen(false)} 
+              />
             </nav>
 
             {/* Search */}
@@ -90,14 +95,6 @@ const Header = ({ onAuthClick, onMessagesClick, onCountryClick, currentCountry }
                   <span className="text-xs text-muted-foreground">Sign in / Register</span>
                   <span className="font-medium">Orders & Account</span>
                 </div>
-              </button>
-
-              <button
-                onClick={onMessagesClick}
-                className="flex items-center gap-2 px-3 py-2 hover:bg-muted rounded-lg transition-colors"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span className="hidden md:inline text-sm font-medium">Messages</span>
               </button>
 
               <button

@@ -32,10 +32,6 @@ const Index = () => {
     detectCountry();
   }, []);
 
-  const handleMessagesClick = () => {
-    setShowAuthModal(true);
-  };
-
   return (
     <div className="min-h-screen bg-background">
       {/* Top Announcement Bar */}
@@ -44,7 +40,6 @@ const Index = () => {
       {/* Main Header */}
       <Header
         onAuthClick={() => setShowAuthModal(true)}
-        onMessagesClick={handleMessagesClick}
         onCountryClick={() => setShowCountryModal(true)}
         currentCountry={currentCountry}
       />
@@ -89,18 +84,8 @@ const Index = () => {
         onCountryChange={setCurrentCountry}
       />
 
-      {/* Fixed Message Button */}
-      <button
-        onClick={handleMessagesClick}
-        className="fixed bottom-6 right-6 w-14 h-14 bg-primary text-primary-foreground rounded-full shadow-lg hover:shadow-glow transition-all flex items-center justify-center z-40"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-      </button>
-
       {/* Feedback Button */}
-      <button className="fixed bottom-24 right-6 bg-card text-foreground px-3 py-2 rounded-l-lg shadow-lg text-sm font-medium border border-border hover:bg-muted transition-colors z-40">
+      <button className="fixed bottom-6 right-6 bg-card text-foreground px-3 py-2 rounded-l-lg shadow-lg text-sm font-medium border border-border hover:bg-muted transition-colors z-40">
         <span className="transform -rotate-90 block whitespace-nowrap" style={{ writingMode: 'vertical-rl' }}>Feedback</span>
       </button>
     </div>

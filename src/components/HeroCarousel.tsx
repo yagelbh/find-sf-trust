@@ -55,7 +55,7 @@ const HeroCarousel = () => {
         {slides.map((slide, index) => (
           <div 
             key={index}
-            className={`min-w-full h-[450px] bg-gradient-to-r ${slide.bgGradient} relative overflow-hidden`}
+            className={`min-w-full h-[200px] md:h-[260px] bg-gradient-to-r ${slide.bgGradient} relative overflow-hidden`}
           >
             {/* Background Image for first slide */}
             {slide.hasImage && (
@@ -71,34 +71,33 @@ const HeroCarousel = () => {
 
             {/* Decorative elements */}
             <div className="absolute inset-0 overflow-hidden">
-              <div className="absolute top-10 left-20 w-4 h-4 rounded-full bg-primary-foreground/20 animate-float" />
-              <div className="absolute top-32 right-40 w-6 h-6 rounded-full bg-primary-foreground/10 animate-float" style={{ animationDelay: '0.5s' }} />
-              <div className="absolute bottom-20 left-40 w-3 h-3 rounded-full bg-primary-foreground/15 animate-float" style={{ animationDelay: '1s' }} />
-              <Sparkles className="absolute top-20 right-60 w-8 h-8 text-warning/60 animate-pulse" />
-              <Sparkles className="absolute bottom-32 left-60 w-6 h-6 text-warning/40 animate-pulse" style={{ animationDelay: '0.7s' }} />
+              <div className="absolute top-5 left-10 w-3 h-3 rounded-full bg-primary-foreground/20 animate-float" />
+              <div className="absolute top-16 right-20 w-4 h-4 rounded-full bg-primary-foreground/10 animate-float" style={{ animationDelay: '0.5s' }} />
+              <Sparkles className="absolute top-10 right-40 w-6 h-6 text-warning/60 animate-pulse" />
             </div>
 
             <div className="container mx-auto px-4 h-full flex items-center relative z-10">
               <div className="text-center w-full animate-fade-in">
-                <p className="text-primary-foreground/80 text-lg mb-2 tracking-wider">
+                <p className="text-primary-foreground/80 text-sm mb-1 tracking-wider">
                   {slide.title}
                 </p>
-                <div className="flex items-center justify-center gap-4 mb-6">
-                  <span className="text-primary-foreground text-2xl">{slide.subtitle}</span>
+                <div className="flex items-center justify-center gap-3 mb-3">
+                  <span className="text-primary-foreground text-lg">{slide.subtitle}</span>
                   <div className="flex items-baseline">
-                    <span className="text-8xl md:text-9xl font-display font-black text-primary-foreground drop-shadow-lg">
+                    <span className="text-5xl md:text-6xl font-display font-black text-primary-foreground drop-shadow-lg">
                       {slide.discount}
                     </span>
-                    <span className="text-4xl md:text-5xl font-bold text-primary-foreground ml-2">
+                    <span className="text-2xl md:text-3xl font-bold text-primary-foreground ml-2">
                       {slide.description}
                     </span>
                   </div>
                 </div>
                 <Button 
                   variant="hero"
+                  size="sm"
                   className="bg-warning text-foreground hover:bg-warning/90"
                 >
-                  {slide.cta} <ChevronRight className="w-5 h-5" />
+                  {slide.cta} <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
             </div>
