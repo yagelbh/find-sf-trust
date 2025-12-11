@@ -62,13 +62,13 @@ const Index = () => {
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
-      {/* Trust Bar - Green banner */}
+      {/* Hero Carousel */}
+      <HeroCarousel />
+
+      {/* Trust Bar - Green banner below hero */}
       <div className="container mx-auto px-4 py-4">
         <TrustBar />
       </div>
-
-      {/* Hero Carousel */}
-      <HeroCarousel />
 
       {/* Deals Countdown Section */}
       <DealsCountdown products={dealProducts} />
