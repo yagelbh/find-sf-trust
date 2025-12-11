@@ -86,7 +86,7 @@ const CountryModal = ({ isOpen, onClose, currentCountry, onCountryChange }: Coun
             <div className="flex items-center gap-3 mb-3">
               <span className="text-2xl">{selectedCountry.flag}</span>
               <p className="text-sm text-muted-foreground">
-                You are shopping on FindSafe {selectedCountry.name}.
+                You are shopping on Findsfae {selectedCountry.name}.
               </p>
             </div>
             
