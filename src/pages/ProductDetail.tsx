@@ -10,6 +10,8 @@ import TopBar from '@/components/TopBar';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CountryModal from '@/components/CountryModal';
+import WhyChooseFindsfae from '@/components/WhyChooseFindsfae';
+import { categories } from '@/data/categories';
 
 // Countdown Timer Component
 const CountdownTimer = ({ endTime }: { endTime: Date }) => {
@@ -258,7 +260,10 @@ const ProductDetail = () => {
               <div className="inline-flex items-center gap-2 bg-warning/20 text-warning px-3 py-2 rounded-lg">
                 <Award className="w-5 h-5" />
                 <span className="font-bold">#{topSellerRank} Top Seller</span>
-                <span className="text-sm">in General Products</span>
+                <span className="text-sm">in {product.productType || categories.find(c => 
+                  product.title.toLowerCase().includes(c.name.toLowerCase().split(' ')[0]) ||
+                  c.subcategories.some(sub => product.title.toLowerCase().includes(sub.name.toLowerCase().split(' ')[0]))
+                )?.name || 'Products'}</span>
               </div>
             )}
             
@@ -382,6 +387,9 @@ const ProductDetail = () => {
                 </div>
               </div>
             </div>
+
+            {/* Why Choose Findsfae */}
+            <WhyChooseFindsfae />
 
             {/* Description */}
             {product.description && (

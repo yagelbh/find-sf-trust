@@ -22,25 +22,25 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
         onClick={onClose}
       />
       
-      {/* Menu Container */}
+      {/* Menu Container - More compact */}
       <div className="absolute top-0 left-0 right-0 bg-card shadow-2xl animate-fade-in" style={{ marginTop: '100px' }}>
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           {/* Close button */}
           <button 
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 hover:bg-muted rounded-full transition-colors z-10"
+            className="absolute top-3 right-3 p-2 hover:bg-muted rounded-full transition-colors z-10"
           >
             <X className="w-5 h-5 text-muted-foreground" />
           </button>
 
           <div className="flex">
-            {/* Left sidebar - Categories List */}
-            <div className="w-56 flex-shrink-0 bg-muted/50 border-r border-border">
-              <div className="py-2 max-h-[65vh] overflow-y-auto">
+            {/* Left sidebar - Categories List - Narrower */}
+            <div className="w-48 flex-shrink-0 bg-muted/50 border-r border-border">
+              <div className="py-1 max-h-[55vh] overflow-y-auto">
                 {categories.map((category) => (
                   <button
                     key={category.name}
-                    className={`w-full flex items-center justify-between px-4 py-2.5 text-sm transition-all ${
+                    className={`w-full flex items-center justify-between px-3 py-2 text-sm transition-all ${
                       hoveredCategory === category.name 
                         ? 'bg-primary text-primary-foreground font-semibold' 
                         : 'text-foreground hover:bg-muted'
@@ -48,36 +48,40 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                     onMouseEnter={() => setHoveredCategory(category.name)}
                     onClick={() => setHoveredCategory(category.name)}
                   >
-                    <span className="truncate">{category.name}</span>
-                    <ChevronRight className="w-4 h-4 opacity-50 flex-shrink-0" />
+                    <span className="flex items-center gap-2">
+                      <span>{category.icon}</span>
+                      <span className="truncate text-xs">{category.name}</span>
+                    </span>
+                    <ChevronRight className="w-3 h-3 opacity-50 flex-shrink-0" />
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Right content - Subcategories Grid */}
-            <div className="flex-1 p-6 bg-card min-h-[350px] max-h-[65vh] overflow-y-auto">
+            {/* Right content - Subcategories Grid - Tighter layout */}
+            <div className="flex-1 p-4 bg-card min-h-[280px] max-h-[55vh] overflow-y-auto">
               {activeCategory && (
                 <div>
                   {/* Category Title */}
-                  <div className="mb-5 pb-3 border-b border-border">
-                    <h3 className="text-xl font-bold text-foreground">
+                  <div className="mb-3 pb-2 border-b border-border">
+                    <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                      <span>{activeCategory.icon}</span>
                       {activeCategory.name}
                     </h3>
                   </div>
                   
-                  {/* Subcategories Grid - Tighter spacing */}
-                  <div className="grid grid-cols-5 xl:grid-cols-7 gap-3">
-                    {activeCategory.subcategories.map((sub, idx) => (
+                  {/* Subcategories Grid - More compact */}
+                  <div className="grid grid-cols-6 xl:grid-cols-8 gap-2">
+                    {activeCategory.subcategories.map((sub) => (
                       <button
                         key={sub.name}
-                        className="group flex flex-col items-center text-center p-2 rounded-lg hover:bg-muted transition-colors"
+                        className="group flex flex-col items-center text-center p-1.5 rounded-lg hover:bg-muted transition-colors"
                         onClick={() => {
                           onClose();
                         }}
                       >
-                        {/* Circular Image - Using real category images */}
-                        <div className="w-14 h-14 rounded-full overflow-hidden bg-muted mb-2 ring-2 ring-transparent group-hover:ring-primary transition-all flex-shrink-0">
+                        {/* Circular Image */}
+                        <div className="w-12 h-12 rounded-full overflow-hidden bg-muted mb-1.5 ring-2 ring-transparent group-hover:ring-primary transition-all flex-shrink-0">
                           <img 
                             src={sub.image} 
                             alt={sub.name}
@@ -86,7 +90,7 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                           />
                         </div>
                         {/* Label */}
-                        <span className="text-[11px] text-foreground group-hover:text-primary transition-colors font-medium leading-tight line-clamp-2">
+                        <span className="text-[10px] text-foreground group-hover:text-primary transition-colors font-medium leading-tight line-clamp-2">
                           {sub.name}
                         </span>
                       </button>

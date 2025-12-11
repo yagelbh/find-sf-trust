@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CountryModal from '@/components/CountryModal';
 import SecurityPuzzle from '@/components/SecurityPuzzle';
+import ChatWidget from '@/components/ChatWidget';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 const Index = () => {
@@ -129,10 +130,8 @@ const Index = () => {
         }}
       />
 
-      {/* Feedback Button */}
-      <button className="fixed bottom-6 right-6 bg-card text-foreground px-3 py-2 rounded-l-lg shadow-lg text-sm font-medium border border-border hover:bg-muted transition-colors z-40">
-        <span className="transform -rotate-90 block whitespace-nowrap" style={{ writingMode: 'vertical-rl' }}>Feedback</span>
-      </button>
+      {/* Chat Widget */}
+      <ChatWidget />
     </div>
   );
 };
