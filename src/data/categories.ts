@@ -8,6 +8,7 @@ export interface Subcategory {
 export interface Category {
   name: string;
   icon: string;
+  image: string;
   subcategories: Subcategory[];
 }
 
@@ -15,6 +16,7 @@ export const categories: Category[] = [
   {
     name: "Women's Clothing",
     icon: "👗",
+    image: "https://images.unsplash.com/photo-1558171813-01ed289a814b?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Tops", image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=200&h=200&fit=crop", isHot: true },
       { name: "Dresses", image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=200&h=200&fit=crop", isHot: true },
@@ -28,6 +30,7 @@ export const categories: Category[] = [
   {
     name: "Men's Clothing",
     icon: "👔",
+    image: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Shirts & Tops", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200&h=200&fit=crop", isHot: true },
       { name: "Hoodies & Sweatshirts", image: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=200&h=200&fit=crop", isHot: true },
@@ -41,6 +44,7 @@ export const categories: Category[] = [
   {
     name: "Kids Clothing",
     icon: "👶",
+    image: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Boys Clothing", image: "https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=200&h=200&fit=crop", isHot: true },
       { name: "Girls Clothing", image: "https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=200&h=200&fit=crop", isHot: true },
@@ -52,6 +56,7 @@ export const categories: Category[] = [
   {
     name: "Unisex",
     icon: "👕",
+    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop",
     subcategories: [
       { name: "T-Shirts", image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop", isHot: true },
       { name: "Hoodies", image: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=200&h=200&fit=crop", isHot: true },
@@ -61,6 +66,7 @@ export const categories: Category[] = [
   {
     name: "Beauty & Personal Care",
     icon: "💄",
+    image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&h=200&fit=crop",
     subcategories: [
       { 
         name: "Skin Care Tools", 
@@ -81,6 +87,7 @@ export const categories: Category[] = [
   {
     name: "Home & Kitchen",
     icon: "🏠",
+    image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Kitchen Tools & Gadgets", image: "https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?w=200&h=200&fit=crop", isHot: true },
       { name: "Cookware & Bakeware", image: "https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=200&h=200&fit=crop" },
@@ -92,6 +99,7 @@ export const categories: Category[] = [
   {
     name: "Electronics",
     icon: "📱",
+    image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Phone Accessories", image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&h=200&fit=crop", isHot: true },
       { name: "Computer Accessories", image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=200&fit=crop" },
@@ -104,6 +112,7 @@ export const categories: Category[] = [
   {
     name: "Sports & Outdoors",
     icon: "⚽",
+    image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Fitness Equipment", image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=200&h=200&fit=crop", isHot: true },
       { name: "Yoga & Pilates", image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=200&h=200&fit=crop" },
@@ -115,6 +124,7 @@ export const categories: Category[] = [
   {
     name: "Health & Household",
     icon: "💊",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Massagers", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=200&h=200&fit=crop", isHot: true },
       { name: "Pain Relief Tools", image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=200&h=200&fit=crop" },
@@ -126,6 +136,7 @@ export const categories: Category[] = [
   {
     name: "Baby Products",
     icon: "🍼",
+    image: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Feeding Accessories", image: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=200&h=200&fit=crop" },
       { name: "Safety Products", image: "https://images.unsplash.com/photo-1522771930-78848d9293e8?w=200&h=200&fit=crop", isHot: true },
@@ -137,6 +148,7 @@ export const categories: Category[] = [
   {
     name: "Pet Supplies",
     icon: "🐕",
+    image: "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Pet Toys", image: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=200&h=200&fit=crop", isHot: true },
       { name: "Grooming Tools", image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200&h=200&fit=crop" },
@@ -148,6 +160,7 @@ export const categories: Category[] = [
   {
     name: "Automotive",
     icon: "🚗",
+    image: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Car Organizers", image: "https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=200&h=200&fit=crop" },
       { name: "Cleaning Tools", image: "https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=200&h=200&fit=crop" },
@@ -159,6 +172,7 @@ export const categories: Category[] = [
   {
     name: "Office Products",
     icon: "📎",
+    image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Desk Organizers", image: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=200&h=200&fit=crop" },
       { name: "Productivity Tools", image: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc?w=200&h=200&fit=crop", isHot: true },
@@ -170,6 +184,7 @@ export const categories: Category[] = [
   {
     name: "Tools & Home Improvement",
     icon: "🔧",
+    image: "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Hand Tools", image: "https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=200&h=200&fit=crop", isHot: true },
       { name: "Power Tool Accessories", image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=200&h=200&fit=crop" },
@@ -181,6 +196,7 @@ export const categories: Category[] = [
   {
     name: "Patio, Lawn & Garden",
     icon: "🌿",
+    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Gardening Tools", image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&h=200&fit=crop", isHot: true },
       { name: "Plant Pots", image: "https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=200&h=200&fit=crop" },
@@ -192,6 +208,7 @@ export const categories: Category[] = [
   {
     name: "Travel & Luggage",
     icon: "🧳",
+    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Travel Organizers", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop" },
       { name: "Suitcases & Bags", image: "https://images.unsplash.com/photo-1565026057447-bc90a3dceb87?w=200&h=200&fit=crop", isHot: true },
@@ -203,6 +220,7 @@ export const categories: Category[] = [
   {
     name: "Arts, Crafts & Sewing",
     icon: "🎨",
+    image: "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=200&h=200&fit=crop",
     subcategories: [
       { name: "DIY Kits", image: "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=200&h=200&fit=crop", isHot: true },
       { name: "Painting Supplies", image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=200&h=200&fit=crop" },
@@ -214,6 +232,7 @@ export const categories: Category[] = [
   {
     name: "Toys & Games",
     icon: "🎮",
+    image: "https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Outdoor Toys", image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=200&h=200&fit=crop" },
       { name: "STEM Toys", image: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=200&h=200&fit=crop", isHot: true },
@@ -225,6 +244,7 @@ export const categories: Category[] = [
   {
     name: "Gifts & Seasonal",
     icon: "🎁",
+    image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Gifts for Men", image: "https://images.unsplash.com/photo-1549465220-1ab2a1c593e8?w=200&h=200&fit=crop" },
       { name: "Gifts for Women", image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=200&h=200&fit=crop", isHot: true },
@@ -236,6 +256,7 @@ export const categories: Category[] = [
   {
     name: "Smart Gadgets",
     icon: "💡",
+    image: "https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=200&h=200&fit=crop",
     subcategories: [
       { name: "LED Gadgets", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop" },
       { name: "USB Gadgets", image: "https://images.unsplash.com/photo-1625961332771-3f40b0e2bdcf?w=200&h=200&fit=crop", isHot: true },
@@ -247,6 +268,7 @@ export const categories: Category[] = [
   {
     name: "Cleaning & Storage",
     icon: "🧹",
+    image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Cleaning Gadgets", image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=200&h=200&fit=crop", isHot: true },
       { name: "Storage Items", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop" },
@@ -258,6 +280,7 @@ export const categories: Category[] = [
   {
     name: "Security & Surveillance",
     icon: "📷",
+    image: "https://images.unsplash.com/photo-1557862921-37829c790f19?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Cameras", image: "https://images.unsplash.com/photo-1557862921-37829c790f19?w=200&h=200&fit=crop", isHot: true },
       { name: "Smart Doorbells", image: "https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=200&h=200&fit=crop" },
@@ -269,6 +292,7 @@ export const categories: Category[] = [
   {
     name: "Small Appliances",
     icon: "🔌",
+    image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=200&h=200&fit=crop",
     subcategories: [
       { name: "Blenders", image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=200&h=200&fit=crop" },
       { name: "Air Fryers", image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop", isHot: true },

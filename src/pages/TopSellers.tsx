@@ -138,14 +138,31 @@ const TopSellers = () => {
     { id: '7days', label: 'Within last 7 days' },
   ];
 
-  const categories = [
+  const categoryFilters = [
     { id: 'all', label: 'All Categories' },
+    { id: 'womens-clothing', label: "Women's Clothing" },
+    { id: 'mens-clothing', label: "Men's Clothing" },
+    { id: 'kids-clothing', label: "Kids Clothing" },
+    { id: 'unisex', label: 'Unisex' },
+    { id: 'beauty', label: 'Beauty & Personal Care' },
+    { id: 'home', label: 'Home & Kitchen' },
     { id: 'electronics', label: 'Electronics' },
-    { id: 'fashion', label: 'Fashion' },
-    { id: 'home', label: 'Home & Garden' },
-    { id: 'beauty', label: 'Beauty' },
+    { id: 'sports', label: 'Sports & Outdoors' },
+    { id: 'health', label: 'Health & Household' },
+    { id: 'baby', label: 'Baby Products' },
+    { id: 'pets', label: 'Pet Supplies' },
+    { id: 'automotive', label: 'Automotive' },
+    { id: 'office', label: 'Office Products' },
+    { id: 'tools', label: 'Tools & Home Improvement' },
+    { id: 'garden', label: 'Patio, Lawn & Garden' },
+    { id: 'travel', label: 'Travel & Luggage' },
+    { id: 'arts', label: 'Arts, Crafts & Sewing' },
     { id: 'toys', label: 'Toys & Games' },
-    { id: 'sports', label: 'Sports' },
+    { id: 'gifts', label: 'Gifts & Seasonal' },
+    { id: 'gadgets', label: 'Smart Gadgets' },
+    { id: 'cleaning', label: 'Cleaning & Storage' },
+    { id: 'security', label: 'Security & Surveillance' },
+    { id: 'appliances', label: 'Small Appliances' },
   ];
 
   useEffect(() => {
@@ -220,7 +237,7 @@ const TopSellers = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-2 py-2 overflow-x-auto scrollbar-hide">
             <span className="text-sm font-medium text-muted-foreground mr-2">Filter by category:</span>
-            {categories.map((cat) => (
+            {categoryFilters.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}

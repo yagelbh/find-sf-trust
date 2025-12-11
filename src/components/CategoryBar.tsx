@@ -10,56 +10,13 @@ interface CategoryBarProps {
 const CategoryBar = ({ activeCategory, onCategoryChange }: CategoryBarProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Get main categories with reliable images
+  // Use all 23 main categories from the data file
   const displayCategories = [
-    { 
-      name: "Recommended", 
-      image: "" 
-    },
-    { 
-      name: "Home & Kitchen", 
-      image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Beauty & Health", 
-      image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Jewelry", 
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Women's Clothing", 
-      image: "https://images.unsplash.com/photo-1558171813-01ed289a814b?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Electronics", 
-      image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Sports & Outdoors", 
-      image: "https://images.unsplash.com/photo-1461896836934- voices?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Toys & Games", 
-      image: "https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Arts & Crafts", 
-      image: "https://images.unsplash.com/photo-1452860606245-08befc0ff44b?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Garden & Patio", 
-      image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Pet Supplies", 
-      image: "https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=100&h=100&fit=crop" 
-    },
-    { 
-      name: "Baby & Kids", 
-      image: "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=100&h=100&fit=crop" 
-    },
+    { name: "All", image: "" },
+    ...categories.map(cat => ({
+      name: cat.name,
+      image: cat.image
+    }))
   ];
 
   const scrollCategories = (direction: 'left' | 'right') => {
