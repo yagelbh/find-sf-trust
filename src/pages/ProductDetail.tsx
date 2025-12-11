@@ -338,7 +338,7 @@ const ProductDetail = () => {
             {showTopSellerBanner && (
               <div className="inline-flex items-center gap-2 bg-warning/20 text-warning px-3 py-2 rounded-lg">
                 <Award className="w-5 h-5" />
-                <span className="font-bold">#{topSellerRank} Top Seller</span>
+                <span className="font-bold">#{topSellerRank} Best Seller</span>
                 <span className="text-sm">in {getCategoryFromTags(product.tags || [], product.productType)}</span>
               </div>
             )}

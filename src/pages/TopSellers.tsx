@@ -132,7 +132,7 @@ const TopSellers = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   const timeFilters = [
-    { id: 'all', label: 'Top Sellers' },
+    { id: 'all', label: 'Best Sellers' },
     { id: '30days', label: 'Within last 30 days' },
     { id: '14days', label: 'Within last 14 days' },
     { id: '7days', label: 'Within last 7 days' },
@@ -197,13 +197,13 @@ const TopSellers = () => {
             </Link>
             <span className="text-sm opacity-80">Home</span>
             <span className="text-sm opacity-60">/</span>
-            <span className="text-sm">Top Sellers</span>
+            <span className="text-sm">Best Sellers</span>
           </div>
           <div className="flex items-center gap-3">
             <Award className="w-8 h-8 fill-current" />
             <div>
               <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
-                Top Sellers
+                Best Sellers
               </h1>
               <p className="text-sm opacity-90">Best picks this week • Most popular items</p>
             </div>
@@ -265,7 +265,7 @@ const TopSellers = () => {
         ) : products.length === 0 ? (
           <div className="text-center py-20">
             <Award className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No Top Sellers Available</h2>
+            <h2 className="text-xl font-semibold mb-2">No Best Sellers Available</h2>
             <p className="text-muted-foreground">Check back soon for trending products!</p>
           </div>
         ) : (

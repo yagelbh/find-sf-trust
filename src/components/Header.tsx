@@ -72,7 +72,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 className="px-3 py-2 text-sm font-semibold bg-warning/20 text-warning hover:bg-warning/30 rounded-lg transition-colors flex items-center gap-1.5"
               >
                 <Award className="w-4 h-4" />
-                Top Sellers
+                Best Sellers
               </Link>
               <Link 
                 to="/flash-deals"
@@ -86,7 +86,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 className="px-3 py-2 text-sm font-semibold bg-destructive/20 text-destructive hover:bg-destructive/30 rounded-lg transition-colors flex items-center gap-1.5"
               >
                 <Tag className="w-4 h-4" />
-                Clearance
+                Value Finds
               </Link>
               {/* Simplified Categories button */}
               <button 

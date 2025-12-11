@@ -135,14 +135,14 @@ const Clearance = () => {
             </Link>
             <span className="text-sm opacity-80">Home</span>
             <span className="text-sm opacity-60">/</span>
-            <span className="text-sm">Clearance</span>
+            <span className="text-sm">Value Finds</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Percent className="w-8 h-8" />
               <div>
                 <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
-                  Clearance Sale
+                  Value Finds
                 </h1>
                 <p className="text-sm opacity-90">Limited stock • Up to 85% off • While supplies last</p>
               </div>
@@ -165,7 +165,7 @@ const Clearance = () => {
         ) : products.length === 0 ? (
           <div className="text-center py-20">
             <Percent className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No Clearance Items</h2>
+            <h2 className="text-xl font-semibold mb-2">No Value Finds Items</h2>
             <p className="text-muted-foreground">Check back soon for clearance deals!</p>
           </div>
         ) : (
