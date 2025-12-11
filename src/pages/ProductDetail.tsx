@@ -264,57 +264,62 @@ const ProductDetail = () => {
                         Copy
                       </button>
                     </div>
-                    <div className="flex items-center justify-center gap-3">
-                      <button 
-                        onClick={() => {
-                          window.open(`mailto:?subject=${encodeURIComponent(product.title)}&body=${encodeURIComponent(window.location.href)}`, '_blank');
-                        }}
-                        className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
-                      >
-                        <Mail className="w-5 h-5" />
-                      </button>
-                      <button 
-                        onClick={() => {
-                          window.open(`sms:?body=${encodeURIComponent(product.title + ' - ' + window.location.href)}`, '_blank');
-                        }}
-                        className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                      </button>
-                      <button 
-                        onClick={() => {
-                          window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(product.title)}`, '_blank');
-                        }}
-                        className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:opacity-80 transition-colors"
-                      >
-                        <X className="w-5 h-5" />
-                      </button>
-                      <button 
-                        onClick={() => {
-                          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
-                        }}
-                        className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-colors"
-                      >
-                        <Facebook className="w-5 h-5" />
-                      </button>
-                      <button 
-                        onClick={() => {
-                          window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.href)}&description=${encodeURIComponent(product.title)}`, '_blank');
-                        }}
-                        className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors"
-                      >
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0a12 12 0 0 0-4.37 23.17c-.1-.94-.2-2.4.04-3.43.2-.93 1.34-5.69 1.34-5.69s-.34-.68-.34-1.7c0-1.59.93-2.78 2.08-2.78.98 0 1.45.74 1.45 1.62 0 .99-.63 2.47-.95 3.84-.27 1.14.57 2.07 1.7 2.07 2.04 0 3.6-2.15 3.6-5.26 0-2.75-1.98-4.67-4.8-4.67-3.27 0-5.19 2.45-5.19 4.98 0 .99.38 2.05.86 2.62.09.11.1.21.08.33-.09.36-.29 1.14-.33 1.3-.05.21-.17.26-.4.16-1.46-.68-2.37-2.82-2.37-4.53 0-3.69 2.68-7.08 7.73-7.08 4.06 0 7.21 2.89 7.21 6.75 0 4.03-2.54 7.27-6.07 7.27-1.19 0-2.3-.62-2.68-1.35l-.73 2.78c-.26 1.01-.97 2.28-1.45 3.05A12 12 0 1 0 12 0z"/></svg>
-                      </button>
-                      <button 
-                        onClick={() => {
-                          navigator.clipboard.writeText(window.location.href);
-                          toast.success('Link copied to clipboard!');
-                        }}
-                        className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
-                      >
-                        <Copy className="w-5 h-5" />
-                      </button>
-                    </div>
+                    {(() => {
+                      const shareUrl = `https://findsfae.com/product/${handle}`;
+                      return (
+                        <div className="flex items-center justify-center gap-3">
+                          <button 
+                            onClick={() => {
+                              window.open(`mailto:?subject=${encodeURIComponent(product.title)}&body=${encodeURIComponent(shareUrl)}`, '_blank');
+                            }}
+                            className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+                          >
+                            <Mail className="w-5 h-5" />
+                          </button>
+                          <button 
+                            onClick={() => {
+                              window.open(`sms:?body=${encodeURIComponent(product.title + ' - ' + shareUrl)}`, '_blank');
+                            }}
+                            className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center hover:bg-green-600 transition-colors"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                          </button>
+                          <button 
+                            onClick={() => {
+                              window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(product.title)}`, '_blank');
+                            }}
+                            className="w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center hover:opacity-80 transition-colors"
+                          >
+                            <X className="w-5 h-5" />
+                          </button>
+                          <button 
+                            onClick={() => {
+                              window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+                            }}
+                            className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 transition-colors"
+                          >
+                            <Facebook className="w-5 h-5" />
+                          </button>
+                          <button 
+                            onClick={() => {
+                              window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&description=${encodeURIComponent(product.title)}`, '_blank');
+                            }}
+                            className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0a12 12 0 0 0-4.37 23.17c-.1-.94-.2-2.4.04-3.43.2-.93 1.34-5.69 1.34-5.69s-.34-.68-.34-1.7c0-1.59.93-2.78 2.08-2.78.98 0 1.45.74 1.45 1.62 0 .99-.63 2.47-.95 3.84-.27 1.14.57 2.07 1.7 2.07 2.04 0 3.6-2.15 3.6-5.26 0-2.75-1.98-4.67-4.8-4.67-3.27 0-5.19 2.45-5.19 4.98 0 .99.38 2.05.86 2.62.09.11.1.21.08.33-.09.36-.29 1.14-.33 1.3-.05.21-.17.26-.4.16-1.46-.68-2.37-2.82-2.37-4.53 0-3.69 2.68-7.08 7.73-7.08 4.06 0 7.21 2.89 7.21 6.75 0 4.03-2.54 7.27-6.07 7.27-1.19 0-2.3-.62-2.68-1.35l-.73 2.78c-.26 1.01-.97 2.28-1.45 3.05A12 12 0 1 0 12 0z"/></svg>
+                          </button>
+                          <button 
+                            onClick={() => {
+                              navigator.clipboard.writeText(shareUrl);
+                              toast.success('Link copied to clipboard!');
+                            }}
+                            className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80 transition-colors"
+                          >
+                            <Copy className="w-5 h-5" />
+                          </button>
+                        </div>
+                      );
+                    })()}
                   </div>
                 </PopoverContent>
               </Popover>
