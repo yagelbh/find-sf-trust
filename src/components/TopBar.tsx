@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 const TopBar = () => {
   const benefits = [
+    { icon: Flame, text: "Hot-selling items", subtext: "Top picks this week", color: "text-warning", link: "/hot-selling" },
     { icon: Truck, text: "Free shipping", subtext: "Min thresholds apply", color: "text-trust", link: null },
-    { icon: Flame, text: "Hot-selling items", subtext: "Top picks this week", color: "text-deal", link: "/flash-deals" },
-    { icon: RefreshCw, text: "Price adjustment", subtext: "Within 30 days", color: "text-warning", link: null },
-    { icon: Shield, text: "Delivery guarantee", subtext: "Refund for any issues", color: "text-info", link: null },
+    { icon: RefreshCw, text: "Price adjustment", subtext: "Within 30 days", color: "text-info", link: null },
+    { icon: Shield, text: "Delivery guarantee", subtext: "Refund for any issues", color: "text-trust", link: null },
   ];
 
   return (
