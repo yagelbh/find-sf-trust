@@ -104,9 +104,8 @@ const DealCard = ({ product, dealEndTime }: { product: ShopifyProduct; dealEndTi
 };
 
 const DealsCountdown = ({ products }: DealsCountdownProps) => {
-  // Set deal end time to 4 hours from now (would be managed in backend)
   const dealEndTime = new Date(Date.now() + 4 * 60 * 60 * 1000);
-  const limitedEndTime = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days
+  const limitedEndTime = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
 
   if (products.length === 0) return null;
 
@@ -122,11 +121,14 @@ const DealsCountdown = ({ products }: DealsCountdownProps) => {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Zap className="w-5 h-5 text-deal fill-deal" />
-                <h2 className="font-display font-bold text-lg text-foreground">Quick Deals</h2>
+                <h2 className="font-display font-extrabold text-xl text-deal tracking-tight">Quick Deals</h2>
               </div>
-              <button className="flex items-center gap-1 text-sm text-primary hover:underline">
-                Time-sensitive offers <ChevronRight className="w-4 h-4" />
-              </button>
+              <Link 
+                to="/flash-deals" 
+                className="flex items-center gap-1 text-sm font-semibold text-deal hover:underline"
+              >
+                Time-limited Offers <ChevronRight className="w-4 h-4" />
+              </Link>
             </div>
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {flashDeals.map((product) => (
@@ -139,12 +141,15 @@ const DealsCountdown = ({ products }: DealsCountdownProps) => {
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <span className="text-lg">🔥</span>
-                <h2 className="font-display font-bold text-lg text-warning">Clearance Corner</h2>
+                <span className="text-xl">🔥</span>
+                <h2 className="font-display font-extrabold text-xl text-warning tracking-tight">Clearance Zone</h2>
               </div>
-              <button className="flex items-center gap-1 text-sm text-primary hover:underline">
-                While supplies last <ChevronRight className="w-4 h-4" />
-              </button>
+              <Link 
+                to="/clearance" 
+                className="flex items-center gap-1 text-sm font-semibold text-warning hover:underline"
+              >
+                While Supplies Last <ChevronRight className="w-4 h-4" />
+              </Link>
             </div>
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {limitedStock.map((product) => (

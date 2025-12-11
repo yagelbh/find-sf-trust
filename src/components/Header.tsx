@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Search, User, Heart, ShoppingCart, ChevronDown, Globe } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, ChevronDown, Globe, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useCartStore } from '@/stores/cartStore';
-import findsafeLogo from '@/assets/findsfae-logo.png';
 import CategoryMegaMenu from './CategoryMegaMenu';
 
 interface HeaderProps {
@@ -16,13 +16,6 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const totalItems = useCartStore(state => state.getTotalItems());
 
-  const navItems = [
-    "Top Picks",
-    "Highly Rated",
-    "Fresh Arrivals",
-    "Today's Deals",
-  ];
-
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -35,28 +28,34 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
       <div className="bg-card">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center gap-6">
-            {/* Logo - Unified one-piece design */}
+          <div className="flex items-center gap-4 lg:gap-6">
+            {/* Logo - Large, Eye-catching with background */}
             <div className="flex-shrink-0">
-              <a href="/" className="flex items-center">
-                <img 
-                  src={findsafeLogo} 
-                  alt="Findsfae" 
-                  className="h-12 md:h-14 w-auto object-contain"
-                />
-              </a>
+              <Link to="/" className="flex items-center">
+                <div className="bg-gradient-to-r from-primary via-primary to-accent px-4 py-2 rounded-xl shadow-lg">
+                  <span className="text-2xl md:text-3xl font-display font-black text-primary-foreground tracking-tight">
+                    Findsfae
+                  </span>
+                </div>
+              </Link>
             </div>
 
-            {/* Categories */}
+            {/* Navigation Links */}
             <nav className="hidden lg:flex items-center gap-1 relative">
-              {navItems.map((item, index) => (
-                <button
-                  key={index}
-                  className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors"
-                >
-                  {item}
-                </button>
-              ))}
+              <Link 
+                to="/flash-deals"
+                className="px-3 py-2 text-sm font-semibold text-deal hover:bg-deal/10 rounded-lg transition-colors flex items-center gap-1"
+              >
+                <span className="animate-pulse">⚡</span>
+                Time-limited Offers
+              </Link>
+              <Link 
+                to="/clearance"
+                className="px-3 py-2 text-sm font-semibold text-warning hover:bg-warning/10 rounded-lg transition-colors flex items-center gap-1"
+              >
+                <span>🔥</span>
+                While Supplies Last
+              </Link>
               <button 
                 className="px-3 py-2 text-sm font-medium text-foreground/80 hover:text-primary transition-colors flex items-center gap-1 bg-muted rounded-lg"
                 onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
