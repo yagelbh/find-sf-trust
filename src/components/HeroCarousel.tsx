@@ -27,7 +27,7 @@ const HeroCarousel = () => {
                 Up to 70% Off Everything
               </h2>
               <p className="text-white/80 text-xs md:text-sm mt-1 md:mt-2">
-                Limited time offers • Free shipping on orders $35+
+                Limited time offers • Free shipping on all orders
               </p>
             </div>
           </div>
