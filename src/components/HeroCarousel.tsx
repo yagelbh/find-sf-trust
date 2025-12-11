@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { Button } from './ui/button';
+import heroImage from '@/assets/hero-products.png';
 
 const HeroCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -13,6 +14,7 @@ const HeroCarousel = () => {
       description: "OFF",
       cta: "SHOP NOW",
       bgGradient: "from-secondary via-navy to-secondary",
+      hasImage: true,
     },
     {
       title: "NEW ARRIVALS",
@@ -21,6 +23,7 @@ const HeroCarousel = () => {
       description: "OFF",
       cta: "DISCOVER",
       bgGradient: "from-primary/90 via-coral to-primary/90",
+      hasImage: false,
     },
     {
       title: "FREE SHIPPING",
@@ -29,6 +32,7 @@ const HeroCarousel = () => {
       description: "",
       cta: "LEARN MORE",
       bgGradient: "from-trust via-accent to-trust",
+      hasImage: false,
     },
   ];
 
@@ -51,8 +55,20 @@ const HeroCarousel = () => {
         {slides.map((slide, index) => (
           <div 
             key={index}
-            className={`min-w-full h-[400px] bg-gradient-to-r ${slide.bgGradient} relative`}
+            className={`min-w-full h-[450px] bg-gradient-to-r ${slide.bgGradient} relative overflow-hidden`}
           >
+            {/* Background Image for first slide */}
+            {slide.hasImage && (
+              <div className="absolute inset-0">
+                <img 
+                  src={heroImage} 
+                  alt="Shop Products" 
+                  className="w-full h-full object-cover opacity-60"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary/90 via-secondary/70 to-secondary/50" />
+              </div>
+            )}
+
             {/* Decorative elements */}
             <div className="absolute inset-0 overflow-hidden">
               <div className="absolute top-10 left-20 w-4 h-4 rounded-full bg-primary-foreground/20 animate-float" />
@@ -62,7 +78,7 @@ const HeroCarousel = () => {
               <Sparkles className="absolute bottom-32 left-60 w-6 h-6 text-warning/40 animate-pulse" style={{ animationDelay: '0.7s' }} />
             </div>
 
-            <div className="container mx-auto px-4 h-full flex items-center">
+            <div className="container mx-auto px-4 h-full flex items-center relative z-10">
               <div className="text-center w-full animate-fade-in">
                 <p className="text-primary-foreground/80 text-lg mb-2 tracking-wider">
                   {slide.title}
@@ -70,7 +86,7 @@ const HeroCarousel = () => {
                 <div className="flex items-center justify-center gap-4 mb-6">
                   <span className="text-primary-foreground text-2xl">{slide.subtitle}</span>
                   <div className="flex items-baseline">
-                    <span className="text-8xl md:text-9xl font-display font-black text-primary-foreground">
+                    <span className="text-8xl md:text-9xl font-display font-black text-primary-foreground drop-shadow-lg">
                       {slide.discount}
                     </span>
                     <span className="text-4xl md:text-5xl font-bold text-primary-foreground ml-2">
