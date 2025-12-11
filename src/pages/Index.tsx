@@ -8,11 +8,13 @@ import ShopifyProductGrid from '@/components/ShopifyProductGrid';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CountryModal from '@/components/CountryModal';
+import SecurityPuzzle from '@/components/SecurityPuzzle';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 const Index = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCountryModal, setShowCountryModal] = useState(false);
+  const [showSecurityPuzzle, setShowSecurityPuzzle] = useState(false);
   const [dealProducts, setDealProducts] = useState<ShopifyProduct[]>([]);
   const [currentCountry, setCurrentCountry] = useState({
     code: 'US',
@@ -21,6 +23,17 @@ const Index = () => {
     currency: 'USD',
     currencySymbol: '$'
   });
+
+  // Show security puzzle after 30 seconds for trust building
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const hasVerified = sessionStorage.getItem('securityVerified');
+      if (!hasVerified) {
+        setShowSecurityPuzzle(true);
+      }
+    }, 30000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Load products for deals section
   useEffect(() => {
@@ -86,6 +99,14 @@ const Index = () => {
         onClose={() => setShowCountryModal(false)}
         currentCountry={currentCountry}
         onCountryChange={setCurrentCountry}
+      />
+
+      <SecurityPuzzle
+        isOpen={showSecurityPuzzle}
+        onClose={() => setShowSecurityPuzzle(false)}
+        onVerify={() => {
+          sessionStorage.setItem('securityVerified', 'true');
+        }}
       />
 
       {/* Feedback Button */}
