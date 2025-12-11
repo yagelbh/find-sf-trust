@@ -1,4 +1,4 @@
-import { Truck, RefreshCw, Shield, ChevronRight, Award, Globe } from 'lucide-react';
+import { Truck, RefreshCw, Shield, ChevronRight, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
@@ -10,12 +10,10 @@ interface TopBarProps {
 const TopBar = ({ onCountryClick, currentCountry }: TopBarProps) => {
   const [detectedCountry, setDetectedCountry] = useState({ name: 'United States', flag: '🇺🇸', code: 'US' });
 
-  // Auto-detect country on mount
   useEffect(() => {
     const detectCountry = () => {
       try {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        // Map common timezones to countries
         const tzCountryMap: Record<string, { name: string; flag: string; code: string }> = {
           'America/New_York': { name: 'United States', flag: '🇺🇸', code: 'US' },
           'America/Los_Angeles': { name: 'United States', flag: '🇺🇸', code: 'US' },
@@ -42,50 +40,38 @@ const TopBar = ({ onCountryClick, currentCountry }: TopBarProps) => {
   const displayCountry = currentCountry || detectedCountry;
 
   const benefits = [
-    { icon: Award, text: "Top Sellers", subtext: "Best picks this week", color: "text-warning", link: "/top-sellers" },
-    { icon: Truck, text: "Free shipping", subtext: "Min thresholds apply", color: "text-foreground", link: null },
-    { icon: RefreshCw, text: "Price adjustment", subtext: "Within 30 days", color: "text-foreground", link: null },
-    { icon: Shield, text: "Delivery guarantee", subtext: "Refund for any issues", color: "text-foreground", link: null },
+    { icon: Truck, text: "Free shipping", subtext: "Min thresholds apply" },
+    { icon: RefreshCw, text: "Price adjustment", subtext: "Within 30 days" },
+    { icon: Shield, text: "Delivery guarantee", subtext: "Refund for any issues" },
   ];
 
   return (
-    <div className="bg-secondary text-secondary-foreground">
+    <div className="bg-foreground text-background">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-2 text-sm">
           <div className="flex items-center gap-6 lg:gap-8">
-            {benefits.map((benefit, index) => {
-              const content = (
-                <div className="flex items-center gap-2 group cursor-pointer">
-                  <benefit.icon className={`w-4 h-4 ${benefit.color}`} />
-                  <div className="flex flex-col">
-                    <span className={`font-semibold ${benefit.color} flex items-center gap-1 text-xs lg:text-sm`}>
-                      {benefit.text}
-                      <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </span>
-                    <span className="text-[10px] lg:text-xs text-secondary-foreground/70 hidden sm:block">{benefit.subtext}</span>
-                  </div>
+            {benefits.map((benefit, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <benefit.icon className="w-4 h-4 text-warning" />
+                <div className="flex flex-col">
+                  <span className="font-semibold text-background flex items-center gap-1 text-xs lg:text-sm">
+                    {benefit.text}
+                    <ChevronRight className="w-3 h-3 opacity-70" />
+                  </span>
+                  <span className="text-[10px] lg:text-xs text-background/70 hidden sm:block">{benefit.subtext}</span>
                 </div>
-              );
-
-              return benefit.link ? (
-                <Link key={index} to={benefit.link} className="hover:opacity-80 transition-opacity">
-                  {content}
-                </Link>
-              ) : (
-                <div key={index} className="hidden md:block">{content}</div>
-              );
-            })}
+              </div>
+            ))}
           </div>
 
-          {/* Country Selector - Auto detected */}
           <button
             onClick={onCountryClick}
-            className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-secondary-foreground/10 transition-colors"
+            className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-background/10 transition-colors"
           >
-            <Globe className="w-4 h-4" />
+            <Globe className="w-4 h-4 text-background" />
             <span className="text-lg">{displayCountry.flag}</span>
-            <span className="text-xs font-medium hidden sm:inline">{displayCountry.name}</span>
-            <ChevronRight className="w-3 h-3" />
+            <span className="text-xs font-medium hidden sm:inline text-background">{displayCountry.name}</span>
+            <ChevronRight className="w-3 h-3 text-background" />
           </button>
         </div>
       </div>

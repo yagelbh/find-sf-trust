@@ -91,11 +91,11 @@ const Index = () => {
         currentCountry={currentCountry}
       />
 
-      {/* Trust Bar */}
-      <TrustBar />
-
       {/* Hero Carousel */}
       <HeroCarousel />
+
+      {/* Trust Bar - After Hero */}
+      <TrustBar />
 
       {/* Deals Countdown Section */}
       <DealsCountdown products={dealProducts} />
