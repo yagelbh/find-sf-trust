@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { categories } from '@/data/categories';
 
 interface CategoryBarProps {
@@ -12,10 +12,9 @@ const CategoryBar = ({ activeCategory, onCategoryChange }: CategoryBarProps) => 
 
   // Use all 23 main categories from the data file
   const displayCategories = [
-    { name: "All", image: "" },
+    { name: "Recommended" },
     ...categories.map(cat => ({
-      name: cat.name,
-      image: cat.image
+      name: cat.name
     }))
   ];
 
@@ -41,50 +40,28 @@ const CategoryBar = ({ activeCategory, onCategoryChange }: CategoryBarProps) => 
             <ChevronLeft className="w-4 h-4" />
           </button>
           
-          {/* Scrollable categories */}
+          {/* Scrollable categories - Pill buttons */}
           <div 
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide px-8 py-2"
+            className="flex gap-3 overflow-x-auto scrollbar-hide px-8 py-1"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {displayCategories.map((cat, index) => (
+            {displayCategories.map((cat) => (
               <button
                 key={cat.name}
                 onClick={() => onCategoryChange(cat.name)}
-                className="flex flex-col items-center gap-2 min-w-[80px] group"
+                className={`px-5 py-2.5 rounded-full border text-sm font-medium whitespace-nowrap transition-all ${
+                  activeCategory === cat.name 
+                    ? 'bg-foreground text-background border-foreground' 
+                    : 'bg-card text-foreground border-border hover:border-foreground/50'
+                }`}
               >
-                {/* Circular image container */}
-                <div className={`w-16 h-16 rounded-full overflow-hidden border-2 transition-all ${
-                  activeCategory === cat.name 
-                    ? 'border-primary shadow-lg ring-2 ring-primary/30' 
-                    : 'border-border group-hover:border-primary/50 group-hover:shadow-md'
-                }`}>
-                  {cat.image ? (
-                    <img 
-                      src={cat.image} 
-                      alt={cat.name}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-muted flex items-center justify-center">
-                      <LayoutGrid className="w-6 h-6 text-muted-foreground" />
-                    </div>
-                  )}
-                </div>
-                {/* Category name */}
-                <span className={`text-xs text-center font-semibold leading-tight max-w-[80px] ${
-                  activeCategory === cat.name 
-                    ? 'text-primary' 
-                    : 'text-foreground group-hover:text-primary'
-                }`}>
-                  {cat.name}
-                </span>
+                {cat.name}
               </button>
             ))}
           </div>
 
-          {/* Right scroll button with arrow */}
+          {/* Right scroll button */}
           <button 
             onClick={() => scrollCategories('right')}
             className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-lg rounded-full flex items-center justify-center hover:bg-muted transition-colors border border-border"
