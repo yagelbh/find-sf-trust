@@ -1,5 +1,5 @@
-import { Star, Heart, Truck, ShoppingCart, Clock, Award } from 'lucide-react';
-import { useState } from 'react';
+import { Star, Heart, Truck, ShoppingCart, Clock, Award, Flame } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
@@ -7,9 +7,11 @@ import { Link } from 'react-router-dom';
 
 interface ShopifyProductCardProps {
   product: ShopifyProduct;
+  showTopSellerRank?: boolean;
+  topSellerRank?: number;
 }
 
-const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
+const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank }: ShopifyProductCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const addItem = useCartStore(state => state.addItem);
@@ -31,6 +33,21 @@ const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
   const isBestSeller = tags.some(tag => tag.toLowerCase().includes('best') || tag.toLowerCase().includes('popular'));
   const isDeal = tags.some(tag => tag.toLowerCase().includes('deal') || tag.toLowerCase().includes('sale'));
   const isLimited = tags.some(tag => tag.toLowerCase().includes('limited') || tag.toLowerCase().includes('last'));
+  const isClearance = tags.some(tag => tag.toLowerCase().includes('clearance'));
+  const isTimeLimited = tags.some(tag => tag.toLowerCase().includes('time-limited') || tag.toLowerCase().includes('flash'));
+
+  // Randomized indicator - either "days left" or "sold count"
+  const indicator = useMemo(() => {
+    const showDaysLeft = Math.random() > 0.5;
+    if (showDaysLeft) {
+      const daysLeft = Math.floor(Math.random() * 7) + 1;
+      return { type: 'days', value: daysLeft, text: `Last ${daysLeft} days` };
+    } else {
+      const soldCount = Math.floor(Math.random() * 50) + 5;
+      const soldDisplay = soldCount > 20 ? `${Math.floor(soldCount / 10) * 10}K+` : `${soldCount * 100}+`;
+      return { type: 'sold', value: soldCount, text: `${soldDisplay} sold` };
+    }
+  }, [node.id]);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -86,8 +103,9 @@ const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
         )}
         
         {isDeal && !isBestSeller && (
-          <div className="absolute top-2 left-2 bg-deal text-primary-foreground text-[10px] font-bold px-2 py-1 rounded">
-            🔥 Hot Deal
+          <div className="absolute top-2 left-2 bg-deal text-primary-foreground text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1">
+            <Flame className="w-3 h-3" />
+            Hot Deal
           </div>
         )}
 
@@ -122,7 +140,7 @@ const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
       {/* Content */}
       <div className="p-3">
         {/* Free Shipping Badge */}
-        <div className="flex items-center gap-1 text-trust text-xs font-medium mb-2">
+        <div className="flex items-center gap-1 text-muted-foreground text-xs font-medium mb-2">
           <Truck className="w-3 h-3" />
           <span>Free shipping</span>
         </div>
@@ -135,6 +153,19 @@ const ShopifyProductCard = ({ product }: ShopifyProductCardProps) => {
           {compareAtPrice && compareAtPrice > price && (
             <span className="text-sm text-muted-foreground line-through">
               ${compareAtPrice.toFixed(2)}
+            </span>
+          )}
+        </div>
+
+        {/* Randomized Indicator - Days left OR Sold count */}
+        <div className="flex items-center gap-1 mb-1">
+          {indicator.type === 'days' ? (
+            <span className="text-xs font-semibold text-deal">
+              {indicator.text}
+            </span>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              <span className="text-foreground font-medium">{indicator.text}</span>
             </span>
           )}
         </div>
