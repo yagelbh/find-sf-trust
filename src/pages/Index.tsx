@@ -10,6 +10,7 @@ import AuthModal from '@/components/AuthModal';
 import SecurityPuzzle from '@/components/SecurityPuzzle';
 import ChatWidget from '@/components/ChatWidget';
 import CartDrawer from '@/components/CartDrawer';
+import LeadCapturePopup from '@/components/LeadCapturePopup';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 const Index = () => {
@@ -97,6 +98,13 @@ const Index = () => {
       <CartDrawer 
         isOpen={showCartDrawer} 
         onClose={() => setShowCartDrawer(false)} 
+      />
+
+      {/* Lead Capture Popup - shows after 30 seconds */}
+      <LeadCapturePopup 
+        delaySeconds={30}
+        discountCode="WELCOME10"
+        discountPercent={10}
       />
 
       {/* Chat Widget */}
