@@ -3,9 +3,7 @@ import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import TrustBar from '@/components/TrustBar';
 import HeroCarousel from '@/components/HeroCarousel';
-import LightningDeals from '@/components/LightningDeals';
-import ProductGrid from '@/components/ProductGrid';
-import AppBanner from '@/components/AppBanner';
+import ShopifyProductGrid from '@/components/ShopifyProductGrid';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CountryModal from '@/components/CountryModal';
@@ -13,7 +11,6 @@ import CountryModal from '@/components/CountryModal';
 const Index = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCountryModal, setShowCountryModal] = useState(false);
-  const [cartCount, setCartCount] = useState(3);
   const [currentCountry, setCurrentCountry] = useState({
     code: 'US',
     name: 'United States',
@@ -24,10 +21,8 @@ const Index = () => {
 
   // Auto-detect country on mount (simulated)
   useEffect(() => {
-    // In a real app, you'd use a geolocation service
     const detectCountry = async () => {
       try {
-        // Simulated detection - in real app use IP geolocation API
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         console.log('Detected timezone:', timezone);
       } catch (error) {
@@ -38,7 +33,6 @@ const Index = () => {
   }, []);
 
   const handleMessagesClick = () => {
-    // Show auth modal when clicking messages (requires login)
     setShowAuthModal(true);
   };
 
@@ -52,7 +46,6 @@ const Index = () => {
         onAuthClick={() => setShowAuthModal(true)}
         onMessagesClick={handleMessagesClick}
         onCountryClick={() => setShowCountryModal(true)}
-        cartCount={cartCount}
         currentCountry={currentCountry}
       />
 
@@ -64,16 +57,10 @@ const Index = () => {
 
       {/* Main Content */}
       <main className="container mx-auto px-4">
-        {/* Lightning Deals */}
-        <LightningDeals />
+        {/* Shopify Products */}
+        <ShopifyProductGrid />
 
-        {/* Product Grid */}
-        <ProductGrid />
-
-        {/* App Download Banner */}
-        <AppBanner />
-
-        {/* More Products (Second Grid) */}
+        {/* More Products Section */}
         <section className="py-8">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-display font-bold text-foreground mb-2">
@@ -83,7 +70,6 @@ const Index = () => {
               Trusted by millions of happy customers
             </p>
           </div>
-          <ProductGrid />
         </section>
       </main>
 
@@ -114,8 +100,8 @@ const Index = () => {
       </button>
 
       {/* Feedback Button */}
-      <button className="fixed bottom-24 right-6 bg-card text-foreground px-3 py-2 rounded-l-lg shadow-lg text-sm font-medium border border-border hover:bg-muted transition-colors z-40 writing-mode-vertical">
-        <span className="transform -rotate-90 block">Feedback</span>
+      <button className="fixed bottom-24 right-6 bg-card text-foreground px-3 py-2 rounded-l-lg shadow-lg text-sm font-medium border border-border hover:bg-muted transition-colors z-40">
+        <span className="transform -rotate-90 block whitespace-nowrap" style={{ writingMode: 'vertical-rl' }}>Feedback</span>
       </button>
     </div>
   );

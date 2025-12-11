@@ -2,7 +2,7 @@ import { Shield, CreditCard, Truck, CheckCircle, AlertTriangle, ChevronRight } f
 
 const TrustBar = () => {
   const trustItems = [
-    { icon: Shield, text: "Why choose FindSafe?", isMain: true },
+    { icon: Shield, text: "Why choose Findsfae?", isMain: true },
     { icon: Shield, text: "Secure privacy" },
     { icon: CreditCard, text: "Safe payments" },
     { icon: Truck, text: "Delivery guarantee" },
@@ -41,7 +41,7 @@ const TrustBar = () => {
               <AlertTriangle className="w-4 h-4" />
               <span className="text-sm font-medium">Security reminder:</span>
               <span className="text-sm text-foreground">
-                Please be wary of scam messages and links. FindSafe won't ask for extra fees via SMS or email.
+                Please be wary of scam messages and links. Findsfae won't ask for extra fees via SMS or email.
               </span>
             </div>
             <button className="flex items-center gap-1 text-sm text-trust font-medium hover:underline">

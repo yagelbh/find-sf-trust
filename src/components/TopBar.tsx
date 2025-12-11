@@ -1,4 +1,4 @@
-import { Truck, RefreshCw, Shield, Smartphone, ChevronRight } from 'lucide-react';
+import { Truck, RefreshCw, Shield, ChevronRight } from 'lucide-react';
 
 const TopBar = () => {
   const benefits = [
@@ -10,7 +10,7 @@ const TopBar = () => {
   return (
     <div className="bg-secondary text-secondary-foreground">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between py-2 text-sm">
+        <div className="flex items-center justify-center py-2 text-sm">
           <div className="flex items-center gap-8">
             {benefits.map((benefit, index) => (
               <div key={index} className="flex items-center gap-2 group cursor-pointer">
@@ -24,11 +24,6 @@ const TopBar = () => {
                 </div>
               </div>
             ))}
-          </div>
-          
-          <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-            <Smartphone className="w-5 h-5" />
-            <span className="font-semibold">Get the FindSafe App</span>
           </div>
         </div>
       </div>
