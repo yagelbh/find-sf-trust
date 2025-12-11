@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import ProductDetail from "./pages/ProductDetail";
 import FlashDeals from "./pages/FlashDeals";
 import Clearance from "./pages/Clearance";
+import Cart from "./pages/Cart";
+import Wishlist from "./pages/Wishlist";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,6 +24,8 @@ const App = () => (
           <Route path="/product/:handle" element={<ProductDetail />} />
           <Route path="/flash-deals" element={<FlashDeals />} />
           <Route path="/clearance" element={<Clearance />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
