@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Search, User, Heart, ShoppingCart, ChevronDown, Sparkles, Flame, Award, Tag } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, ChevronDown, Flame, Award, Tag } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/stores/cartStore';
 import CategoryMegaMenu from './CategoryMegaMenu';
+import findsfaeLogo from '@/assets/findsfae-logo.png';
 
 interface HeaderProps {
   onAuthClick: () => void;
@@ -37,19 +38,14 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
       <div className="bg-secondary">
         <div className="container mx-auto px-4 py-2">
           <div className="flex items-center gap-4 lg:gap-6">
-            {/* Logo - Creative compact design with faerie touch */}
+            {/* Logo - Using actual brand image */}
             <div className="flex-shrink-0">
-              <Link to="/" className="flex items-center group">
-                <div className="relative">
-                  <div className="flex items-center gap-0.5 bg-gradient-to-r from-emerald-600 to-teal-500 px-3 py-1.5 rounded-xl shadow-md group-hover:shadow-lg transition-all">
-                    <span className="text-sm font-black text-white tracking-tight">finds</span>
-                    <span className="text-sm font-black text-yellow-300 tracking-tight">fae</span>
-                    <svg className="w-3 h-3 ml-0.5 text-yellow-300" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2L9 9H2L7.5 13.5L5.5 21L12 16.5L18.5 21L16.5 13.5L22 9H15L12 2Z" />
-                    </svg>
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
-                </div>
+              <Link to="/" className="block group">
+                <img 
+                  src={findsfaeLogo} 
+                  alt="Findsfae" 
+                  className="h-9 w-auto object-contain group-hover:scale-105 transition-transform"
+                />
               </Link>
             </div>
 
