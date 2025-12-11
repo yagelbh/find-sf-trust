@@ -274,52 +274,68 @@ export async function createCheckout(items: Array<{ variantId: string; quantity:
   return url.toString();
 }
 
-// Category mapping from tags
+// Category mapping from tags - matches the 23-category taxonomy
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
-  'Electronics': ['electronics', 'electronic', 'tech', 'gadget', 'phone', 'computer', 'laptop'],
-  'Home & Garden': ['home', 'garden', 'furniture', 'decor', 'kitchen', 'household'],
-  'Beauty & Health': ['beauty', 'health', 'skincare', 'makeup', 'cosmetic', 'wellness'],
-  'Fashion - Women': ['women', 'womens', "women's", 'ladies', 'female'],
-  'Fashion - Men': ['men', 'mens', "men's", 'male'],
-  'Fashion - Kids': ['kids', 'children', 'baby', 'toddler', 'infant'],
-  'Bags & Luggage': ['bag', 'bags', 'luggage', 'backpack', 'purse', 'handbag'],
-  'Sports & Outdoors': ['sports', 'outdoor', 'fitness', 'exercise', 'gym', 'athletic'],
-  'Toys & Games': ['toys', 'games', 'toy', 'game', 'puzzle', 'play'],
-  'Pet Supplies': ['pet', 'pets', 'dog', 'cat', 'animal'],
-  'Automotive': ['automotive', 'car', 'auto', 'vehicle', 'motor'],
-  'Jewelry & Accessories': ['jewelry', 'jewellery', 'accessory', 'accessories', 'watch', 'watches'],
-  'Office & School': ['office', 'school', 'stationery', 'desk'],
-  'Tools & Hardware': ['tools', 'hardware', 'tool', 'drill', 'wrench'],
+  "Women's Clothing": ['women', 'womens', "women's", 'ladies', 'female', 'dress', 'blouse', 'skirt', 'leggings', 'swimwear women'],
+  "Men's Clothing": ['men', 'mens', "men's", 'male', 'gentleman', 'shirt', 'hoodie', 'pants men', 'workwear'],
+  "Kids Clothing": ['kids', 'children', 'child', 'boys', 'girls', 'toddler', 'infant clothing', 'baby clothing'],
+  "Unisex": ['unisex', 't-shirt', 'tshirt', 'streetwear', 'hoodie unisex'],
+  "Beauty & Personal Care": ['beauty', 'skincare', 'makeup', 'cosmetic', 'hair styling', 'nail', 'grooming', 'shaving', 'personal care'],
+  "Home & Kitchen": ['home', 'kitchen', 'cookware', 'bakeware', 'home decor', 'storage', 'cleaning tools', 'household'],
+  "Electronics": ['electronics', 'electronic', 'phone', 'computer', 'laptop', 'smart home', 'audio', 'wearable', 'portable tech', 'charger', 'cable'],
+  "Sports & Outdoors": ['sports', 'outdoor', 'fitness', 'exercise', 'gym', 'athletic', 'yoga', 'pilates', 'camping', 'cycling', 'water sports', 'hiking'],
+  "Health & Household": ['health', 'wellness', 'massager', 'pain relief', 'sleep', 'brace', 'support', 'first aid', 'medical'],
+  "Baby Products": ['baby', 'infant', 'nursery', 'feeding baby', 'stroller', 'baby safety', 'baby toys'],
+  "Pet Supplies": ['pet', 'pets', 'dog', 'cat', 'animal', 'pet toy', 'pet bed', 'pet food', 'grooming pet'],
+  "Automotive": ['automotive', 'car', 'auto', 'vehicle', 'motor', 'seat cover', 'car organizer', 'phone mount car'],
+  "Office Products": ['office', 'desk', 'stationery', 'productivity', 'writing', 'school supplies', 'organizer office'],
+  "Tools & Home Improvement": ['tools', 'hardware', 'tool', 'drill', 'wrench', 'measuring', 'repair', 'electrical'],
+  "Patio, Lawn & Garden": ['garden', 'patio', 'lawn', 'outdoor decor', 'plant', 'gardening', 'watering', 'pest control'],
+  "Travel & Luggage": ['travel', 'luggage', 'suitcase', 'bag', 'bags', 'backpack', 'packing', 'travel pillow'],
+  "Arts, Crafts & Sewing": ['arts', 'crafts', 'sewing', 'diy', 'painting', 'craft', 'resin', 'knitting', 'embroidery'],
+  "Toys & Games": ['toys', 'games', 'toy', 'game', 'puzzle', 'play', 'stem', 'learning game', 'collectible'],
+  "Gifts & Seasonal": ['gift', 'gifts', 'holiday', 'christmas', 'party', 'seasonal', 'decoration', 'personalized'],
+  "Smart Gadgets": ['gadget', 'gadgets', 'led', 'usb', 'smart tracker', 'projector', 'tech gadget', 'innovative'],
+  "Cleaning & Storage": ['cleaning', 'storage', 'laundry', 'organization', 'air freshener', 'vacuum', 'mop'],
+  "Security & Surveillance": ['security', 'surveillance', 'camera', 'doorbell', 'lock', 'alarm', 'motion sensor', 'anti-theft'],
+  "Small Appliances": ['appliance', 'blender', 'air fryer', 'coffee maker', 'kettle', 'toaster', 'mixer', 'mini appliance'],
 };
 
 // Extract category from product tags
 export function getCategoryFromTags(tags: string[], productType?: string): string {
-  // First, check if any tag directly matches a category name
   const normalizedTags = tags.map(t => t.toLowerCase().trim());
+  const combinedText = [...normalizedTags, (productType || '').toLowerCase()].join(' ');
+  
+  // Score each category by keyword matches
+  let bestMatch = { category: 'General Products', score: 0 };
   
   for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-    // Check exact category name match in tags
+    let score = 0;
+    
+    // Check exact category name match in tags (highest priority)
     if (normalizedTags.some(tag => tag === category.toLowerCase())) {
       return category;
     }
-    // Check keyword matches
+    
+    // Score by keyword matches
     for (const keyword of keywords) {
-      if (normalizedTags.some(tag => tag.includes(keyword))) {
-        return category;
+      if (combinedText.includes(keyword.toLowerCase())) {
+        // Longer keyword matches are more specific/valuable
+        score += keyword.length;
       }
     }
-  }
-  
-  // Fallback to productType if available
-  if (productType) {
-    for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-      const normalizedType = productType.toLowerCase();
-      if (normalizedType === category.toLowerCase()) return category;
-      if (keywords.some(kw => normalizedType.includes(kw))) return category;
+    
+    if (score > bestMatch.score) {
+      bestMatch = { category, score };
     }
   }
   
-  // Default fallback
+  // Return best match if we found any keywords
+  if (bestMatch.score > 0) {
+    return bestMatch.category;
+  }
+  
+  // Fallback to first tag or productType
   return tags[0] || productType || 'General Products';
 }
 
