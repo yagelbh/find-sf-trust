@@ -14,6 +14,9 @@ const TopBar = () => {
           <div className="flex items-center justify-between w-full max-w-4xl gap-8 lg:gap-16 xl:gap-24">
             {benefits.map((benefit, index) => (
               <div key={index} className="flex items-center gap-2.5">
+                {index > 0 && (
+                  <div className="h-8 w-px bg-background/30 mr-4 lg:mr-8 xl:mr-12" />
+                )}
                 <benefit.icon className="w-5 h-5 lg:w-6 lg:h-6 text-warning" strokeWidth={2} />
                 <div className="flex flex-col">
                   <span className="font-bold text-background text-sm lg:text-base tracking-tight">
