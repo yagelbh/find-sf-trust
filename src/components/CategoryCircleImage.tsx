@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { forwardRef, useMemo, useState } from "react";
 
 function initialsFromName(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -7,20 +7,20 @@ function initialsFromName(name: string) {
   return (first + second).toUpperCase();
 }
 
-export function CategoryCircleImage({
-  src,
-  alt,
-  size = 80,
-}: {
-  src: string;
-  alt: string;
-  size?: number;
-}) {
+export const CategoryCircleImage = forwardRef<
+  HTMLDivElement,
+  {
+    src: string;
+    alt: string;
+    size?: number;
+  }
+>(function CategoryCircleImage({ src, alt, size = 80 }, ref) {
   const [hasError, setHasError] = useState(false);
   const initials = useMemo(() => initialsFromName(alt), [alt]);
 
   return (
     <div
+      ref={ref}
       className="rounded-full overflow-hidden bg-muted ring-2 ring-transparent group-hover:ring-primary group-hover:ring-offset-2 transition-all shadow-md flex items-center justify-center"
       style={{ width: size, height: size }}
       aria-label={alt}
@@ -41,4 +41,5 @@ export function CategoryCircleImage({
       )}
     </div>
   );
-}
+});
+CategoryCircleImage.displayName = 'CategoryCircleImage';
