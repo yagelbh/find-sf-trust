@@ -40,12 +40,12 @@ const CountdownTimer = ({ endTime }: { endTime: Date }) => {
   }, [endTime]);
 
   return (
-    <div className="flex items-center gap-1">
-      <span className="bg-foreground text-background px-2 py-1 rounded text-sm font-bold">{String(timeLeft.hours).padStart(2, '0')}</span>
-      <span className="text-foreground font-bold">:</span>
-      <span className="bg-foreground text-background px-2 py-1 rounded text-sm font-bold">{String(timeLeft.minutes).padStart(2, '0')}</span>
-      <span className="text-foreground font-bold">:</span>
-      <span className="bg-foreground text-background px-2 py-1 rounded text-sm font-bold">{String(timeLeft.seconds).padStart(2, '0')}</span>
+    <div className="flex items-center gap-0.5">
+      <span className="bg-foreground text-background px-1.5 py-0.5 rounded text-xs font-bold">{String(timeLeft.hours).padStart(2, '0')}</span>
+      <span className="text-foreground font-bold text-xs">:</span>
+      <span className="bg-foreground text-background px-1.5 py-0.5 rounded text-xs font-bold">{String(timeLeft.minutes).padStart(2, '0')}</span>
+      <span className="text-foreground font-bold text-xs">:</span>
+      <span className="bg-foreground text-background px-1.5 py-0.5 rounded text-xs font-bold">{String(timeLeft.seconds).padStart(2, '0')}</span>
     </div>
   );
 };
@@ -231,15 +231,15 @@ const ProductDetail = () => {
           {/* Product Info */}
           <div className="space-y-4">
             {/* Top Banner - Free Shipping & Credit + Share */}
-            <div className="bg-gradient-to-r from-primary to-deal text-primary-foreground p-3 rounded-lg flex items-center justify-between">
+            <div className="bg-gradient-to-r from-primary to-deal text-primary-foreground px-4 py-2 rounded-lg flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">Free shipping</span>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">Free shipping</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">$20 Credit for delay</span>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">$20 Credit for delay</span>
                 </div>
               </div>
               {/* Share Button */}
@@ -361,12 +361,12 @@ const ProductDetail = () => {
             </div>
 
             {/* Deal Countdown */}
-            <div className="bg-gradient-to-r from-deal/90 to-warning/90 text-primary-foreground p-4 rounded-xl">
+            <div className="bg-gradient-to-r from-deal/90 to-warning/90 text-primary-foreground px-4 py-2.5 rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg">Big sale</span>
-                  <span className="opacity-80">|</span>
-                  <span className="text-sm">Ends in</span>
+                  <span className="font-semibold text-sm">Big sale</span>
+                  <span className="opacity-80 text-xs">|</span>
+                  <span className="text-xs">Ends in</span>
                 </div>
                 <CountdownTimer endTime={dealEndTime} />
               </div>
@@ -414,10 +414,10 @@ const ProductDetail = () => {
             )}
 
             {/* Add to Cart Button */}
-            <Button variant="cta" size="xl" className="w-full text-lg" onClick={handleAddToCart}>
-              <ShoppingCart className="w-5 h-5 mr-2" />
+            <Button variant="cta" size="lg" className="w-full" onClick={handleAddToCart}>
+              <ShoppingCart className="w-4 h-4 mr-2" />
               Add to Cart
-              {discount && <span className="ml-2 text-sm opacity-90">{discount}% OFF</span>}
+              {discount && <span className="ml-2 text-xs opacity-90">{discount}% OFF</span>}
             </Button>
 
             {/* Shipping Info */}
