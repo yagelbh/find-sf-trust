@@ -3,7 +3,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { fetchProductByHandle, ShopifyProduct, getCategoryFromTags } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, Heart, Truck, Shield, Minus, Plus, ShoppingCart, Loader2, Award, Clock, Package, CheckCircle, Globe, Share2, Copy, Mail, Facebook, X } from 'lucide-react';
+import { ChevronLeft, Heart, Truck, Shield, Minus, Plus, ShoppingCart, Loader2, Award, Clock, Package, CheckCircle, Globe, Share2, Copy, Mail, Facebook, X, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import Header from '@/components/Header';
 import TopBar from '@/components/TopBar';
@@ -230,23 +230,24 @@ const ProductDetail = () => {
 
           {/* Product Info */}
           <div className="space-y-4">
-            {/* Top Banner - Free Shipping & Credit + Share */}
-            <div className="bg-gradient-to-r from-primary to-deal text-primary-foreground px-4 py-2 rounded-lg flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            {/* Free Shipping - Simple inline text like reference */}
+            <div className="bg-warning/10 px-4 py-2.5 rounded-lg flex items-center justify-between">
+              <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span className="text-xs font-medium">Free shipping</span>
+                  <Check className="w-4 h-4 text-primary" />
+                  <span className="text-primary font-medium">Free shipping</span>
                 </div>
+                <span className="text-muted-foreground">|</span>
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span className="text-xs font-medium">$20 Credit for delay</span>
+                  <Check className="w-4 h-4 text-foreground" />
+                  <span className="text-foreground">$5.00 Credit for delay</span>
                 </div>
               </div>
               {/* Share Button */}
               <Popover>
                 <PopoverTrigger asChild>
-                  <button className="p-2 hover:bg-white/20 rounded-lg transition-colors">
-                    <Share2 className="w-5 h-5" />
+                  <button className="p-1.5 hover:bg-muted rounded-lg transition-colors text-muted-foreground hover:text-foreground">
+                    <Share2 className="w-4 h-4" />
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-64 p-4" align="end">
