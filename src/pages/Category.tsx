@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CartDrawer from '@/components/CartDrawer';
 import ShopifyProductCard from '@/components/ShopifyProductCard';
+import { Skeleton } from '@/components/ui/skeleton';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 // Build a Shopify search query from category/subcategory
@@ -45,32 +46,30 @@ const Category = () => {
   }, []);
 
   // Fetch products with server-side search query
+  // Keep previous results while updating to avoid a "full page reload" feel
   useEffect(() => {
+    if (!categoryParam) return;
+
+    let cancelled = false;
+
     const loadCategoryProducts = async () => {
-      if (!categoryParam) return;
-      
       setLoading(true);
       try {
-        // Build search query for Shopify
         const searchQuery = buildSearchQuery(categoryParam, subcategoryParam, childParam);
-        
-        // Fetch with server-side filtering (much faster)
         const data = await fetchProducts(50, searchQuery);
-        setProducts(data);
+        if (!cancelled) setProducts(data);
       } catch (err) {
         console.error('Category load error:', err);
-        // Fallback: fetch without query if search fails
-        try {
-          const fallbackData = await fetchProducts(30);
-          setProducts(fallbackData);
-        } catch {
-          setProducts([]);
-        }
+        // Keep current products on error (do not blank the page)
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
+
     loadCategoryProducts();
+    return () => {
+      cancelled = true;
+    };
   }, [categoryParam, subcategoryParam, childParam]);
 
   // Build breadcrumb
@@ -138,16 +137,30 @@ const Category = () => {
           {pageTitle}
         </h1>
 
-        {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <span className="ml-2 text-muted-foreground">Loading products...</span>
+        {/* Products area (avoid "full page reload" feel by keeping layout stable) */}
+        {products.length === 0 && loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="space-y-3">
+                <Skeleton className="aspect-square w-full" />
+                <Skeleton className="h-4 w-4/5" />
+                <Skeleton className="h-4 w-2/5" />
+              </div>
+            ))}
           </div>
         ) : products.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {products.map((product) => (
-              <ShopifyProductCard key={product.node.id} product={product} />
-            ))}
+          <div className="relative">
+            {loading && (
+              <div className="absolute inset-x-0 -top-10 flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                Updating products…
+              </div>
+            )}
+            <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 ${loading ? 'opacity-60' : ''}`}>
+              {products.map((product) => (
+                <ShopifyProductCard key={product.node.id} product={product} />
+              ))}
+            </div>
           </div>
         ) : (
           <div className="text-center py-12">
