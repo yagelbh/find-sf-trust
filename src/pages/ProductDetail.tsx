@@ -173,10 +173,12 @@ const ProductDetail = () => {
   }
 
   const price = parseFloat(product.priceRange.minVariantPrice.amount);
-  const compareAtPrice = product.compareAtPriceRange?.minVariantPrice 
+  const rawCompareAtPrice = product.compareAtPriceRange?.minVariantPrice 
     ? parseFloat(product.compareAtPriceRange.minVariantPrice.amount) 
-    : price * 1.4;
-  const discount = compareAtPrice && compareAtPrice > price 
+    : 0;
+  // Only show compare price if it's greater than current price (not 0, not equal/less)
+  const compareAtPrice = rawCompareAtPrice > price ? rawCompareAtPrice : null;
+  const discount = compareAtPrice 
     ? Math.round((1 - price / compareAtPrice) * 100) 
     : null;
 

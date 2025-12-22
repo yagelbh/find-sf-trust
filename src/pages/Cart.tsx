@@ -33,10 +33,17 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
         <p className="text-sm text-muted-foreground mt-1">
           {item.selectedOptions.map(opt => opt.value).join(' / ')}
         </p>
-        <p className="font-bold text-lg text-primary mt-2">
-          {item.price.currencyCode === 'USD' ? '$' : item.price.currencyCode}
-          {parseFloat(item.price.amount).toFixed(2)}
-        </p>
+        <div className="flex items-baseline gap-2 mt-2">
+          <span className="font-bold text-lg text-primary">
+            {item.price.currencyCode === 'USD' ? '$' : item.price.currencyCode}
+            {(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
+          </span>
+          {item.quantity > 1 && (
+            <span className="text-sm text-muted-foreground">
+              (${parseFloat(item.price.amount).toFixed(2)} each)
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="flex flex-col items-end justify-between">
