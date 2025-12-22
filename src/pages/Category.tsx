@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
@@ -7,7 +7,24 @@ import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
 import CartDrawer from '@/components/CartDrawer';
 import ShopifyProductCard from '@/components/ShopifyProductCard';
-import { fetchProducts, ShopifyProduct, getCategoryPath } from '@/lib/shopify';
+import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
+
+// Build a Shopify search query from category/subcategory
+function buildSearchQuery(category: string, subcategory?: string, child?: string): string {
+  // Use the most specific term for searching
+  const searchTerm = child || subcategory || category;
+  
+  // Extract key words for better matching
+  const words = searchTerm.toLowerCase().split(/[\s&,]+/).filter(w => w.length > 2);
+  
+  // Build query: search in title, tags, and product_type
+  if (words.length > 0) {
+    const queries = words.map(w => `(title:*${w}* OR tag:*${w}* OR product_type:*${w}*)`);
+    return queries.join(' OR ');
+  }
+  
+  return `title:*${searchTerm}*`;
+}
 
 const Category = () => {
   const [searchParams] = useSearchParams();
@@ -27,45 +44,34 @@ const Category = () => {
     return () => window.removeEventListener('openCartDrawer', handleOpenCartDrawer);
   }, []);
 
+  // Fetch products with server-side search query
   useEffect(() => {
     const loadCategoryProducts = async () => {
       if (!categoryParam) return;
       
       setLoading(true);
       try {
-        // Load all products and filter on client side for accurate category matching
-        const data = await fetchProducts(100);
+        // Build search query for Shopify
+        const searchQuery = buildSearchQuery(categoryParam, subcategoryParam, childParam);
+        
+        // Fetch with server-side filtering (much faster)
+        const data = await fetchProducts(50, searchQuery);
         setProducts(data);
       } catch (err) {
         console.error('Category load error:', err);
+        // Fallback: fetch without query if search fails
+        try {
+          const fallbackData = await fetchProducts(30);
+          setProducts(fallbackData);
+        } catch {
+          setProducts([]);
+        }
       } finally {
         setLoading(false);
       }
     };
     loadCategoryProducts();
-  }, [categoryParam]);
-
-  // Filter products based on category path
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => {
-      const productPath = getCategoryPath(
-        product.node.tags || [], 
-        product.node.productType
-      );
-      
-      // Match based on what level user clicked
-      if (childParam) {
-        return productPath.category === categoryParam && 
-               productPath.subcategory === subcategoryParam && 
-               productPath.child === childParam;
-      } else if (subcategoryParam) {
-        return productPath.category === categoryParam && 
-               productPath.subcategory === subcategoryParam;
-      } else {
-        return productPath.category === categoryParam;
-      }
-    });
-  }, [products, categoryParam, subcategoryParam, childParam]);
+  }, [categoryParam, subcategoryParam, childParam]);
 
   // Build breadcrumb
   const breadcrumbParts = [
@@ -137,9 +143,9 @@ const Category = () => {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
             <span className="ml-2 text-muted-foreground">Loading products...</span>
           </div>
-        ) : filteredProducts.length > 0 ? (
+        ) : products.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
               <ShopifyProductCard key={product.node.id} product={product} />
             ))}
           </div>
