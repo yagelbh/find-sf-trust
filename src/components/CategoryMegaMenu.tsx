@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronRight, X } from 'lucide-react';
+import { ChevronRight, X, Shirt, User, Baby, Users, Sparkles, Home, Smartphone, Dumbbell, HeartPulse, PawPrint, Car, Briefcase, Wrench, Flower, Luggage, Palette, Gamepad2, Gift, Lightbulb, Archive, Camera, Plug, LucideIcon } from 'lucide-react';
 import { categories } from '@/data/categories';
 
 interface CategoryMegaMenuProps {
@@ -7,12 +7,42 @@ interface CategoryMegaMenuProps {
   onClose: () => void;
 }
 
+const iconMap: Record<string, LucideIcon> = {
+  'shirt': Shirt,
+  'user': User,
+  'baby': Baby,
+  'users': Users,
+  'sparkles': Sparkles,
+  'home': Home,
+  'smartphone': Smartphone,
+  'dumbbell': Dumbbell,
+  'heart-pulse': HeartPulse,
+  'paw-print': PawPrint,
+  'car': Car,
+  'briefcase': Briefcase,
+  'wrench': Wrench,
+  'flower': Flower,
+  'luggage': Luggage,
+  'palette': Palette,
+  'gamepad-2': Gamepad2,
+  'gift': Gift,
+  'lightbulb': Lightbulb,
+  'archive': Archive,
+  'camera': Camera,
+  'plug': Plug,
+};
+
 const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
   const [hoveredCategory, setHoveredCategory] = useState<string>("Women's Clothing");
 
   const activeCategory = categories.find(c => c.name === hoveredCategory);
 
   if (!isOpen) return null;
+
+  const getIcon = (iconName: string) => {
+    const IconComponent = iconMap[iconName];
+    return IconComponent ? <IconComponent className="w-4 h-4" /> : null;
+  };
 
   return (
     <div className="fixed inset-0 z-[100]">
@@ -49,7 +79,7 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                     onClick={() => setHoveredCategory(category.name)}
                   >
                     <span className="flex items-center gap-3">
-                      <span className="text-lg">{category.icon}</span>
+                      <span className="opacity-80">{getIcon(category.icon)}</span>
                       <span className="truncate text-sm">{category.name}</span>
                     </span>
                     <ChevronRight className="w-4 h-4 opacity-50 flex-shrink-0" />
@@ -64,7 +94,7 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                 <div>
                   {/* Category Header */}
                   <div className="mb-6 pb-3 border-b border-border flex items-center gap-3">
-                    <span className="text-2xl">{activeCategory.icon}</span>
+                    <span className="opacity-80">{getIcon(activeCategory.icon)}</span>
                     <h3 className="text-xl font-bold text-foreground">
                       All {activeCategory.name}
                     </h3>
