@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ChevronRight,
   X,
@@ -95,22 +96,23 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
             <div className="w-56 flex-shrink-0 bg-muted/30 border-r border-border">
               <div className="py-2 max-h-[70vh] overflow-y-auto">
                 {categories.map((category) => (
-                  <button
+                  <Link
                     key={category.name}
+                    to={`/category?category=${encodeURIComponent(category.name)}`}
                     className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-all ${
                       hoveredCategory === category.name
                         ? 'bg-primary text-primary-foreground font-semibold'
                         : 'text-foreground hover:bg-muted'
                     }`}
                     onMouseEnter={() => setHoveredCategory(category.name)}
-                    onClick={() => setHoveredCategory(category.name)}
+                    onClick={onClose}
                   >
                     <span className="flex items-center gap-3">
                       <span className="opacity-80">{getIcon(category.icon)}</span>
                       <span className="truncate text-sm">{category.name}</span>
                     </span>
                     <ChevronRight className="w-4 h-4 opacity-50 flex-shrink-0" />
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -122,21 +124,26 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                   {/* Category Header */}
                   <div className="mb-6 pb-3 border-b border-border flex items-center gap-3">
                     <span className="opacity-80">{getIcon(activeCategory.icon)}</span>
-                    <h3 className="text-xl font-bold text-foreground">
-                      All {activeCategory.name}
-                    </h3>
+                    <Link
+                      to={`/category?category=${encodeURIComponent(activeCategory.name)}`}
+                      onClick={onClose}
+                      className="text-left"
+                    >
+                      <h3 className="text-xl font-bold text-foreground hover:text-primary transition-colors">
+                        All {activeCategory.name}
+                      </h3>
+                    </Link>
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>
 
                   {/* Subcategories Grid - Bigger circles like Temu */}
                   <div className="grid grid-cols-5 xl:grid-cols-6 gap-6">
                     {activeCategory.subcategories.map((sub) => (
-                      <button
+                      <Link
                         key={sub.name}
+                        to={`/category?category=${encodeURIComponent(activeCategory.name)}&subcategory=${encodeURIComponent(sub.name)}`}
                         className="group flex flex-col items-center text-center"
-                        onClick={() => {
-                          onClose();
-                        }}
+                        onClick={onClose}
                       >
                         {/* Circular Image with HOT badge */}
                         <div className="relative mb-3">
@@ -153,7 +160,7 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                         <span className="text-xs text-foreground group-hover:text-primary transition-colors font-medium leading-tight line-clamp-2 max-w-[90px]">
                           {sub.name}
                         </span>
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 </div>
