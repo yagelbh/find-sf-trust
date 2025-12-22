@@ -359,6 +359,7 @@ export interface CategoryPath {
 // Find the best matching category path from product tags/type
 export function getCategoryPath(tags: string[], productType?: string): CategoryPath {
   const combinedText = [...tags, productType || ''].map(t => t.toLowerCase()).join(' ');
+  const tagSet = new Set(tags.map(t => t.toLowerCase().trim()));
   
   let bestMatch: { path: CategoryPath; score: number } = {
     path: { category: 'General Products' },
@@ -368,54 +369,89 @@ export function getCategoryPath(tags: string[], productType?: string): CategoryP
   for (const cat of categories) {
     const catNameLower = cat.name.toLowerCase();
     
-    // Check for exact category match first
-    if (tags.some(t => t.toLowerCase() === catNameLower)) {
-      return { category: cat.name };
+    // Calculate category score
+    let catScore = 0;
+    if (tagSet.has(catNameLower)) {
+      catScore = 1000; // Exact tag match gets highest priority
+    } else {
+      const catWords = catNameLower.split(/[\s&,]+/).filter(w => w.length > 2);
+      for (const word of catWords) {
+        if (combinedText.includes(word)) {
+          catScore += word.length;
+        }
+      }
     }
     
-    for (const sub of cat.subcategories) {
-      const subNameLower = sub.name.toLowerCase();
+    // If this category matches, find the best subcategory within it
+    if (catScore > 0) {
+      let bestSubMatch: { sub: Subcategory | null; score: number; child?: string } = { sub: null, score: 0 };
       
-      // Check for exact subcategory match
-      if (tags.some(t => t.toLowerCase() === subNameLower)) {
-        return { category: cat.name, subcategory: sub.name };
-      }
-      
-      // Check children if any
-      if (sub.children) {
-        for (const child of sub.children) {
-          const childLower = child.toLowerCase();
-          if (combinedText.includes(childLower)) {
-            return { category: cat.name, subcategory: sub.name, child };
+      for (const sub of cat.subcategories) {
+        const subNameLower = sub.name.toLowerCase();
+        let subScore = 0;
+        
+        // Check for exact subcategory match in tags
+        if (tagSet.has(subNameLower)) {
+          subScore = 500;
+        } else {
+          // Score by keyword matches in subcategory name
+          const subWords = subNameLower.split(/[\s&,]+/).filter(w => w.length > 2);
+          for (const word of subWords) {
+            if (combinedText.includes(word)) {
+              subScore += word.length * 2; // Subcategory words weighted higher
+            }
           }
         }
-      }
-      
-      // Score by keyword matches
-      let score = 0;
-      const subWords = subNameLower.split(/[\s&,]+/).filter(w => w.length > 2);
-      for (const word of subWords) {
-        if (combinedText.includes(word)) {
-          score += word.length;
+        
+        // Check children for matches
+        let matchedChild: string | undefined;
+        if (sub.children) {
+          for (const child of sub.children) {
+            const childLower = child.toLowerCase();
+            if (combinedText.includes(childLower)) {
+              subScore += 100;
+              matchedChild = child;
+              break;
+            }
+            // Also check individual words
+            const childWords = childLower.split(/[\s&,]+/).filter(w => w.length > 2);
+            for (const word of childWords) {
+              if (combinedText.includes(word)) {
+                subScore += word.length;
+              }
+            }
+          }
+        }
+        
+        if (subScore > bestSubMatch.score) {
+          bestSubMatch = { sub, score: subScore, child: matchedChild };
         }
       }
       
-      if (score > bestMatch.score) {
-        bestMatch = { path: { category: cat.name, subcategory: sub.name }, score };
+      // Total score = category score + subcategory score
+      const totalScore = catScore + bestSubMatch.score;
+      
+      if (totalScore > bestMatch.score) {
+        if (bestSubMatch.sub) {
+          bestMatch = {
+            path: { 
+              category: cat.name, 
+              subcategory: bestSubMatch.sub.name,
+              child: bestSubMatch.child
+            },
+            score: totalScore
+          };
+        } else {
+          // Category matched but no subcategory - pick first subcategory as default
+          bestMatch = {
+            path: { 
+              category: cat.name, 
+              subcategory: cat.subcategories[0]?.name
+            },
+            score: totalScore
+          };
+        }
       }
-    }
-    
-    // Also check category-level keywords
-    const catWords = catNameLower.split(/[\s&,]+/).filter(w => w.length > 2);
-    let catScore = 0;
-    for (const word of catWords) {
-      if (combinedText.includes(word)) {
-        catScore += word.length;
-      }
-    }
-    
-    if (catScore > bestMatch.score) {
-      bestMatch = { path: { category: cat.name }, score: catScore };
     }
   }
   
