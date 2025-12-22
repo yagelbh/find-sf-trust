@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
@@ -12,13 +13,9 @@ import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 // Build a Shopify search query from category/subcategory
 function buildSearchQuery(category: string, subcategory?: string, child?: string): string {
-  // Use the most specific term for searching
   const searchTerm = child || subcategory || category;
-  
-  // Extract key words for better matching
   const words = searchTerm.toLowerCase().split(/[\s&,]+/).filter(w => w.length > 2);
   
-  // Build query: search in title, tags, and product_type
   if (words.length > 0) {
     const queries = words.map(w => `(title:*${w}* OR tag:*${w}* OR product_type:*${w}*)`);
     return queries.join(' OR ');
@@ -28,6 +25,7 @@ function buildSearchQuery(category: string, subcategory?: string, child?: string
 }
 
 const Category = () => {
+  console.log('[Category] Component mounted');
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') || '';
   const subcategoryParam = searchParams.get('subcategory') || '';
@@ -35,8 +33,6 @@ const Category = () => {
   
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCartDrawer, setShowCartDrawer] = useState(false);
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [loading, setLoading] = useState(false);
 
   // Listen for cart drawer open events
   useEffect(() => {
@@ -45,37 +41,21 @@ const Category = () => {
     return () => window.removeEventListener('openCartDrawer', handleOpenCartDrawer);
   }, []);
 
-  // Fetch products with server-side search query
-  // Keep previous results while updating to avoid a "full page reload" feel
-  useEffect(() => {
-    if (!categoryParam) return;
-
-    let cancelled = false;
-
-    const loadCategoryProducts = async () => {
-      setLoading(true);
-      try {
-        const searchQuery = buildSearchQuery(categoryParam, subcategoryParam, childParam);
-        const data = await fetchProducts(50, searchQuery);
-        if (!cancelled) setProducts(data);
-      } catch (err) {
-        console.error('Category load error:', err);
-        // Keep current products on error (do not blank the page)
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-
-    loadCategoryProducts();
-    return () => {
-      cancelled = true;
-    };
-  }, [categoryParam, subcategoryParam, childParam]);
+  // Use React Query for caching - keeps previous data while fetching new
+  const searchQuery = categoryParam ? buildSearchQuery(categoryParam, subcategoryParam, childParam) : '';
+  
+  const { data: products = [], isLoading, isFetching } = useQuery({
+    queryKey: ['category-products', categoryParam, subcategoryParam, childParam],
+    queryFn: () => fetchProducts(50, searchQuery),
+    enabled: !!categoryParam,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    placeholderData: (prev) => prev, // Keep previous data while fetching new
+  });
 
   // Build breadcrumb
   const breadcrumbParts = [
     { label: 'Home', link: '/' },
-    { label: categoryParam, link: `/category?category=${encodeURIComponent(categoryParam)}` }
+    ...(categoryParam ? [{ label: categoryParam, link: `/category?category=${encodeURIComponent(categoryParam)}` }] : [])
   ];
   
   if (subcategoryParam) {
@@ -92,13 +72,14 @@ const Category = () => {
     });
   }
 
-  const pageTitle = childParam || subcategoryParam || categoryParam;
+  const pageTitle = childParam || subcategoryParam || categoryParam || 'Category';
 
   // Basic SEO
   useEffect(() => {
     if (!pageTitle) return;
     document.title = `${pageTitle} | FindsFae`;
   }, [pageTitle]);
+
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
@@ -137,12 +118,12 @@ const Category = () => {
           {pageTitle}
         </h1>
 
-        {/* Products area (avoid "full page reload" feel by keeping layout stable) */}
-        {products.length === 0 && loading ? (
+        {/* Products area */}
+        {isLoading && products.length === 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="space-y-3">
-                <Skeleton className="aspect-square w-full" />
+                <Skeleton className="aspect-square w-full rounded-lg" />
                 <Skeleton className="h-4 w-4/5" />
                 <Skeleton className="h-4 w-2/5" />
               </div>
@@ -150,21 +131,27 @@ const Category = () => {
           </div>
         ) : products.length > 0 ? (
           <div className="relative">
-            {loading && (
-              <div className="absolute inset-x-0 -top-10 flex items-center gap-2 text-sm text-muted-foreground">
-                <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                Updating products…
+            {isFetching && (
+              <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10 rounded-lg">
+                <div className="flex items-center gap-2 bg-card px-4 py-2 rounded-full shadow-lg">
+                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                  <span className="text-sm">Updating…</span>
+                </div>
               </div>
             )}
-            <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 ${loading ? 'opacity-60' : ''}`}>
-              {products.map((product) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {products.map((product: ShopifyProduct) => (
                 <ShopifyProductCard key={product.node.id} product={product} />
               ))}
             </div>
           </div>
-        ) : (
+        ) : !isLoading && categoryParam ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground">No products found in this category</p>
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Select a category to view products</p>
           </div>
         )}
       </main>
