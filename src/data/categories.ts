@@ -274,7 +274,7 @@ export const categories: Category[] = [
       { name: "Storage Items", image: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=200&h=200&fit=crop" },
       { name: "Laundry Tools", image: "https://images.unsplash.com/photo-1545173168-9f1947eebb7f?w=200&h=200&fit=crop" },
       { name: "Home Organization", image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop" },
-      { name: "Air Freshening Products", image: "https://images.unsplash.com/photo-1602607688398-908a5afbd8be?w=200&h=200&fit=crop" },
+      { name: "Air Freshening Products", image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&h=200&fit=crop" },
     ]
   },
   {
