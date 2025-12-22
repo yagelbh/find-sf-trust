@@ -95,9 +95,16 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
                   {/* Details */}
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
-                      <span className="font-bold text-foreground">
-                        ${parseFloat(item.price.amount).toFixed(2)}
-                      </span>
+                      <div>
+                        <span className="font-bold text-foreground">
+                          ${(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
+                        </span>
+                        {item.quantity > 1 && (
+                          <span className="text-xs text-muted-foreground ml-1">
+                            (${parseFloat(item.price.amount).toFixed(2)} each)
+                          </span>
+                        )}
+                      </div>
                       <button
                         onClick={() => removeItem(item.variantId)}
                         className="text-muted-foreground hover:text-destructive transition-colors"
