@@ -52,24 +52,24 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
             <nav className="hidden lg:flex items-center gap-6 relative">
               <Link 
                 to="/top-sellers"
-                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors"
+                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors"
               >
                 Best Sellers
               </Link>
               <Link 
                 to="/flash-deals"
-                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors"
+                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors"
               >
                 Deals
               </Link>
               <Link 
                 to="/clearance"
-                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors"
+                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors"
               >
                 Clearance
               </Link>
               <button 
-                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors flex items-center gap-1"
+                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors flex items-center gap-1"
                 onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
               >
                 Categories
