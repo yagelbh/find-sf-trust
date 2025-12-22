@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, User, Heart, ShoppingCart, ChevronDown, Flame, Award, Tag } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/stores/cartStore';
 import CategoryMegaMenu from './CategoryMegaMenu';
@@ -48,36 +48,32 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               </Link>
             </div>
 
-            {/* Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-2 relative">
+            {/* Navigation Links - Clean minimal style */}
+            <nav className="hidden lg:flex items-center gap-6 relative">
               <Link 
                 to="/top-sellers"
-                className="px-3 py-2 text-sm font-semibold bg-warning/20 text-warning hover:bg-warning/30 rounded-lg transition-colors flex items-center gap-1.5"
+                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors"
               >
-                <Award className="w-4 h-4" />
                 Best Sellers
               </Link>
               <Link 
                 to="/flash-deals"
-                className="px-3 py-2 text-sm font-semibold bg-deal/20 text-deal hover:bg-deal/30 rounded-lg transition-colors flex items-center gap-1.5"
+                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors"
               >
-                <Flame className="w-4 h-4" />
-                Flash Deals
+                Deals
               </Link>
               <Link 
                 to="/clearance"
-                className="px-3 py-2 text-sm font-semibold bg-teal-500/20 text-teal-400 hover:bg-teal-500/30 rounded-lg transition-colors flex items-center gap-1.5"
+                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors"
               >
-                <Tag className="w-4 h-4" />
-                Value Finds
+                Clearance
               </Link>
-              {/* Simplified Categories button */}
               <button 
-                className="px-3 py-2 text-sm font-medium text-secondary-foreground hover:text-primary transition-colors flex items-center gap-1"
+                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors flex items-center gap-1"
                 onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
               >
                 Categories
-                <ChevronDown className={`w-4 h-4 transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} />
               </button>
             </nav>
 
