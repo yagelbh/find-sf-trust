@@ -52,6 +52,15 @@ const Category = () => {
     placeholderData: keepPreviousData, // Keep previous data when params change
   });
 
+  // Ensure we never flash an empty page between category changes.
+  const [stickyProducts, setStickyProducts] = useState<ShopifyProduct[]>([]);
+  useEffect(() => {
+    if (products.length > 0) setStickyProducts(products);
+  }, [products]);
+
+  const displayedProducts = stickyProducts.length > 0 ? stickyProducts : products;
+
+
   // Build breadcrumb
   const breadcrumbParts = [
     { label: 'Home', link: '/' },
@@ -119,7 +128,7 @@ const Category = () => {
         </h1>
 
         {/* Products area */}
-        {isLoading && products.length === 0 ? (
+        {isLoading && displayedProducts.length === 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="space-y-3">
@@ -129,7 +138,7 @@ const Category = () => {
               </div>
             ))}
           </div>
-        ) : products.length > 0 ? (
+        ) : displayedProducts.length > 0 ? (
           <div className="relative">
             {isFetching && (
               <div className="absolute inset-0 bg-background/50 flex items-center justify-center z-10 rounded-lg">
@@ -140,7 +149,7 @@ const Category = () => {
               </div>
             )}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-              {products.map((product: ShopifyProduct) => (
+              {displayedProducts.map((product: ShopifyProduct) => (
                 <ShopifyProductCard key={product.node.id} product={product} />
               ))}
             </div>
