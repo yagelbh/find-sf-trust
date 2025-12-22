@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { fetchProductByHandle, ShopifyProduct, getCategoryFromTags, getCategoryPath, CategoryPath } from '@/lib/shopify';
+import { fetchProductByHandle, ShopifyProduct, getCategoryFromTags, getCategoryPath } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, Heart, Truck, Shield, Minus, Plus, ShoppingCart, Loader2, Award, Clock, Package, CheckCircle, Globe, Share2, Copy, Mail, Facebook, X, Check } from 'lucide-react';
@@ -192,28 +192,40 @@ const ProductDetail = () => {
       />
       
       <main className="container mx-auto px-4 py-8">
-        {/* Breadcrumb with full category path */}
+        {/* Breadcrumb with full, clickable category path */}
         {(() => {
           const categoryPath = getCategoryPath(product.tags || [], product.productType);
+          const categoryLink = `/category?category=${encodeURIComponent(categoryPath.category)}`;
+          const subcategoryLink = categoryPath.subcategory
+            ? `${categoryLink}&subcategory=${encodeURIComponent(categoryPath.subcategory)}`
+            : '';
+          const childLink = categoryPath.child
+            ? `${subcategoryLink}&child=${encodeURIComponent(categoryPath.child)}`
+            : '';
+
           return (
-            <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
+            <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap" aria-label="Breadcrumb">
               <Link to="/" className="hover:text-primary">Home</Link>
               <span className="text-muted-foreground/50">›</span>
-              <span className="hover:text-primary cursor-pointer">{categoryPath.category}</span>
+
+              <Link to={categoryLink} className="hover:text-primary">{categoryPath.category}</Link>
+
               {categoryPath.subcategory && (
                 <>
                   <span className="text-muted-foreground/50">›</span>
-                  <span className="hover:text-primary cursor-pointer">{categoryPath.subcategory}</span>
+                  <Link to={subcategoryLink} className="hover:text-primary">{categoryPath.subcategory}</Link>
                 </>
               )}
+
               {categoryPath.child && (
                 <>
                   <span className="text-muted-foreground/50">›</span>
-                  <span className="hover:text-primary cursor-pointer">{categoryPath.child}</span>
+                  <Link to={childLink} className="hover:text-primary">{categoryPath.child}</Link>
                 </>
               )}
+
               <span className="text-muted-foreground/50">›</span>
-              <span className="text-foreground truncate max-w-xs font-medium">{product.title.length > 40 ? product.title.substring(0, 40) + '...' : product.title}</span>
+              <span className="text-foreground truncate max-w-xs font-medium">{product.title}</span>
             </nav>
           );
         })()}
