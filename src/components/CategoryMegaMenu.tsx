@@ -1,6 +1,33 @@
 import { useState } from 'react';
-import { ChevronRight, X, Shirt, User, Baby, Users, Sparkles, Home, Smartphone, Dumbbell, HeartPulse, PawPrint, Car, Briefcase, Wrench, Flower, Luggage, Palette, Gamepad2, Gift, Lightbulb, Archive, Camera, Plug, LucideIcon } from 'lucide-react';
+import {
+  ChevronRight,
+  X,
+  Shirt,
+  User,
+  Baby,
+  Users,
+  Sparkles,
+  Home,
+  Smartphone,
+  Dumbbell,
+  HeartPulse,
+  PawPrint,
+  Car,
+  Briefcase,
+  Wrench,
+  Flower,
+  Luggage,
+  Palette,
+  Gamepad2,
+  Gift,
+  Lightbulb,
+  Archive,
+  Camera,
+  Plug,
+  LucideIcon,
+} from 'lucide-react';
 import { categories } from '@/data/categories';
+import { CategoryCircleImage } from '@/components/CategoryCircleImage';
 
 interface CategoryMegaMenuProps {
   isOpen: boolean;
@@ -8,34 +35,34 @@ interface CategoryMegaMenuProps {
 }
 
 const iconMap: Record<string, LucideIcon> = {
-  'shirt': Shirt,
-  'user': User,
-  'baby': Baby,
-  'users': Users,
-  'sparkles': Sparkles,
-  'home': Home,
-  'smartphone': Smartphone,
-  'dumbbell': Dumbbell,
+  shirt: Shirt,
+  user: User,
+  baby: Baby,
+  users: Users,
+  sparkles: Sparkles,
+  home: Home,
+  smartphone: Smartphone,
+  dumbbell: Dumbbell,
   'heart-pulse': HeartPulse,
   'paw-print': PawPrint,
-  'car': Car,
-  'briefcase': Briefcase,
-  'wrench': Wrench,
-  'flower': Flower,
-  'luggage': Luggage,
-  'palette': Palette,
+  car: Car,
+  briefcase: Briefcase,
+  wrench: Wrench,
+  flower: Flower,
+  luggage: Luggage,
+  palette: Palette,
   'gamepad-2': Gamepad2,
-  'gift': Gift,
-  'lightbulb': Lightbulb,
-  'archive': Archive,
-  'camera': Camera,
-  'plug': Plug,
+  gift: Gift,
+  lightbulb: Lightbulb,
+  archive: Archive,
+  camera: Camera,
+  plug: Plug,
 };
 
 const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
   const [hoveredCategory, setHoveredCategory] = useState<string>("Women's Clothing");
 
-  const activeCategory = categories.find(c => c.name === hoveredCategory);
+  const activeCategory = categories.find((c) => c.name === hoveredCategory);
 
   if (!isOpen) return null;
 
@@ -47,16 +74,16 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
   return (
     <div className="fixed inset-0 z-[100]">
       {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-foreground/40"
-        onClick={onClose}
-      />
-      
+      <div className="absolute inset-0 bg-foreground/40" onClick={onClose} />
+
       {/* Menu Container */}
-      <div className="absolute top-0 left-0 right-0 bg-card shadow-2xl animate-fade-in" style={{ marginTop: '100px' }}>
+      <div
+        className="absolute top-0 left-0 right-0 bg-card shadow-2xl animate-fade-in"
+        style={{ marginTop: '100px' }}
+      >
         <div className="max-w-7xl mx-auto">
           {/* Close button */}
-          <button 
+          <button
             onClick={onClose}
             className="absolute top-3 right-3 p-2 hover:bg-muted rounded-full transition-colors z-10"
           >
@@ -71,8 +98,8 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                   <button
                     key={category.name}
                     className={`w-full flex items-center justify-between px-4 py-3 text-sm transition-all ${
-                      hoveredCategory === category.name 
-                        ? 'bg-primary text-primary-foreground font-semibold' 
+                      hoveredCategory === category.name
+                        ? 'bg-primary text-primary-foreground font-semibold'
                         : 'text-foreground hover:bg-muted'
                     }`}
                     onMouseEnter={() => setHoveredCategory(category.name)}
@@ -100,7 +127,7 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                     </h3>
                     <ChevronRight className="w-5 h-5 text-muted-foreground" />
                   </div>
-                  
+
                   {/* Subcategories Grid - Bigger circles like Temu */}
                   <div className="grid grid-cols-5 xl:grid-cols-6 gap-6">
                     {activeCategory.subcategories.map((sub) => (
@@ -113,14 +140,8 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                       >
                         {/* Circular Image with HOT badge */}
                         <div className="relative mb-3">
-                          <div className="w-20 h-20 rounded-full overflow-hidden bg-muted ring-2 ring-transparent group-hover:ring-primary group-hover:ring-offset-2 transition-all shadow-md">
-                            <img 
-                              src={sub.image} 
-                              alt={sub.name}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                              loading="lazy"
-                            />
-                          </div>
+                          <CategoryCircleImage src={sub.image} alt={sub.name} size={80} />
+
                           {/* HOT Badge */}
                           {sub.isHot && (
                             <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm">
@@ -146,3 +167,4 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
 };
 
 export default CategoryMegaMenu;
+
