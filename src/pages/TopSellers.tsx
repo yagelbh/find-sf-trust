@@ -168,7 +168,7 @@ const TopSellers = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProducts(24);
+        const data = await fetchProducts(50);
         setProducts(data);
       } catch (error) {
         console.error('Failed to load products:', error);
@@ -178,6 +178,54 @@ const TopSellers = () => {
     };
     loadProducts();
   }, []);
+
+  // Filter products based on active category
+  const filteredProducts = useMemo(() => {
+    if (activeCategory === 'all') return products;
+    
+    // Map category IDs to keywords for matching
+    const categoryKeywords: Record<string, string[]> = {
+      'womens-clothing': ['women', 'womens', 'woman', 'dress', 'skirt', 'blouse'],
+      'mens-clothing': ['men', 'mens', 'man', 'shirt'],
+      'kids-clothing': ['kids', 'kid', 'children', 'child', 'baby'],
+      'unisex': ['unisex', 'universal'],
+      'beauty': ['beauty', 'cosmetic', 'makeup', 'skincare', 'personal care'],
+      'home': ['home', 'kitchen', 'house', 'furniture', 'decor', 'lamp', 'light'],
+      'electronics': ['electronic', 'tech', 'gadget', 'phone', 'computer', 'keyboard', 'gaming'],
+      'sports': ['sport', 'outdoor', 'fitness', 'gym', 'cycling', 'hiking', 'backpack', 'travel', 'bag'],
+      'health': ['health', 'medical', 'wellness', 'vitamin'],
+      'baby': ['baby', 'infant', 'toddler', 'nursery'],
+      'pets': ['pet', 'dog', 'cat', 'animal'],
+      'automotive': ['car', 'auto', 'vehicle', 'motor'],
+      'office': ['office', 'desk', 'work', 'stationery'],
+      'tools': ['tool', 'hardware', 'improvement', 'repair'],
+      'garden': ['garden', 'lawn', 'patio', 'outdoor', 'plant'],
+      'travel': ['travel', 'luggage', 'suitcase', 'backpack', 'bag'],
+      'arts': ['art', 'craft', 'sewing', 'creative'],
+      'toys': ['toy', 'game', 'play', 'puzzle'],
+      'gifts': ['gift', 'seasonal', 'holiday', 'party'],
+      'gadgets': ['smart', 'gadget', 'device', 'tech'],
+      'cleaning': ['cleaning', 'storage', 'organizer', 'clean'],
+      'security': ['security', 'surveillance', 'camera', 'safety'],
+      'appliances': ['appliance', 'blender', 'mixer', 'toaster'],
+    };
+
+    const keywords = categoryKeywords[activeCategory] || [];
+    
+    return products.filter(product => {
+      const title = product.node.title.toLowerCase();
+      const productType = (product.node.productType || '').toLowerCase();
+      const tags = (product.node.tags || []).map(t => t.toLowerCase());
+      const description = (product.node.description || '').toLowerCase();
+      
+      return keywords.some(keyword => 
+        title.includes(keyword) || 
+        productType.includes(keyword) || 
+        tags.some(tag => tag.includes(keyword)) ||
+        description.includes(keyword)
+      );
+    });
+  }, [products, activeCategory]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -262,15 +310,21 @@ const TopSellers = () => {
               <div key={i} className="bg-muted rounded-xl aspect-[3/4] animate-pulse" />
             ))}
           </div>
-        ) : products.length === 0 ? (
+        ) : filteredProducts.length === 0 ? (
           <div className="text-center py-20">
             <Award className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No Best Sellers Available</h2>
-            <p className="text-muted-foreground">Check back soon for trending products!</p>
+            <h2 className="text-xl font-semibold mb-2">No products in this category</h2>
+            <p className="text-muted-foreground mb-4">Try a different category or view all best sellers.</p>
+            <button
+              onClick={() => setActiveCategory('all')}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+            >
+              View All Categories
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {products.map((product, index) => (
+            {filteredProducts.map((product, index) => (
               <TopSellerCard key={product.node.id} product={product} rank={index + 1} />
             ))}
           </div>
