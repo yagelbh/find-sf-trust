@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   ChevronRight,
   X,
@@ -29,6 +30,8 @@ import {
 } from 'lucide-react';
 import { categories } from '@/data/categories';
 import { CategoryCircleImage } from '@/components/CategoryCircleImage';
+import { fetchProducts } from '@/lib/shopify';
+import { buildCategorySearchQuery } from '@/lib/categorySearch';
 
 interface CategoryMegaMenuProps {
   isOpen: boolean;
@@ -61,11 +64,24 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
+  const queryClient = useQueryClient();
   const [hoveredCategory, setHoveredCategory] = useState<string>("Women's Clothing");
 
-  const activeCategory = categories.find((c) => c.name === hoveredCategory);
+  const activeCategory = useMemo(
+    () => categories.find((c) => c.name === hoveredCategory),
+    [hoveredCategory],
+  );
 
   if (!isOpen) return null;
+
+  const prefetchCategory = (category: string, subcategory?: string) => {
+    const query = buildCategorySearchQuery(category, subcategory);
+    queryClient.prefetchQuery({
+      queryKey: ['category-products', category, subcategory ?? '', ''],
+      queryFn: () => fetchProducts(50, query),
+      staleTime: 5 * 60 * 1000,
+    });
+  };
 
   const getIcon = (iconName: string) => {
     const IconComponent = iconMap[iconName];
@@ -104,7 +120,11 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                         ? 'bg-primary text-primary-foreground font-semibold'
                         : 'text-foreground hover:bg-muted'
                     }`}
-                    onMouseEnter={() => setHoveredCategory(category.name)}
+                    onMouseEnter={() => {
+                      setHoveredCategory(category.name);
+                      prefetchCategory(category.name);
+                    }}
+                    onFocus={() => prefetchCategory(category.name)}
                     onClick={onClose}
                   >
                     <span className="flex items-center gap-3">
@@ -137,32 +157,34 @@ const CategoryMegaMenu = ({ isOpen, onClose }: CategoryMegaMenuProps) => {
                   </div>
 
                   {/* Subcategories Grid - Bigger circles like Temu */}
-                  <div className="grid grid-cols-5 xl:grid-cols-6 gap-6">
-                    {activeCategory.subcategories.map((sub) => (
-                      <Link
-                        key={sub.name}
-                        to={`/category?category=${encodeURIComponent(activeCategory.name)}&subcategory=${encodeURIComponent(sub.name)}`}
-                        className="group flex flex-col items-center text-center"
-                        onClick={onClose}
-                      >
-                        {/* Circular Image with HOT badge */}
-                        <div className="relative mb-3">
-                          <CategoryCircleImage src={sub.image} alt={sub.name} size={80} />
+                    <div className="grid grid-cols-5 xl:grid-cols-6 gap-6">
+                      {activeCategory.subcategories.map((sub) => (
+                        <Link
+                          key={sub.name}
+                          to={`/category?category=${encodeURIComponent(activeCategory.name)}&subcategory=${encodeURIComponent(sub.name)}`}
+                          className="group flex flex-col items-center text-center"
+                          onMouseEnter={() => prefetchCategory(activeCategory.name, sub.name)}
+                          onFocus={() => prefetchCategory(activeCategory.name, sub.name)}
+                          onClick={onClose}
+                        >
+                          {/* Circular Image with HOT badge */}
+                          <div className="relative mb-3">
+                            <CategoryCircleImage src={sub.image} alt={sub.name} size={80} />
 
-                          {/* HOT Badge */}
-                          {sub.isHot && (
-                            <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm">
-                              HOT
-                            </span>
-                          )}
-                        </div>
-                        {/* Label */}
-                        <span className="text-xs text-foreground group-hover:text-primary transition-colors font-medium leading-tight line-clamp-2 max-w-[90px]">
-                          {sub.name}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
+                            {/* HOT Badge */}
+                            {sub.isHot && (
+                              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm">
+                                HOT
+                              </span>
+                            )}
+                          </div>
+                          {/* Label */}
+                          <span className="text-xs text-foreground group-hover:text-primary transition-colors font-medium leading-tight line-clamp-2 max-w-[90px]">
+                            {sub.name}
+                          </span>
+                        </Link>
+                      ))}
+                    </div>
                 </div>
               )}
             </div>
