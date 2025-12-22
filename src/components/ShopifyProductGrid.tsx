@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { ShopifyProduct, fetchProducts, getCategoryFromTags } from '@/lib/shopify';
 import ShopifyProductCard from './ShopifyProductCard';
-import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { categories as allCategories } from '@/data/categories';
 
 const ShopifyProductGrid = () => {
@@ -164,8 +164,8 @@ const ShopifyProductGrid = () => {
         {/* Load More */}
         {filteredProducts.length > 0 && (
           <div className="text-center mt-8">
-            <button className="px-8 py-3 bg-card border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-primary-foreground transition-colors">
-              Load More Products
+            <button className="px-8 py-3 bg-card border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-primary-foreground transition-colors flex items-center gap-2 mx-auto">
+              See more <ChevronDown className="w-5 h-5" />
             </button>
           </div>
         )}
