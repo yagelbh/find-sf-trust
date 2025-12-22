@@ -4,11 +4,14 @@ import ShopifyProductCard from './ShopifyProductCard';
 import { Loader2, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { categories as allCategories } from '@/data/categories';
 
+const PRODUCTS_PER_PAGE = 10;
+
 const ShopifyProductGrid = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState("Recommended");
+  const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Build category bar from the 23 main categories
@@ -54,6 +57,22 @@ const ShopifyProductGrid = () => {
              productCategoryLower === categoryLower;
     });
   }, [products, activeCategory]);
+
+  // Reset visible count when category changes
+  useEffect(() => {
+    setVisibleCount(PRODUCTS_PER_PAGE);
+  }, [activeCategory]);
+
+  // Products to display based on visible count
+  const displayedProducts = useMemo(() => {
+    return filteredProducts.slice(0, visibleCount);
+  }, [filteredProducts, visibleCount]);
+
+  const hasMoreProducts = visibleCount < filteredProducts.length;
+
+  const handleSeeMore = () => {
+    setVisibleCount(prev => prev + PRODUCTS_PER_PAGE);
+  };
 
   const scrollCategories = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -146,7 +165,7 @@ const ShopifyProductGrid = () => {
         </div>
 
         {/* Products Grid */}
-        {filteredProducts.length === 0 ? (
+        {displayedProducts.length === 0 ? (
           <div className="text-center py-16 bg-muted/50 rounded-xl">
             <h3 className="text-lg font-semibold mb-2">No products in this category</h3>
             <p className="text-muted-foreground text-sm">
@@ -155,16 +174,19 @@ const ShopifyProductGrid = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {filteredProducts.map((product) => (
+            {displayedProducts.map((product) => (
               <ShopifyProductCard key={product.node.id} product={product} />
             ))}
           </div>
         )}
 
         {/* Load More */}
-        {filteredProducts.length > 0 && (
+        {hasMoreProducts && (
           <div className="text-center mt-8">
-            <button className="px-8 py-3 bg-card border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-primary-foreground transition-colors flex items-center gap-2 mx-auto">
+            <button 
+              onClick={handleSeeMore}
+              className="px-8 py-3 bg-card border-2 border-primary text-primary font-semibold rounded-full hover:bg-primary hover:text-primary-foreground transition-colors flex items-center gap-2 mx-auto"
+            >
               See more <ChevronDown className="w-5 h-5" />
             </button>
           </div>
