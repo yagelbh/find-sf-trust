@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
@@ -49,7 +49,7 @@ const Category = () => {
     queryFn: () => fetchProducts(50, searchQuery),
     enabled: !!categoryParam,
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
-    placeholderData: (prev) => prev, // Keep previous data while fetching new
+    placeholderData: keepPreviousData, // Keep previous data when params change
   });
 
   // Build breadcrumb
