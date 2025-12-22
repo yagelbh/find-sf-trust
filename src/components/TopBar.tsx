@@ -11,13 +11,13 @@ const TopBar = () => {
     <div className="bg-foreground text-background">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center py-2.5">
-          <div className="flex items-center justify-between w-full max-w-4xl gap-8 lg:gap-16 xl:gap-24">
+          <div className="flex items-center justify-center gap-6 lg:gap-12 xl:gap-16">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center">
+              <>
                 {index > 0 && (
-                  <div className="h-8 w-px bg-background/30 mx-6 lg:mx-12 xl:mx-16" />
+                  <div key={`divider-${index}`} className="h-8 w-px bg-background/30" />
                 )}
-                <div className="flex items-center gap-2.5">
+                <div key={index} className="flex items-center gap-2.5">
                   <benefit.icon className="w-5 h-5 lg:w-6 lg:h-6 text-warning" strokeWidth={2} />
                   <div className="flex flex-col">
                     <span className="font-bold text-background text-sm lg:text-base tracking-tight">
@@ -26,7 +26,7 @@ const TopBar = () => {
                     <span className="text-xs text-background/60 hidden sm:block">{benefit.subtext}</span>
                   </div>
                 </div>
-              </div>
+              </>
             ))}
           </div>
         </div>
