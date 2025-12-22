@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Award, ChevronLeft, Star, TrendingUp, Flame, Clock } from 'lucide-react';
+import { Award, ChevronLeft, Star, TrendingUp, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
-import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
+import { fetchTopSellers, ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
 
@@ -168,7 +168,7 @@ const TopSellers = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProducts(50);
+        const data = await fetchTopSellers(50);
         setProducts(data);
       } catch (error) {
         console.error('Failed to load products:', error);
@@ -182,7 +182,7 @@ const TopSellers = () => {
   // Filter products based on active category
   const filteredProducts = useMemo(() => {
     if (activeCategory === 'all') return products;
-    
+
     // Map category IDs to keywords for matching
     const categoryKeywords: Record<string, string[]> = {
       'womens-clothing': ['women', 'womens', 'woman', 'dress', 'skirt', 'blouse'],
@@ -211,21 +211,45 @@ const TopSellers = () => {
     };
 
     const keywords = categoryKeywords[activeCategory] || [];
-    
-    return products.filter(product => {
+
+    return products.filter((product) => {
       const title = product.node.title.toLowerCase();
       const productType = (product.node.productType || '').toLowerCase();
-      const tags = (product.node.tags || []).map(t => t.toLowerCase());
+      const tags = (product.node.tags || []).map((t) => t.toLowerCase());
       const description = (product.node.description || '').toLowerCase();
-      
-      return keywords.some(keyword => 
-        title.includes(keyword) || 
-        productType.includes(keyword) || 
-        tags.some(tag => tag.includes(keyword)) ||
-        description.includes(keyword)
+
+      return keywords.some(
+        (keyword) =>
+          title.includes(keyword) ||
+          productType.includes(keyword) ||
+          tags.some((tag) => tag.includes(keyword)) ||
+          description.includes(keyword)
       );
     });
   }, [products, activeCategory]);
+
+  // Time filter based on Shopify product createdAt
+  const timeFilteredProducts = useMemo(() => {
+    if (activeFilter === 'all') return filteredProducts;
+
+    const daysMap: Record<string, number> = {
+      '30days': 30,
+      '14days': 14,
+      '7days': 7,
+    };
+
+    const days = daysMap[activeFilter];
+    if (!days) return filteredProducts;
+
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - days);
+
+    return filteredProducts.filter((p) => {
+      const createdAt = p.node.createdAt;
+      if (!createdAt) return true; // fallback: keep item if Shopify didn't return a date
+      return new Date(createdAt) >= cutoff;
+    });
+  }, [filteredProducts, activeFilter]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -310,21 +334,31 @@ const TopSellers = () => {
               <div key={i} className="bg-muted rounded-xl aspect-[3/4] animate-pulse" />
             ))}
           </div>
-        ) : filteredProducts.length === 0 ? (
+        ) : timeFilteredProducts.length === 0 ? (
           <div className="text-center py-20">
             <Award className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No products in this category</h2>
-            <p className="text-muted-foreground mb-4">Try a different category or view all best sellers.</p>
-            <button
-              onClick={() => setActiveCategory('all')}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
-            >
-              View All Categories
-            </button>
+            <h2 className="text-xl font-semibold mb-2">No products found</h2>
+            <p className="text-muted-foreground mb-4">
+              Try a different time range or category.
+            </p>
+            <div className="flex items-center justify-center gap-2">
+              <button
+                onClick={() => setActiveFilter('all')}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                Reset time filter
+              </button>
+              <button
+                onClick={() => setActiveCategory('all')}
+                className="px-4 py-2 bg-muted text-foreground rounded-lg font-medium hover:bg-muted/80 transition-colors"
+              >
+                All categories
+              </button>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {filteredProducts.map((product, index) => (
+            {timeFilteredProducts.map((product, index) => (
               <TopSellerCard key={product.node.id} product={product} rank={index + 1} />
             ))}
           </div>

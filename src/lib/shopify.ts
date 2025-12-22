@@ -16,6 +16,7 @@ export interface ShopifyProduct {
     handle: string;
     tags: string[];
     productType: string;
+    createdAt?: string;
     priceRange: {
       minVariantPrice: {
         amount: string;
@@ -75,6 +76,70 @@ const PRODUCTS_QUERY = `
           handle
           tags
           productType
+          createdAt
+          priceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          compareAtPriceRange {
+            minVariantPrice {
+              amount
+              currencyCode
+            }
+          }
+          images(first: 5) {
+            edges {
+              node {
+                url
+                altText
+              }
+            }
+          }
+          variants(first: 10) {
+            edges {
+              node {
+                id
+                title
+                price {
+                  amount
+                  currencyCode
+                }
+                compareAtPrice {
+                  amount
+                  currencyCode
+                }
+                availableForSale
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+          options {
+            name
+            values
+          }
+        }
+      }
+    }
+  }
+`;
+
+const TOP_SELLERS_QUERY = `
+  query GetTopSellers($first: Int!, $query: String) {
+    products(first: $first, sortKey: BEST_SELLING, query: $query) {
+      edges {
+        node {
+          id
+          title
+          description
+          handle
+          tags
+          productType
+          createdAt
           priceRange {
             minVariantPrice {
               amount
@@ -211,7 +276,15 @@ export async function fetchProducts(first: number = 20, query?: string): Promise
   const data = await storefrontApiRequest<{
     data: { products: { edges: ShopifyProduct[] } };
   }>(PRODUCTS_QUERY, { first, query });
-  
+
+  return data.data.products.edges;
+}
+
+export async function fetchTopSellers(first: number = 20, query?: string): Promise<ShopifyProduct[]> {
+  const data = await storefrontApiRequest<{
+    data: { products: { edges: ShopifyProduct[] } };
+  }>(TOP_SELLERS_QUERY, { first, query });
+
   return data.data.products.edges;
 }
 
