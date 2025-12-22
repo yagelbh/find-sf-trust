@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { fetchProductByHandle, ShopifyProduct, getCategoryFromTags } from '@/lib/shopify';
+import { fetchProductByHandle, ShopifyProduct, getCategoryFromTags, getCategoryPath, CategoryPath } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, Heart, Truck, Shield, Minus, Plus, ShoppingCart, Loader2, Award, Clock, Package, CheckCircle, Globe, Share2, Copy, Mail, Facebook, X, Check } from 'lucide-react';
@@ -192,14 +192,31 @@ const ProductDetail = () => {
       />
       
       <main className="container mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
-          <Link to="/" className="hover:text-primary flex items-center gap-1">
-            <ChevronLeft className="w-4 h-4" /> Home
-          </Link>
-          <span>/</span>
-          <span className="text-foreground truncate max-w-xs">{product.title}</span>
-        </div>
+        {/* Breadcrumb with full category path */}
+        {(() => {
+          const categoryPath = getCategoryPath(product.tags || [], product.productType);
+          return (
+            <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap">
+              <Link to="/" className="hover:text-primary">Home</Link>
+              <span className="text-muted-foreground/50">›</span>
+              <span className="hover:text-primary cursor-pointer">{categoryPath.category}</span>
+              {categoryPath.subcategory && (
+                <>
+                  <span className="text-muted-foreground/50">›</span>
+                  <span className="hover:text-primary cursor-pointer">{categoryPath.subcategory}</span>
+                </>
+              )}
+              {categoryPath.child && (
+                <>
+                  <span className="text-muted-foreground/50">›</span>
+                  <span className="hover:text-primary cursor-pointer">{categoryPath.child}</span>
+                </>
+              )}
+              <span className="text-muted-foreground/50">›</span>
+              <span className="text-foreground truncate max-w-xs font-medium">{product.title.length > 40 ? product.title.substring(0, 40) + '...' : product.title}</span>
+            </nav>
+          );
+        })()}
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Images */}

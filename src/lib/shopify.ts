@@ -347,82 +347,90 @@ export async function createCheckout(items: Array<{ variantId: string; quantity:
   return url.toString();
 }
 
-import { categories } from '@/data/categories';
+import { categories, Category, Subcategory } from '@/data/categories';
 
-// Build category keywords from the category tree (single source of truth)
-function buildCategoryKeywords(): Record<string, string[]> {
-  const keywords: Record<string, string[]> = {};
-  
-  for (const cat of categories) {
-    // Extract keywords from category name and subcategories
-    const catKeywords: string[] = [];
-    
-    // Add words from category name
-    const catWords = cat.name.toLowerCase().split(/[\s&,]+/).filter(w => w.length > 2);
-    catKeywords.push(...catWords);
-    catKeywords.push(cat.name.toLowerCase());
-    
-    // Add subcategory names and their words
-    for (const sub of cat.subcategories) {
-      catKeywords.push(sub.name.toLowerCase());
-      const subWords = sub.name.toLowerCase().split(/[\s&,]+/).filter(w => w.length > 2);
-      catKeywords.push(...subWords);
-      
-      // Add children if any
-      if (sub.children) {
-        for (const child of sub.children) {
-          catKeywords.push(child.toLowerCase());
-          const childWords = child.toLowerCase().split(/[\s&,]+/).filter(w => w.length > 2);
-          catKeywords.push(...childWords);
-        }
-      }
-    }
-    
-    keywords[cat.name] = [...new Set(catKeywords)]; // Remove duplicates
-  }
-  
-  return keywords;
+// Category path represents the full hierarchy
+export interface CategoryPath {
+  category: string;
+  subcategory?: string;
+  child?: string;
 }
 
-// Cache the keywords
-const CATEGORY_KEYWORDS = buildCategoryKeywords();
-
-// Extract category from product tags using the category tree
-export function getCategoryFromTags(tags: string[], productType?: string): string {
-  const normalizedTags = tags.map(t => t.toLowerCase().trim());
-  const combinedText = [...normalizedTags, (productType || '').toLowerCase()].join(' ');
+// Find the best matching category path from product tags/type
+export function getCategoryPath(tags: string[], productType?: string): CategoryPath {
+  const combinedText = [...tags, productType || ''].map(t => t.toLowerCase()).join(' ');
   
-  // Score each category by keyword matches
-  let bestMatch = { category: 'General Products', score: 0 };
+  let bestMatch: { path: CategoryPath; score: number } = {
+    path: { category: 'General Products' },
+    score: 0
+  };
   
-  for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-    let score = 0;
+  for (const cat of categories) {
+    const catNameLower = cat.name.toLowerCase();
     
-    // Check exact category name match in tags (highest priority)
-    if (normalizedTags.some(tag => tag === category.toLowerCase())) {
-      return category;
+    // Check for exact category match first
+    if (tags.some(t => t.toLowerCase() === catNameLower)) {
+      return { category: cat.name };
     }
     
-    // Score by keyword matches
-    for (const keyword of keywords) {
-      if (combinedText.includes(keyword)) {
-        // Longer keyword matches are more specific/valuable
-        score += keyword.length;
+    for (const sub of cat.subcategories) {
+      const subNameLower = sub.name.toLowerCase();
+      
+      // Check for exact subcategory match
+      if (tags.some(t => t.toLowerCase() === subNameLower)) {
+        return { category: cat.name, subcategory: sub.name };
+      }
+      
+      // Check children if any
+      if (sub.children) {
+        for (const child of sub.children) {
+          const childLower = child.toLowerCase();
+          if (combinedText.includes(childLower)) {
+            return { category: cat.name, subcategory: sub.name, child };
+          }
+        }
+      }
+      
+      // Score by keyword matches
+      let score = 0;
+      const subWords = subNameLower.split(/[\s&,]+/).filter(w => w.length > 2);
+      for (const word of subWords) {
+        if (combinedText.includes(word)) {
+          score += word.length;
+        }
+      }
+      
+      if (score > bestMatch.score) {
+        bestMatch = { path: { category: cat.name, subcategory: sub.name }, score };
       }
     }
     
-    if (score > bestMatch.score) {
-      bestMatch = { category, score };
+    // Also check category-level keywords
+    const catWords = catNameLower.split(/[\s&,]+/).filter(w => w.length > 2);
+    let catScore = 0;
+    for (const word of catWords) {
+      if (combinedText.includes(word)) {
+        catScore += word.length;
+      }
+    }
+    
+    if (catScore > bestMatch.score) {
+      bestMatch = { path: { category: cat.name }, score: catScore };
     }
   }
   
-  // Return best match if we found any keywords
   if (bestMatch.score > 0) {
-    return bestMatch.category;
+    return bestMatch.path;
   }
   
-  // Fallback to productType or first tag if no match
-  return productType || tags[0] || 'General Products';
+  // Fallback
+  return { category: productType || tags[0] || 'General Products' };
+}
+
+// Legacy function for backward compatibility - returns just the category name
+export function getCategoryFromTags(tags: string[], productType?: string): string {
+  const path = getCategoryPath(tags, productType);
+  return path.category;
 }
 
 // Check if product has promotional tag
