@@ -78,30 +78,15 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   };
 
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
-    const { error } = await signInWithGoogle();
-    if (error) {
-      toast.error('Google sign-in is not configured yet. Please use email/password.');
-    }
-    setIsLoading(false);
+    toast.info('Google sign-in requires additional setup. Please use email/password for now.');
   };
 
   const handleFacebookSignIn = async () => {
-    setIsLoading(true);
-    const { error } = await signInWithFacebook();
-    if (error) {
-      toast.error('Facebook sign-in is not configured yet. Please use email/password.');
-    }
-    setIsLoading(false);
+    toast.info('Facebook sign-in requires additional setup. Please use email/password for now.');
   };
 
   const handleAppleSignIn = async () => {
-    setIsLoading(true);
-    const { error } = await signInWithApple();
-    if (error) {
-      toast.error('Apple sign-in is not configured yet. Please use email/password.');
-    }
-    setIsLoading(false);
+    toast.info('Apple sign-in requires additional setup. Please use email/password for now.');
   };
 
   return (
