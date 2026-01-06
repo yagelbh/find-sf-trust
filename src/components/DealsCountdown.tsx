@@ -145,11 +145,11 @@ const DealCard = ({ product, dealEndTime, discount, category, rating, reviewCoun
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-square bg-muted overflow-hidden">
+      <div className="relative aspect-square bg-white overflow-hidden">
         <img 
           src={imageUrl} 
           alt={`${node.title} - ${category} product on sale`}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
         
         {/* Discount Badge */}
