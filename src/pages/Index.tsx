@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
-import TrustBar from '@/components/TrustBar';
+
 import HeroCarousel from '@/components/HeroCarousel';
 import DealsCountdown from '@/components/DealsCountdown';
 import PromoBanners from '@/components/PromoBanners';
@@ -52,11 +52,6 @@ const Index = () => {
 
       {/* Hero Carousel */}
       <HeroCarousel />
-
-      {/* Trust Bar - Green banner below hero */}
-      <div className="container mx-auto px-4 py-4">
-        <TrustBar />
-      </div>
 
       {/* Promo Banners - Temu style */}
       <PromoBanners />
