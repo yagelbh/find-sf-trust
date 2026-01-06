@@ -38,7 +38,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
   const mobileNavLinks = [
     { to: '/', label: 'Home', icon: Home },
     { to: '/top-sellers', label: 'Best Sellers', icon: Flame },
-    { to: '/flash-deals', label: 'Deals', icon: Tag },
+    { to: '/flash-deals', label: '2026 Deals', icon: Tag },
     { to: '/clearance', label: 'Clearance', icon: Tag },
   ];
 
@@ -75,9 +75,9 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               </Link>
               <Link 
                 to="/flash-deals"
-                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors"
+                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors flex items-center gap-1"
               >
-                Deals
+                <span className="text-warning">🎆</span> 2026 Deals
               </Link>
               <Link 
                 to="/clearance"
