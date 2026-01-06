@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Clock, Zap, ChevronLeft } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Zap, Gift, Star, Truck, TrendingUp, Sparkles, ChevronLeft, ChevronRight, Heart, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
@@ -8,45 +8,26 @@ import AuthModal from '@/components/AuthModal';
 import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
+import { categories } from '@/data/categories';
 
-const CountdownTimer = ({ endTime }: { endTime: Date }) => {
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+// Deal category circles inspired by Temu
+const dealCategories = [
+  { name: 'Lightning Deals', icon: Zap, gradient: 'from-warning to-deal' },
+  { name: 'Best Sellers', icon: TrendingUp, gradient: 'from-primary to-primary/70' },
+  { name: 'New Year Gifts', icon: Gift, gradient: 'from-deal to-warning' },
+  { name: 'Top Rated', icon: Star, gradient: 'from-amber-500 to-orange-500' },
+  { name: 'Free Shipping', icon: Truck, gradient: 'from-emerald-500 to-teal-500' },
+  { name: 'New Arrivals', icon: Sparkles, gradient: 'from-violet-500 to-purple-500' },
+];
 
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const difference = endTime.getTime() - new Date().getTime();
-      if (difference > 0) {
-        setTimeLeft({
-          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-          minutes: Math.floor((difference / 1000 / 60) % 60),
-          seconds: Math.floor((difference / 1000) % 60),
-        });
-      }
-    };
-
-    calculateTimeLeft();
-    const timer = setInterval(calculateTimeLeft, 1000);
-    return () => clearInterval(timer);
-  }, [endTime]);
-
-  return (
-    <div className="flex items-center gap-1">
-      <div className="bg-foreground text-background px-2 py-1 rounded font-mono font-bold text-sm">
-        {String(timeLeft.hours).padStart(2, '0')}
-      </div>
-      <span className="text-foreground font-bold">:</span>
-      <div className="bg-foreground text-background px-2 py-1 rounded font-mono font-bold text-sm">
-        {String(timeLeft.minutes).padStart(2, '0')}
-      </div>
-      <span className="text-foreground font-bold">:</span>
-      <div className="bg-foreground text-background px-2 py-1 rounded font-mono font-bold text-sm">
-        {String(timeLeft.seconds).padStart(2, '0')}
-      </div>
-    </div>
-  );
-};
-
-const FlashDealCard = ({ product, endTime }: { product: ShopifyProduct; endTime: Date }) => {
+// Masonry-style product card with variable heights
+const MasonryProductCard = ({ 
+  product, 
+  variant = 'normal' 
+}: { 
+  product: ShopifyProduct; 
+  variant?: 'tall' | 'normal' | 'wide';
+}) => {
   const addItem = useCartStore(state => state.addItem);
   const { node } = product;
   const price = parseFloat(node.priceRange.minVariantPrice.amount);
@@ -54,9 +35,11 @@ const FlashDealCard = ({ product, endTime }: { product: ShopifyProduct; endTime:
   const imageUrl = node.images.edges[0]?.node.url || 'https://via.placeholder.com/300';
   const firstVariant = node.variants.edges[0]?.node;
 
-  const compareAtPrice = price * 1.6;
+  // Seeded random for consistent values
+  const seed = node.id.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+  const compareAtPrice = price * (1.3 + (seed % 5) * 0.1);
   const discount = Math.round((1 - price / compareAtPrice) * 100);
-  const soldPercentage = Math.floor(Math.random() * 40) + 50;
+  const soldCount = ((seed % 9) + 1) * 1.1;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -73,80 +56,98 @@ const FlashDealCard = ({ product, endTime }: { product: ShopifyProduct; endTime:
     toast.success('Added to cart!', { description: node.title, position: 'top-center' });
   };
 
+  const heightClass = variant === 'tall' ? 'aspect-[3/5]' : variant === 'wide' ? 'aspect-[4/3]' : 'aspect-square';
+
   return (
     <Link 
       to={`/product/${node.handle}`}
-      className="bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all group"
+      className="group bg-card rounded-lg overflow-hidden border border-border hover:shadow-xl transition-all duration-300 break-inside-avoid mb-4"
     >
-      <div className="relative aspect-square bg-muted overflow-hidden">
+      <div className={`relative ${heightClass} bg-white overflow-hidden`}>
         <img 
           src={imageUrl} 
           alt={node.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute top-2 left-2 bg-deal text-primary-foreground text-xs font-bold px-2 py-1 rounded-full">
+        
+        {/* 2026 DEALS Badge */}
+        <div className="absolute top-2 left-2 bg-gradient-to-r from-deal to-warning text-white text-[10px] font-bold px-2 py-1 rounded shadow-lg">
+          2026 DEALS
+        </div>
+        
+        {/* Discount Badge */}
+        <div className="absolute top-2 right-2 bg-deal text-white text-xs font-bold px-2 py-1 rounded-full">
           -{discount}%
         </div>
+
+        {/* Wishlist button */}
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toast.success('Added to wishlist!');
+          }}
+          className="absolute bottom-2 right-2 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:bg-white"
+        >
+          <Heart className="w-4 h-4 text-muted-foreground hover:text-deal transition-colors" />
+        </button>
       </div>
       
-      <div className="p-4">
-        <h3 className="font-medium text-foreground line-clamp-2 mb-2 text-sm">
+      <div className="p-3">
+        <h3 className="font-medium text-foreground line-clamp-2 text-sm mb-2 group-hover:text-primary transition-colors">
           {node.title}
         </h3>
         
-        <div className="flex items-baseline gap-2 mb-3">
+        <div className="flex items-baseline gap-2 mb-2">
           <span className="text-deal font-bold text-lg">
             {currency === 'USD' ? '$' : currency}{price.toFixed(2)}
           </span>
-          <span className="text-muted-foreground text-sm line-through">
+          <span className="text-muted-foreground text-xs line-through">
             ${compareAtPrice.toFixed(2)}
           </span>
         </div>
 
-        {/* Countdown */}
-        <div className="mb-3">
-          <CountdownTimer endTime={endTime} />
+        {/* Sold count */}
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-muted-foreground">
+            {soldCount.toFixed(1)}K+ sold
+          </span>
+          <button
+            onClick={handleAddToCart}
+            className="w-8 h-8 rounded-full bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground flex items-center justify-center transition-all"
+          >
+            <ShoppingCart className="w-4 h-4" />
+          </button>
         </div>
-
-        {/* Stock bar */}
-        <div className="space-y-1">
-          <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">{soldPercentage}% sold</span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-2">
-            <div 
-              className="bg-gradient-to-r from-deal to-warning h-2 rounded-full transition-all"
-              style={{ width: `${soldPercentage}%` }}
-            />
-          </div>
-        </div>
-
-        <button
-          onClick={handleAddToCart}
-          className="w-full mt-3 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors text-sm"
-        >
-          Add to Cart
-        </button>
       </div>
     </Link>
   );
 };
 
+// Category filter tabs
+const categoryTabs = [
+  'All',
+  'Home & Kitchen',
+  'Electronics',
+  'Beauty & Health',
+  "Men's Clothing",
+  "Women's Clothing",
+  'Sports & Outdoors',
+  'Toys & Games',
+  'Arts & Crafts',
+];
+
 const FlashDeals = () => {
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAuthModal, setShowAuthModal] = useState(false);
-
-  // Different end times for variety
-  const getRandomEndTime = (index: number) => {
-    const hours = [2, 4, 6, 8, 12][index % 5];
-    return new Date(Date.now() + hours * 60 * 60 * 1000);
-  };
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [categoryScrollPosition, setCategoryScrollPosition] = useState(0);
 
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const data = await fetchProducts(20);
+        const data = await fetchProducts(30);
         setProducts(data);
       } catch (error) {
         console.error('Failed to load products:', error);
@@ -157,6 +158,22 @@ const FlashDeals = () => {
     loadProducts();
   }, []);
 
+  // Generate varied heights for masonry effect
+  const productVariants = useMemo(() => {
+    return products.map((_, index) => {
+      const patterns = ['normal', 'tall', 'normal', 'normal', 'tall', 'normal'] as const;
+      return patterns[index % patterns.length];
+    });
+  }, [products]);
+
+  const scrollCategories = (direction: 'left' | 'right') => {
+    const container = document.getElementById('category-tabs');
+    if (container) {
+      const scrollAmount = direction === 'left' ? -200 : 200;
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <TopBar />
@@ -166,57 +183,137 @@ const FlashDeals = () => {
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-deal via-primary to-deal/80 text-primary-foreground py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Link to="/" className="hover:opacity-80">
-              <ChevronLeft className="w-5 h-5" />
+      {/* Festive 2026 Hero Banner - Temu inspired */}
+      <div className="relative bg-gradient-to-r from-deal via-red-500 to-deal overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Firework sparkles */}
+          <div className="absolute top-4 left-10 text-4xl animate-pulse">✨</div>
+          <div className="absolute top-8 right-20 text-3xl animate-pulse delay-100">🎆</div>
+          <div className="absolute bottom-6 left-1/4 text-2xl animate-pulse delay-200">✨</div>
+          <div className="absolute top-12 left-1/3 text-3xl animate-pulse delay-300">🎇</div>
+          <div className="absolute bottom-8 right-1/4 text-4xl animate-pulse">🎆</div>
+          <div className="absolute top-6 right-1/3 text-2xl animate-pulse delay-150">✨</div>
+          
+          {/* Gift boxes */}
+          <div className="absolute left-8 bottom-4 text-5xl hidden md:block">🎁</div>
+          <div className="absolute right-12 top-8 text-4xl hidden md:block">🎁</div>
+          
+          {/* Golden ribbons effect */}
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-yellow-500/10 to-transparent pointer-events-none" />
+        </div>
+
+        <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 mb-4 text-white/80">
+            <Link to="/" className="hover:text-white transition-colors flex items-center gap-1">
+              <ChevronLeft className="w-4 h-4" />
+              Home
             </Link>
-            <span className="text-sm opacity-80">Home</span>
-            <span className="text-sm opacity-60">/</span>
-            <span className="text-sm">Flash Deals</span>
+            <span>/</span>
+            <span className="text-white">2026 Deals</span>
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Zap className="w-8 h-8 fill-current" />
-              <div>
-                <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
-                  Flash Deals
-                </h1>
-                <p className="text-sm opacity-90">Limited time offers • Grab before they're gone!</p>
-              </div>
-            </div>
-            <div className="hidden md:flex items-center gap-2 bg-background/20 px-4 py-2 rounded-lg">
-              <Clock className="w-5 h-5" />
-              <span className="font-semibold">Ends in:</span>
-              <CountdownTimer endTime={new Date(Date.now() + 4 * 60 * 60 * 1000)} />
-            </div>
+
+          <div className="text-center">
+            <p className="text-yellow-300 text-sm md:text-base font-semibold tracking-widest mb-2 uppercase">
+              A Fresh Start to 2026
+            </p>
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-3 tracking-tight">
+              NEW YEAR, AMAZING DEALS
+            </h1>
+            <p className="text-white/90 text-base md:text-lg">
+              Limited time offers • Up to 70% off everything
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Products Grid */}
+      {/* Deal Category Circles */}
+      <div className="bg-card border-b border-border py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-center gap-6 md:gap-12 overflow-x-auto pb-2 scrollbar-hide">
+            {dealCategories.map((category) => (
+              <Link
+                key={category.name}
+                to="#"
+                className="flex flex-col items-center gap-2 min-w-[80px] group"
+              >
+                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br ${category.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <category.icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
+                </div>
+                <span className="text-xs md:text-sm font-medium text-foreground text-center leading-tight">
+                  {category.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Category Filter Tabs */}
+      <div className="sticky top-[72px] z-40 bg-background border-b border-border">
+        <div className="container mx-auto px-4 relative">
+          <button
+            onClick={() => scrollCategories('left')}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-background shadow-md rounded-full flex items-center justify-center hover:bg-muted transition-colors md:hidden"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          
+          <div 
+            id="category-tabs"
+            className="flex gap-2 py-4 overflow-x-auto scrollbar-hide px-8 md:px-0 md:justify-center"
+          >
+            {categoryTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveCategory(tab)}
+                className={`px-4 py-2 rounded-full border text-sm font-medium whitespace-nowrap transition-all ${
+                  activeCategory === tab
+                    ? 'bg-foreground text-background border-foreground'
+                    : 'bg-card text-foreground border-border hover:border-foreground/50'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={() => scrollCategories('right')}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-background shadow-md rounded-full flex items-center justify-center hover:bg-muted transition-colors md:hidden"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Masonry Products Grid */}
       <main className="container mx-auto px-4 py-8">
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="bg-muted rounded-xl aspect-[3/4] animate-pulse" />
+          <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
+            {Array.from({ length: 15 }).map((_, i) => (
+              <div 
+                key={i} 
+                className={`bg-muted rounded-lg animate-pulse mb-4 ${
+                  i % 3 === 0 ? 'aspect-[3/5]' : 'aspect-square'
+                }`} 
+              />
             ))}
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20">
             <Zap className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No Flash Deals Available</h2>
+            <h2 className="text-xl font-semibold mb-2">No 2026 Deals Available</h2>
             <p className="text-muted-foreground">Check back soon for exciting deals!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4">
             {products.map((product, index) => (
-              <FlashDealCard 
+              <MasonryProductCard 
                 key={product.node.id} 
                 product={product} 
-                endTime={getRandomEndTime(index)}
+                variant={productVariants[index]}
               />
             ))}
           </div>
