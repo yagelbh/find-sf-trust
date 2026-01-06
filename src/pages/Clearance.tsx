@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Percent, ChevronLeft, Package } from 'lucide-react';
+import { Percent, ChevronLeft, Package, Flame } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
@@ -17,10 +17,14 @@ const ClearanceCard = ({ product }: { product: ShopifyProduct }) => {
   const imageUrl = node.images.edges[0]?.node.url || 'https://via.placeholder.com/300';
   const firstVariant = node.variants.edges[0]?.node;
 
+  // Seeded random for consistent values
+  const seed = node.id.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
   const compareAtPrice = price * 2;
   const discount = Math.round((1 - price / compareAtPrice) * 100);
-  const stockLeft = Math.floor(Math.random() * 20) + 3;
-  const daysLeft = ['Last day', 'Last 2 days', 'Last 3 days', 'Limited time'][Math.floor(Math.random() * 4)];
+  const stockLeft = (seed % 20) + 3;
+  const daysLabels = ['Last day', 'Limited time', 'Last 3 days', 'Last 3 days'];
+  const daysLeft = daysLabels[seed % daysLabels.length];
+  const stockPercentage = Math.min(100, (stockLeft / 25) * 100);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -40,15 +44,15 @@ const ClearanceCard = ({ product }: { product: ShopifyProduct }) => {
   return (
     <Link 
       to={`/product/${node.handle}`}
-      className="bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all group"
+      className="bg-card rounded-lg overflow-hidden border border-border hover:shadow-xl hover:border-primary/20 transition-all group"
     >
-      <div className="relative aspect-square bg-muted overflow-hidden">
+      <div className="relative aspect-square bg-white overflow-hidden">
         <img 
           src={imageUrl} 
           alt={node.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
         />
-        <div className="absolute top-2 left-2 bg-warning text-warning-foreground text-xs font-bold px-2 py-1 rounded-full">
+        <div className="absolute top-2 left-2 bg-foreground text-background text-xs font-bold px-2 py-1 rounded">
           -{discount}%
         </div>
         <div className="absolute bottom-2 right-2 bg-foreground/80 text-background text-xs px-2 py-1 rounded">
@@ -57,7 +61,7 @@ const ClearanceCard = ({ product }: { product: ShopifyProduct }) => {
       </div>
       
       <div className="p-4">
-        <h3 className="font-medium text-foreground line-clamp-2 mb-2 text-sm">
+        <h3 className="font-medium text-foreground line-clamp-2 mb-2 text-sm min-h-[2.5rem]">
           {node.title}
         </h3>
         
@@ -76,12 +80,12 @@ const ClearanceCard = ({ product }: { product: ShopifyProduct }) => {
           <span>Only {stockLeft} left in stock</span>
         </div>
 
-        {/* Clearance progress */}
+        {/* Stock progress bar */}
         <div className="space-y-1 mb-3">
-          <div className="w-full bg-muted rounded-full h-2">
+          <div className="w-full bg-muted rounded-full h-1.5">
             <div 
-              className="bg-gradient-to-r from-warning to-deal h-2 rounded-full"
-              style={{ width: `${100 - stockLeft * 3}%` }}
+              className="bg-warning h-1.5 rounded-full transition-all"
+              style={{ width: `${stockPercentage}%` }}
             />
           </div>
           <span className="text-[10px] text-warning font-medium">Clearance</span>
@@ -89,7 +93,7 @@ const ClearanceCard = ({ product }: { product: ShopifyProduct }) => {
 
         <button
           onClick={handleAddToCart}
-          className="w-full py-2 bg-warning text-warning-foreground rounded-lg font-semibold hover:bg-warning/90 transition-colors text-sm"
+          className="w-full py-2.5 bg-warning text-warning-foreground rounded-lg font-semibold hover:bg-warning/90 transition-colors text-sm"
         >
           Grab Deal
         </button>
@@ -126,29 +130,34 @@ const Clearance = () => {
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-warning via-warning/80 to-deal text-foreground py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Link to="/" className="hover:opacity-80">
-              <ChevronLeft className="w-5 h-5" />
+      {/* Clean Header Banner */}
+      <div className="bg-gradient-to-r from-warning via-amber-500 to-warning">
+        <div className="container mx-auto px-4 py-6">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 mb-3 text-foreground/80">
+            <Link to="/" className="hover:text-foreground transition-colors flex items-center gap-1">
+              <ChevronLeft className="w-4 h-4" />
+              Home
             </Link>
-            <span className="text-sm opacity-80">Home</span>
-            <span className="text-sm opacity-60">/</span>
-            <span className="text-sm">Value Finds</span>
+            <span>/</span>
+            <span className="text-foreground font-medium">Value Finds</span>
           </div>
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Percent className="w-8 h-8" />
+              <Percent className="w-7 h-7 text-foreground" />
               <div>
-                <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
+                <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
                   Value Finds
                 </h1>
-                <p className="text-sm opacity-90">Limited stock • Up to 85% off • While supplies last</p>
+                <p className="text-sm text-foreground/80">
+                  Limited stock • Up to 85% off • While supplies last
+                </p>
               </div>
             </div>
-            <div className="hidden md:block bg-background/20 px-4 py-2 rounded-lg">
-              <span className="font-bold text-lg">🔥 Final Sale</span>
+            <div className="hidden md:flex items-center gap-2 bg-card px-4 py-2 rounded-full border border-border shadow-sm">
+              <Flame className="w-4 h-4 text-warning" />
+              <span className="font-bold text-foreground">Final Sale</span>
             </div>
           </div>
         </div>
@@ -157,19 +166,19 @@ const Clearance = () => {
       {/* Products Grid */}
       <main className="container mx-auto px-4 py-8">
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="bg-muted rounded-xl aspect-[3/4] animate-pulse" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {Array.from({ length: 15 }).map((_, i) => (
+              <div key={i} className="bg-muted rounded-lg aspect-square animate-pulse" />
             ))}
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20">
             <Percent className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">No Value Finds Items</h2>
+            <h2 className="text-xl font-semibold mb-2">No Value Finds Available</h2>
             <p className="text-muted-foreground">Check back soon for clearance deals!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {products.map((product) => (
               <ClearanceCard key={product.node.id} product={product} />
             ))}
