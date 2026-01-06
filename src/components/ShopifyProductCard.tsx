@@ -79,14 +79,14 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
       className="group relative bg-card rounded-lg overflow-hidden border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-1 block"
     >
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-muted">
+      <div className="relative aspect-square overflow-hidden bg-white">
         {!imageLoaded && (
           <div className="absolute inset-0 bg-muted animate-pulse" />
         )}
         <img 
           src={imageUrl} 
           alt={node.title}
-          className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
         />
         
