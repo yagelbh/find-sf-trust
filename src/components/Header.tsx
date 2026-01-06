@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Search, User, Heart, ShoppingCart, ChevronDown, Menu, X, Home, Flame, Tag, Grid3X3 } from 'lucide-react';
+import findsfaeLogo from '@/assets/findsfae-logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/stores/cartStore';
 import CategoryMegaMenu from './CategoryMegaMenu';
@@ -55,13 +56,14 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               <Menu className="w-6 h-6 text-secondary-foreground" />
             </button>
 
-            {/* Logo - Clean text logo */}
+            {/* Logo */}
             <div className="flex-shrink-0">
-              <Link to="/" className="flex items-center group">
-                <span className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight">
-                  <span className="text-primary">Finds</span>
-                  <span className="text-warning">fae</span>
-                </span>
+              <Link to="/" className="flex items-center">
+                <img 
+                  src={findsfaeLogo} 
+                  alt="Findsfae" 
+                  className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
+                />
               </Link>
             </div>
 
@@ -164,10 +166,11 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
         <SheetContent side="left" className="w-[300px] p-0">
           <SheetHeader className="p-4 border-b border-border">
             <SheetTitle className="text-left">
-              <span className="text-xl font-black tracking-tight">
-                <span className="text-primary">Finds</span>
-                <span className="text-warning">fae</span>
-              </span>
+              <img 
+                src={findsfaeLogo} 
+                alt="Findsfae" 
+                className="h-8 w-auto object-contain"
+              />
             </SheetTitle>
           </SheetHeader>
 
