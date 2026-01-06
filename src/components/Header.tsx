@@ -102,7 +102,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                   placeholder="Search millions of products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-10 pl-4 pr-12 rounded-full border-2 border-border bg-card focus:border-primary focus:bg-card outline-none transition-all text-sm"
+                  className="w-full h-10 pl-4 pr-12 rounded-full border-2 border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary focus:bg-card outline-none transition-all text-sm"
                 />
                 <button 
                   type="submit"
@@ -121,11 +121,11 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               {/* Sign in / Register - White/neutral style */}
               <button
                 onClick={onAuthClick}
-                className="hidden sm:flex items-center gap-2 px-3 py-2 text-secondary-foreground hover:bg-muted rounded-lg transition-colors"
+                className="hidden sm:flex items-center gap-2 px-3 py-2 text-secondary-foreground hover:bg-primary/10 rounded-lg transition-colors group"
               >
                 <User className="w-5 h-5" />
                 <div className="hidden md:flex flex-col items-start text-xs leading-tight">
-                  <span className="font-semibold">Sign in / Register</span>
+                  <span className="font-semibold group-hover:text-primary transition-colors">Sign in / Register</span>
                   <span className="text-[10px] opacity-70">Orders & Account</span>
                 </div>
               </button>
