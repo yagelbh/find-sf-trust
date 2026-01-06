@@ -56,13 +56,13 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               <Menu className="w-6 h-6 text-secondary-foreground" />
             </button>
 
-            {/* Logo - Refined size, hover glow effect */}
+            {/* Logo - Blend into header background */}
             <div className="flex-shrink-0">
-              <Link to="/" className="flex items-center group">
+              <Link to="/" className="flex items-center">
                 <img 
                   src={findsfaeLogo} 
                   alt="Findsfae" 
-                  className="h-16 sm:h-18 lg:h-20 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.25)]"
+                  className="h-16 sm:h-18 lg:h-20 w-auto object-contain mix-blend-lighten"
                 />
               </Link>
             </div>
