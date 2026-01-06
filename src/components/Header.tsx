@@ -75,9 +75,9 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               </Link>
               <Link 
                 to="/flash-deals"
-                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors flex items-center gap-1"
+                className="text-sm font-bold text-secondary-foreground/80 hover:text-primary transition-colors"
               >
-                <span className="text-warning">🎆</span> 2026 Deals
+                2026 Deals
               </Link>
               <Link 
                 to="/clearance"
