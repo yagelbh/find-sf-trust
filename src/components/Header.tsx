@@ -132,15 +132,15 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
 
             {/* Actions - Clear hierarchy: Cart > Account > Wishlist */}
             <div className="flex items-center gap-0.5 sm:gap-1">
-              {/* Sign in / Register - Lighter weight */}
+              {/* Sign in / Register - Bolder, clearer */}
               <button
                 onClick={onAuthClick}
-                className="hidden sm:flex items-center gap-1.5 px-2 py-1.5 text-secondary-foreground/80 hover:bg-secondary-foreground/10 rounded-lg transition-colors group"
+                className="hidden sm:flex items-center gap-2 px-3 py-2 text-secondary-foreground hover:bg-secondary-foreground/15 rounded-lg transition-colors group"
               >
-                <User className="w-4 h-4 opacity-70" />
+                <User className="w-5 h-5" />
                 <div className="hidden md:flex flex-col items-start leading-tight">
-                  <span className="text-[11px] font-normal group-hover:text-primary transition-colors">Sign in / Register</span>
-                  <span className="text-[9px] opacity-50">Orders & Account</span>
+                  <span className="text-xs font-semibold group-hover:text-primary transition-colors">Sign in / Register</span>
+                  <span className="text-[10px] text-secondary-foreground/70">Orders & Account</span>
                 </div>
               </button>
 

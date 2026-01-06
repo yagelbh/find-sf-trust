@@ -20,8 +20,8 @@
     --primary: 16 100% 60%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Deep Navy matching logo exactly */
-    --secondary: 240 40% 16%;
+    /* Secondary - Lighter Navy for header */
+    --secondary: 235 35% 28%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 96%;
@@ -44,8 +44,8 @@
     --trust-green: 152 60% 38%;
     --warning-yellow: 45 93% 47%;
     --deal-red: 0 84% 60%;
-    --navy: 235 55% 20%;
-    --navy-light: 235 40% 35%;
+    --navy: 235 35% 28%;
+    --navy-light: 235 30% 38%;
     --coral: 16 100% 60%;
     --coral-dark: 16 100% 50%;
     --success: 142 71% 45%;
