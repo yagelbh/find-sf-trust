@@ -45,7 +45,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
-      <div className="bg-secondary py-2">
+      <div className="bg-secondary py-3">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between gap-4 lg:gap-5">
             {/* Mobile Menu Button */}
@@ -67,39 +67,48 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               </Link>
             </div>
 
-            {/* Navigation Links - Tighter spacing */}
+            {/* Navigation Links - With hover/active states */}
             <nav className="hidden lg:flex items-center gap-4 relative">
               <Link 
                 to="/top-sellers"
-                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors whitespace-nowrap"
+                className="text-sm font-medium text-secondary-foreground/60 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] transition-all whitespace-nowrap relative group"
               >
                 Best Sellers
+                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/flash-deals"
-                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors whitespace-nowrap"
+                className="text-sm font-medium text-secondary-foreground/60 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] transition-all whitespace-nowrap relative group"
               >
                 2026 Deals
+                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/clearance"
-                className="text-sm font-medium text-secondary-foreground/80 hover:text-primary transition-colors whitespace-nowrap"
+                className="text-sm font-medium text-secondary-foreground/60 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] transition-all whitespace-nowrap relative group"
               >
                 Clearance
+                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <button 
-                className="text-sm font-semibold text-secondary-foreground hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap"
+                className={`text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap relative ${
+                  isCategoryMenuOpen 
+                    ? 'text-secondary-foreground drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]' 
+                    : 'text-secondary-foreground/90 hover:text-secondary-foreground'
+                }`}
                 onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
               >
                 <span className="relative">
                   Categories
-                  <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-primary/50 rounded-full"></span>
+                  <span className={`absolute -bottom-0.5 left-0 h-0.5 bg-primary rounded-full transition-all ${
+                    isCategoryMenuOpen ? 'w-full' : 'w-0'
+                  }`}></span>
                 </span>
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} />
               </button>
             </nav>
 
-            {/* Search - Hero element with enhanced styling */}
+            {/* Search - Hero element with enhanced button */}
             <form onSubmit={handleSearch} className="hidden sm:block flex-1 max-w-xl lg:max-w-2xl">
               <div className="relative">
                 <input
@@ -111,7 +120,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 />
                 <button 
                   type="submit"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors shadow-sm"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors shadow-md border border-primary/80"
                 >
                   <Search className="w-4 h-4" />
                 </button>
@@ -121,17 +130,17 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
             {/* Spacer for mobile */}
             <div className="flex-1 sm:hidden" />
 
-            {/* Actions - Clear hierarchy */}
-            <div className="flex items-center gap-1 sm:gap-1.5">
-              {/* Sign in / Register - Subdued styling */}
+            {/* Actions - Clear hierarchy: Cart > Account > Wishlist */}
+            <div className="flex items-center gap-0.5 sm:gap-1">
+              {/* Sign in / Register - Lighter weight */}
               <button
                 onClick={onAuthClick}
-                className="hidden sm:flex items-center gap-1.5 px-2 py-1.5 text-secondary-foreground/90 hover:bg-secondary-foreground/10 rounded-lg transition-colors group"
+                className="hidden sm:flex items-center gap-1.5 px-2 py-1.5 text-secondary-foreground/80 hover:bg-secondary-foreground/10 rounded-lg transition-colors group"
               >
-                <User className="w-4 h-4 opacity-80" />
+                <User className="w-4 h-4 opacity-70" />
                 <div className="hidden md:flex flex-col items-start leading-tight">
-                  <span className="text-[11px] font-medium group-hover:text-primary transition-colors">Sign in / Register</span>
-                  <span className="text-[9px] opacity-60">Orders & Account</span>
+                  <span className="text-[11px] font-normal group-hover:text-primary transition-colors">Sign in / Register</span>
+                  <span className="text-[9px] opacity-50">Orders & Account</span>
                 </div>
               </button>
 
@@ -140,17 +149,17 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 to="/wishlist"
                 className="relative flex items-center p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
               >
-                <Heart className="w-4 h-4 text-secondary-foreground/50 stroke-[1.5]" />
+                <Heart className="w-4 h-4 text-secondary-foreground/40 stroke-[1.5]" />
               </Link>
 
-              {/* Cart - Primary action, larger */}
+              {/* Cart - Primary action, larger & prominent */}
               <Link 
                 to="/cart"
                 className="relative flex items-center p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
               >
-                <ShoppingCart className="w-5 h-5 text-secondary-foreground" />
+                <ShoppingCart className="w-6 h-6 text-secondary-foreground" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-0.5 right-0 min-w-[18px] h-[18px] px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                     {totalItems}
                   </span>
                 )}
