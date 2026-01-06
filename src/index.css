@@ -20,8 +20,8 @@
     --primary: 16 100% 60%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Deep Navy matching logo */
-    --secondary: 233 59% 12%;
+    /* Secondary - Deep Navy matching logo exactly */
+    --secondary: 240 40% 16%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 96%;
