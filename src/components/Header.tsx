@@ -71,21 +71,21 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
             <nav className="hidden lg:flex items-center gap-4 relative">
               <Link 
                 to="/top-sellers"
-                className="text-sm font-medium text-secondary-foreground/60 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] transition-all whitespace-nowrap relative group"
+                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
               >
                 Best Sellers
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/flash-deals"
-                className="text-sm font-medium text-secondary-foreground/60 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] transition-all whitespace-nowrap relative group"
+                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
               >
                 2026 Deals
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/clearance"
-                className="text-sm font-medium text-secondary-foreground/60 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.15)] transition-all whitespace-nowrap relative group"
+                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
               >
                 Clearance
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
