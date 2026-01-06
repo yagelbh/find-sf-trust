@@ -446,7 +446,7 @@ const ProductDetail = () => {
             )}
 
             {/* Add to Cart Button */}
-            <Button variant="cta" size="lg" className="w-full" onClick={handleAddToCart}>
+            <Button variant="default" size="lg" className="w-full" onClick={handleAddToCart}>
               <ShoppingCart className="w-4 h-4 mr-2" />
               Add to Cart
               {discount && <span className="ml-2 text-xs opacity-90">{discount}% OFF</span>}
