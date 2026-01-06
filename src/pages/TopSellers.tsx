@@ -260,28 +260,6 @@ const TopSellers = () => {
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
-      {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-warning via-deal to-primary text-primary-foreground py-6">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Link to="/" className="hover:opacity-80">
-              <ChevronLeft className="w-5 h-5" />
-            </Link>
-            <span className="text-sm opacity-80">Home</span>
-            <span className="text-sm opacity-60">/</span>
-            <span className="text-sm">Best Sellers</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <Award className="w-8 h-8 fill-current" />
-            <div>
-              <h1 className="text-2xl md:text-3xl font-display font-bold tracking-tight">
-                Best Sellers
-              </h1>
-              <p className="text-sm opacity-90">Best picks this week • Most popular items</p>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Time Filters */}
       <div className="border-b border-border bg-card sticky top-[72px] z-40">
