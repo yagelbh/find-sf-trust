@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import TrustBar from '@/components/TrustBar';
 import HeroCarousel from '@/components/HeroCarousel';
 import DealsCountdown from '@/components/DealsCountdown';
+import PromoBanners from '@/components/PromoBanners';
 import ShopifyProductGrid from '@/components/ShopifyProductGrid';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
@@ -56,6 +57,9 @@ const Index = () => {
       <div className="container mx-auto px-4 py-4">
         <TrustBar />
       </div>
+
+      {/* Promo Banners - Temu style */}
+      <PromoBanners />
 
       {/* Deals Countdown Section */}
       <DealsCountdown products={dealProducts} />
