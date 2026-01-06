@@ -5,7 +5,6 @@ import TrustBar from '@/components/TrustBar';
 import HeroCarousel from '@/components/HeroCarousel';
 import DealsCountdown from '@/components/DealsCountdown';
 import PromoBanners from '@/components/PromoBanners';
-import SocialProof from '@/components/SocialProof';
 import ShopifyProductGrid from '@/components/ShopifyProductGrid';
 import Footer from '@/components/Footer';
 import AuthModal from '@/components/AuthModal';
@@ -54,16 +53,13 @@ const Index = () => {
       {/* Hero Carousel */}
       <HeroCarousel />
 
-      {/* Trust Bar - Compact strip */}
-      <div className="container mx-auto px-4 py-3">
+      {/* Trust Bar - Green banner below hero */}
+      <div className="container mx-auto px-4 py-4">
         <TrustBar />
       </div>
 
-      {/* Category Cards - Clean grid */}
+      {/* Promo Banners - Temu style */}
       <PromoBanners />
-
-      {/* Social Proof */}
-      <SocialProof />
 
       {/* Deals Countdown Section */}
       <DealsCountdown products={dealProducts} />

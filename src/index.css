@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - Simplified */
+    /* Core Brand Colors */
     --background: 0 0% 98%;
     --foreground: 222 47% 11%;
 
@@ -16,20 +16,19 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    /* Primary - Warm Coral/Orange (Single brand color) */
-    --primary: 16 100% 55%;
+    /* Primary - Bold Coral/Orange */
+    --primary: 16 100% 60%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 16 100% 65%;
 
-    /* Secondary - Deep Navy (for contrast) */
+    /* Secondary - Deep Navy matching logo exactly */
     --secondary: 240 40% 16%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 96%;
     --muted-foreground: 220 9% 46%;
 
-    /* Accent - Soft Amber (ONE accent color) */
-    --accent: 38 92% 50%;
+    /* Accent - Teal/Green for trust */
+    --accent: 160 84% 39%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -37,26 +36,33 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 16 100% 55%;
+    --ring: 16 100% 60%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
-    /* Simplified Custom Colors */
+    /* Custom Colors */
     --trust-green: 152 60% 38%;
-    --navy: 240 40% 16%;
-    --coral: 16 100% 55%;
-    --success: 152 60% 38%;
+    --warning-yellow: 45 93% 47%;
+    --deal-red: 0 84% 60%;
+    --navy: 235 55% 20%;
+    --navy-light: 235 40% 35%;
+    --coral: 16 100% 60%;
+    --coral-dark: 16 100% 50%;
+    --success: 142 71% 45%;
+    --info-blue: 217 91% 60%;
     
-    /* Single Premium Gradient */
-    --gradient-hero: linear-gradient(135deg, hsl(16 100% 55%) 0%, hsl(38 92% 55%) 100%);
-    --gradient-cta: linear-gradient(135deg, hsl(16 100% 55%) 0%, hsl(25 100% 60%) 100%);
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(235 55% 20%) 0%, hsl(235 55% 30%) 100%);
+    --gradient-deal: linear-gradient(90deg, hsl(235 55% 25%) 0%, hsl(235 40% 35%) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(16 100% 60%) 0%, hsl(25 100% 55%) 100%);
+    --gradient-trust: linear-gradient(90deg, hsl(142 71% 40%) 0%, hsl(142 71% 50%) 100%);
     
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.08), 0 2px 4px -2px hsl(0 0% 0% / 0.06);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.08), 0 4px 6px -4px hsl(0 0% 0% / 0.06);
-    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.08), 0 8px 10px -6px hsl(0 0% 0% / 0.06);
-    --shadow-glow: 0 0 30px hsl(16 100% 55% / 0.25);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 8px 10px -6px hsl(0 0% 0% / 0.1);
+    --shadow-glow: 0 0 20px hsl(16 100% 60% / 0.3);
     
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -78,7 +84,7 @@
     --popover: 222 47% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 16 100% 55%;
+    --primary: 16 100% 60%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 217 33% 17%;
@@ -87,7 +93,7 @@
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 38 92% 50%;
+    --accent: 160 84% 39%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 63% 31%;
@@ -95,7 +101,7 @@
 
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 16 100% 55%;
+    --ring: 16 100% 60%;
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -133,8 +139,16 @@
     background: var(--gradient-hero);
   }
   
+  .bg-gradient-deal {
+    background: var(--gradient-deal);
+  }
+  
   .bg-gradient-cta {
     background: var(--gradient-cta);
+  }
+  
+  .bg-gradient-trust {
+    background: var(--gradient-trust);
   }
   
   .shadow-glow {
@@ -145,19 +159,23 @@
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
   
-  .animate-shimmer {
-    animation: shimmer 3s ease-in-out infinite;
-    background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.15), transparent);
-    background-size: 200% 100%;
-  }
-
-  .hover-glow {
-    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
   }
   
-  .hover-glow:hover {
-    box-shadow: var(--shadow-glow);
-    transform: translateY(-2px);
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+    background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.1), transparent);
+    background-size: 200% 100%;
+  }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
   }
 }
 
@@ -170,17 +188,17 @@
   }
 }
 
-@keyframes subtle-glow {
+@keyframes float {
   0%, 100% {
-    opacity: 0.5;
+    transform: translateY(0px);
   }
   50% {
-    opacity: 1;
+    transform: translateY(-10px);
   }
 }
 
-.animate-subtle-glow {
-  animation: subtle-glow 2s ease-in-out infinite;
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
 
 /* Scrollbar styling */
