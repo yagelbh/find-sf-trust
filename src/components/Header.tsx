@@ -45,8 +45,8 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
-      <div className="bg-secondary">
-        <div className="container mx-auto px-4 py-2">
+      <div className="bg-secondary py-1">
+        <div className="container mx-auto px-4">
           <div className="flex items-center gap-2 lg:gap-6">
             {/* Mobile Menu Button */}
             <button
@@ -62,7 +62,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 <img 
                   src={findsfaeLogo} 
                   alt="Findsfae" 
-                  className="h-16 sm:h-20 lg:h-24 w-auto object-contain"
+                  className="h-14 sm:h-16 lg:h-20 w-auto object-contain"
                 />
               </Link>
             </div>
