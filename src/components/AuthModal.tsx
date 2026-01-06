@@ -78,15 +78,26 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
   };
 
   const handleGoogleSignIn = async () => {
-    toast.info('Google sign-in requires additional setup. Please use email/password for now.');
+    setIsLoading(true);
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) {
+        toast.error(`Google sign-in failed: ${error.message}`);
+      }
+      // On success, Supabase redirects away; the auth listener will update session on return.
+    } catch {
+      toast.error('Google sign-in failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleFacebookSignIn = async () => {
-    toast.info('Facebook sign-in requires additional setup. Please use email/password for now.');
+    toast.info('Facebook sign-in isn’t available in Lovable Cloud yet. Please use email/password for now.');
   };
 
   const handleAppleSignIn = async () => {
-    toast.info('Apple sign-in requires additional setup. Please use email/password for now.');
+    toast.info('Apple sign-in isn’t available in Lovable Cloud yet. Please use email/password for now.');
   };
 
   return (
