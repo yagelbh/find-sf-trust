@@ -62,7 +62,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 <img 
                   src={findsfaeLogo} 
                   alt="Findsfae" 
-                  className="h-12 sm:h-14 lg:h-16 w-auto object-contain"
+                  className="h-16 sm:h-20 lg:h-24 w-auto object-contain"
                 />
               </Link>
             </div>
