@@ -61,7 +61,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
         const { error } = await signIn(email, password);
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
-            toast.error('Invalid email or password');
+            toast.error('Invalid email or password. If you don\'t have an account yet, click “Sign up”.');
           } else {
             toast.error(error.message);
           }
