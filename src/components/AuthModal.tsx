@@ -153,7 +153,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
               </div>
 
               <Button 
-                variant="cta" 
+                variant="default" 
                 size="xl" 
                 className="w-full rounded-full"
                 onClick={handleEmailAuth}
@@ -265,7 +265,7 @@ const AuthModal = ({ isOpen, onClose, initialMode = 'signin' }: AuthModalProps) 
               Leave
             </Button>
             <Button 
-              variant="cta" 
+              variant="default" 
               className="flex-1 rounded-full"
               onClick={() => setShowLeaveConfirm(false)}
             >
