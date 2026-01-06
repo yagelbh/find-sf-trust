@@ -49,7 +49,7 @@ const CategoryCardItem = ({ category }: { category: CategoryCard }) => {
       to={category.link}
       className={`group relative flex flex-col items-center justify-center p-6 rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${
         category.featured 
-          ? 'bg-gradient-hero text-white border-transparent col-span-2 md:col-span-1' 
+          ? 'bg-gradient-hero text-white border-transparent' 
           : 'bg-card border-border hover:border-primary/20'
       }`}
     >
