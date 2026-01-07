@@ -3,7 +3,7 @@ import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 
 import HeroCarousel from '@/components/HeroCarousel';
-import DealsCountdown from '@/components/DealsCountdown';
+import FeaturedProductsRow from '@/components/FeaturedProductsRow';
 import PromoBanners from '@/components/PromoBanners';
 import ShopifyProductGrid from '@/components/ShopifyProductGrid';
 import Footer from '@/components/Footer';
@@ -11,25 +11,10 @@ import AuthModal from '@/components/AuthModal';
 import ChatWidget from '@/components/ChatWidget';
 import CartDrawer from '@/components/CartDrawer';
 import LeadCapturePopup from '@/components/LeadCapturePopup';
-import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 
 const Index = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showCartDrawer, setShowCartDrawer] = useState(false);
-  const [dealProducts, setDealProducts] = useState<ShopifyProduct[]>([]);
-
-  // Load products for deals section
-  useEffect(() => {
-    const loadDealProducts = async () => {
-      try {
-        const products = await fetchProducts(10);
-        setDealProducts(products);
-      } catch (error) {
-        console.error('Failed to load deal products:', error);
-      }
-    };
-    loadDealProducts();
-  }, []);
 
   // Listen for cart drawer open events
   useEffect(() => {
@@ -53,11 +38,11 @@ const Index = () => {
       {/* Hero Carousel */}
       <HeroCarousel />
 
+      {/* Featured Products Row - Before promo banners, more attractive */}
+      <FeaturedProductsRow />
+
       {/* Promo Banners - Temu style */}
       <PromoBanners />
-
-      {/* Deals Countdown Section */}
-      <DealsCountdown products={dealProducts} />
 
       {/* Main Content */}
       <main>
