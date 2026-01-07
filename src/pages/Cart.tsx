@@ -13,40 +13,66 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
   const imageUrl = item.product.node.images?.edges?.[0]?.node?.url || 'https://via.placeholder.com/120';
 
   return (
-    <div className="flex gap-4 p-4 bg-card rounded-xl border border-border">
+    <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-card rounded-xl border border-border">
       <Link to={`/product/${item.product.node.handle}`} className="flex-shrink-0">
-        <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-white">
           <img
             src={imageUrl}
             alt={item.product.node.title}
-            className="w-full h-full object-cover hover:scale-105 transition-transform"
+            className="w-full h-full object-contain p-1 hover:scale-105 transition-transform"
           />
         </div>
       </Link>
 
       <div className="flex-1 min-w-0">
         <Link to={`/product/${item.product.node.handle}`}>
-          <h3 className="font-medium text-foreground line-clamp-2 hover:text-primary transition-colors">
+          <h3 className="font-medium text-foreground text-sm sm:text-base line-clamp-2 hover:text-primary transition-colors">
             {item.product.node.title}
           </h3>
         </Link>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 line-clamp-1">
           {item.selectedOptions.map(opt => opt.value).join(' / ')}
         </p>
-        <div className="flex items-baseline gap-2 mt-2">
-          <span className="font-bold text-lg text-primary">
+        <div className="flex flex-wrap items-baseline gap-1 sm:gap-2 mt-1 sm:mt-2">
+          <span className="font-bold text-base sm:text-lg text-primary">
             {item.price.currencyCode === 'USD' ? '$' : item.price.currencyCode}
             {(parseFloat(item.price.amount) * item.quantity).toFixed(2)}
           </span>
           {item.quantity > 1 && (
-            <span className="text-sm text-muted-foreground">
+            <span className="text-xs sm:text-sm text-muted-foreground">
               (${parseFloat(item.price.amount).toFixed(2)} each)
             </span>
           )}
         </div>
+
+        {/* Mobile quantity controls */}
+        <div className="flex items-center gap-2 mt-2 sm:hidden">
+          <div className="flex items-center bg-muted rounded-lg">
+            <button
+              onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
+              className="p-1.5 hover:bg-background rounded-l-lg transition-colors"
+            >
+              <Minus className="w-3.5 h-3.5" />
+            </button>
+            <span className="w-6 text-center font-medium text-sm">{item.quantity}</span>
+            <button
+              onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
+              className="p-1.5 hover:bg-background rounded-r-lg transition-colors"
+            >
+              <Plus className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          <button
+            onClick={() => removeItem(item.variantId)}
+            className="p-1.5 text-muted-foreground hover:text-destructive transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
-      <div className="flex flex-col items-end justify-between">
+      {/* Desktop quantity controls */}
+      <div className="hidden sm:flex flex-col items-end justify-between">
         <button
           onClick={() => removeItem(item.variantId)}
           className="p-2 text-muted-foreground hover:text-destructive transition-colors"
@@ -101,16 +127,17 @@ const Cart = () => {
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-6 text-sm">
+        <div className="flex items-center gap-2 mb-4 sm:mb-6 text-sm">
           <Link to="/" className="text-muted-foreground hover:text-primary flex items-center gap-1">
             <ChevronLeft className="w-4 h-4" />
-            Continue Shopping
+            <span className="hidden sm:inline">Continue Shopping</span>
+            <span className="sm:hidden">Back</span>
           </Link>
         </div>
 
-        <h1 className="text-2xl md:text-3xl font-display font-bold mb-8">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-4 sm:mb-8">
           Shopping Cart ({totalItems} {totalItems === 1 ? 'item' : 'items'})
         </h1>
 
