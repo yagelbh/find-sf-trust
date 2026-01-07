@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { 
   Instagram, 
   Facebook, 
@@ -9,18 +10,18 @@ import {
 
 const Footer = () => {
   const companyLinks = [
-    "About Findsfae",
-    "Contact us",
+    { label: "About Findsfae", to: "/info/about" },
+    { label: "Contact us", to: "/info/contact" },
   ];
 
   const customerLinks = [
-    "Return and refund policy",
-    "Shipping info",
+    { label: "Return and refund policy", to: "/info/returns" },
+    { label: "Shipping info", to: "/info/shipping" },
   ];
 
   const helpLinks = [
-    "Support center & FAQ",
-    "Purchase protection",
+    { label: "Support center & FAQ", to: "/info/faq" },
+    { label: "Purchase protection", to: "/info/protection" },
   ];
 
   const paymentMethods = [
@@ -46,10 +47,10 @@ const Footer = () => {
             <h3 className="font-display font-bold text-lg mb-4">Company info</h3>
             <ul className="space-y-3">
               {companyLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors text-sm">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link to={link.to} className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors text-sm">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -60,10 +61,10 @@ const Footer = () => {
             <h3 className="font-display font-bold text-lg mb-4">Customer service</h3>
             <ul className="space-y-3">
               {customerLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors text-sm">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link to={link.to} className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors text-sm">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -74,10 +75,10 @@ const Footer = () => {
             <h3 className="font-display font-bold text-lg mb-4">Help</h3>
             <ul className="space-y-3">
               {helpLinks.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors text-sm">
-                    {link}
-                  </a>
+                <li key={link.label}>
+                  <Link to={link.to} className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors text-sm">
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -87,16 +88,16 @@ const Footer = () => {
           <div>
             <h3 className="font-display font-bold text-lg mb-4">Connect with Findsfae</h3>
             <div className="flex gap-4 mb-6">
-              <a href="#" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
                 <Instagram className="w-6 h-6" />
               </a>
-              <a href="#" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
                 <Facebook className="w-6 h-6" />
               </a>
-              <a href="#" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
                 <Twitter className="w-6 h-6" />
               </a>
-              <a href="#" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-secondary-foreground/70 hover:text-secondary-foreground transition-colors">
                 <Youtube className="w-6 h-6" />
               </a>
             </div>
@@ -148,10 +149,10 @@ const Footer = () => {
         {/* Copyright */}
         <div className="border-t border-secondary-foreground/20 mt-8 pt-8 text-center">
           <p className="text-secondary-foreground/60 text-sm">
-            © 2024 Findsfae. All rights reserved. |{' '}
-            <a href="#" className="hover:text-secondary-foreground">Terms of Service</a> |{' '}
-            <a href="#" className="hover:text-secondary-foreground">Privacy Policy</a> |{' '}
-            <a href="#" className="hover:text-secondary-foreground">Cookie Policy</a>
+            © 2026 Findsfae. All rights reserved. |{' '}
+            <Link to="/info/terms" className="hover:text-secondary-foreground">Terms of Service</Link> |{' '}
+            <Link to="/info/privacy" className="hover:text-secondary-foreground">Privacy Policy</Link> |{' '}
+            <Link to="/info/cookies" className="hover:text-secondary-foreground">Cookie Policy</Link>
           </p>
         </div>
       </div>
