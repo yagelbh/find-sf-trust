@@ -183,7 +183,7 @@ const ProductDetail = () => {
     : null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <TopBar />
       <Header
         onAuthClick={() => setShowAuthModal(true)}

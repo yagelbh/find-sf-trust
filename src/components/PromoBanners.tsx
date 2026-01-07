@@ -69,7 +69,7 @@ const PromoBannerCard = ({ banner }: { banner: PromoBanner }) => {
   return (
     <Link
       to={banner.link}
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${banner.gradientFrom} ${banner.gradientTo} p-5 h-48 flex flex-col justify-end group hover:scale-[1.02] hover:shadow-xl transition-all duration-300 block`}
+      className={`relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br ${banner.gradientFrom} ${banner.gradientTo} p-3 sm:p-5 h-32 sm:h-48 flex flex-col justify-end group hover:scale-[1.02] hover:shadow-xl transition-all duration-300 block`}
     >
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -80,21 +80,21 @@ const PromoBannerCard = ({ banner }: { banner: PromoBanner }) => {
         <div className="absolute bottom-12 right-12 w-1 h-1 bg-white/50 rounded-full" />
       </div>
 
-      {/* Icon */}
-      {banner.icon}
+      {/* Icon - hide on mobile */}
+      <div className="hidden sm:block">{banner.icon}</div>
 
       {/* Content */}
       <div className="relative z-10">
-        <h3 className={`text-2xl md:text-3xl font-black ${banner.textColor} leading-none tracking-tight`}>
+        <h3 className={`text-lg sm:text-2xl md:text-3xl font-black ${banner.textColor} leading-none tracking-tight`}>
           {banner.title}
         </h3>
         {banner.subtitle && (
-          <p className={`text-xl md:text-2xl font-black ${banner.textColor} leading-tight tracking-tight`}>
+          <p className={`text-sm sm:text-xl md:text-2xl font-black ${banner.textColor} leading-tight tracking-tight`}>
             {banner.subtitle}
           </p>
         )}
 
-        <span className="mt-3 bg-gray-900 text-white text-sm font-bold px-5 py-2 rounded-full inline-flex items-center gap-1 group-hover:gap-2">
+        <span className="mt-2 sm:mt-3 bg-gray-900 text-white text-[10px] sm:text-sm font-bold px-3 sm:px-5 py-1 sm:py-2 rounded-full inline-flex items-center gap-1 group-hover:gap-2">
           SHOP NOW
           <span className="transition-transform group-hover:translate-x-1">▶</span>
         </span>
@@ -105,8 +105,8 @@ const PromoBannerCard = ({ banner }: { banner: PromoBanner }) => {
 
 const PromoBanners = () => {
   return (
-    <section className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 overflow-hidden">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
         {banners.map((banner) => (
           <PromoBannerCard key={banner.id} banner={banner} />
         ))}

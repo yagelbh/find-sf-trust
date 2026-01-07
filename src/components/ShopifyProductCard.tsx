@@ -141,20 +141,20 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
       </div>
 
       {/* Content */}
-      <div className="p-3">
+      <div className="p-2 sm:p-3">
         {/* Free Shipping Badge */}
-        <div className="flex items-center gap-1 text-muted-foreground text-xs font-medium mb-2">
+        <div className="flex items-center gap-1 text-muted-foreground text-[10px] sm:text-xs font-medium mb-1 sm:mb-2">
           <Truck className="w-3 h-3" />
           <span>Free shipping</span>
         </div>
 
         {/* Price */}
-        <div className="flex items-baseline gap-2 mb-1">
-          <span className="text-xl font-bold text-foreground">
-            {currency === 'USD' ? '$' : currency} {price.toFixed(2)}
+        <div className="flex items-baseline gap-1 sm:gap-2 mb-1 flex-wrap">
+          <span className="text-base sm:text-xl font-bold text-foreground">
+            {currency === 'USD' ? '$' : currency}{price.toFixed(2)}
           </span>
           {compareAtPrice && compareAtPrice > price && (
-            <span className="text-sm text-muted-foreground line-through">
+            <span className="text-xs sm:text-sm text-muted-foreground line-through">
               ${compareAtPrice.toFixed(2)}
             </span>
           )}
@@ -174,7 +174,7 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
         </div>
 
         {/* Name */}
-        <h3 className="text-sm text-foreground line-clamp-2 mb-2 min-h-[40px]">
+        <h3 className="text-xs sm:text-sm text-foreground line-clamp-2 mb-1 sm:mb-2 min-h-[32px] sm:min-h-[40px]">
           {node.title}
         </h3>
 

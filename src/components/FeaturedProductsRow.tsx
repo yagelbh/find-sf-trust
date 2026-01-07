@@ -61,7 +61,7 @@ const FeaturedCard = ({ product, discount, soldCount }: {
     <Link 
       to={`/product/${node.handle}`}
       className={cn(
-        "flex-shrink-0 w-52 bg-card rounded-xl overflow-hidden border-2 border-primary/20 transition-all duration-300 group relative",
+        "flex-shrink-0 w-44 sm:w-52 bg-card rounded-xl overflow-hidden border-2 border-primary/20 transition-all duration-300 group relative",
         isHovered && "shadow-[0_10px_40px_rgba(255,107,0,0.25)] scale-[1.03] z-10 border-primary/50"
       )}
       onMouseEnter={() => setIsHovered(true)}
@@ -205,25 +205,25 @@ const FeaturedProductsRow = () => {
   if (products.length === 0) return null;
 
   return (
-    <section className="py-5 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border-y border-orange-200/50">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-full shadow-lg">
-              <Flame className="w-5 h-5 fill-white animate-pulse" />
-              <span className="font-display font-extrabold text-lg tracking-tight">⚡ LIGHTNING DEALS</span>
+    <section className="py-5 bg-gradient-to-r from-orange-50 via-amber-50 to-orange-50 border-y border-orange-200/50 overflow-hidden">
+      <div className="container mx-auto px-3 sm:px-4">
+        <div className="flex items-center justify-between mb-4 gap-2">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-lg flex-shrink-0">
+              <Flame className="w-4 h-4 sm:w-5 sm:h-5 fill-white animate-pulse" />
+              <span className="font-display font-extrabold text-sm sm:text-lg tracking-tight whitespace-nowrap">⚡ LIGHTNING DEALS</span>
             </div>
-            <span className="text-sm text-muted-foreground hidden sm:block">Selling fast! Don't miss out</span>
+            <span className="text-xs sm:text-sm text-muted-foreground hidden sm:block">Selling fast! Don't miss out</span>
           </div>
           <Link 
             to="/flash-deals" 
-            className="flex items-center gap-1 text-sm font-semibold text-orange-600 hover:text-orange-700 hover:underline"
+            className="flex items-center gap-1 text-xs sm:text-sm font-semibold text-orange-600 hover:text-orange-700 hover:underline whitespace-nowrap flex-shrink-0"
           >
             View All <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
         
-        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-3 sm:gap-4 overflow-x-auto pb-2 scrollbar-hide -mx-3 sm:-mx-4 px-3 sm:px-4">
           {productData.map(({ product, discount, soldCount }) => (
             <FeaturedCard 
               key={product.node.id} 
