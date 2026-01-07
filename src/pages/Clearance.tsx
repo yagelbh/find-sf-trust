@@ -48,9 +48,9 @@ const ClearanceProductCard = ({ product }: { product: ShopifyProduct }) => {
   return (
     <Link 
       to={`/product/${node.handle}`}
-      className="group bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg hover:border-primary/30 transition-all duration-300"
+      className="group bg-card rounded-xl overflow-hidden border border-border hover:shadow-lg hover:border-primary/30 transition-all duration-300 flex flex-col h-full"
     >
-      <div className="relative aspect-square bg-muted/30 overflow-hidden">
+      <div className="relative aspect-square bg-muted/30 overflow-hidden flex-shrink-0">
         <img 
           src={imageUrl} 
           alt={node.title}
@@ -61,7 +61,7 @@ const ClearanceProductCard = ({ product }: { product: ShopifyProduct }) => {
         </div>
       </div>
       
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-1">
         <h3 className="font-medium text-foreground line-clamp-2 mb-3 text-sm leading-snug min-h-[2.5rem]">
           {node.title}
         </h3>
@@ -75,9 +75,12 @@ const ClearanceProductCard = ({ product }: { product: ShopifyProduct }) => {
           </span>
         </div>
 
+        {/* Spacer to push button to bottom */}
+        <div className="flex-1" />
+
         <button
           onClick={handleAddToCart}
-          className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm"
+          className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors text-sm mt-auto"
         >
           Add to Cart
         </button>

@@ -76,10 +76,10 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
   return (
     <Link 
       to={`/product/${node.handle}`}
-      className="group relative bg-card rounded-lg overflow-hidden border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-1 block"
+      className="group relative bg-card rounded-lg overflow-hidden border border-border hover:shadow-xl transition-all duration-300 hover:-translate-y-1 block flex flex-col h-full"
     >
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-white">
+      <div className="relative aspect-square overflow-hidden bg-white flex-shrink-0">
         {!imageLoaded && (
           <div className="absolute inset-0 bg-muted animate-pulse" />
         )}
@@ -141,7 +141,7 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
       </div>
 
       {/* Content */}
-      <div className="p-2 sm:p-3">
+      <div className="p-2 sm:p-3 flex flex-col flex-1">
         {/* Free Shipping Badge */}
         <div className="flex items-center gap-1 text-muted-foreground text-[10px] sm:text-xs font-medium mb-1 sm:mb-2">
           <Truck className="w-3 h-3" />
