@@ -191,7 +191,7 @@ const ProductDetail = () => {
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8 overflow-x-hidden">
         {/* Breadcrumb with full, clickable category path */}
         {(() => {
           const categoryPath = getCategoryPath(product.tags || [], product.productType);
@@ -204,55 +204,56 @@ const ProductDetail = () => {
             : '';
 
           return (
-            <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6 flex-wrap" aria-label="Breadcrumb">
-              <Link to="/" className="hover:text-primary">Home</Link>
+            <nav className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 overflow-x-auto scrollbar-hide" aria-label="Breadcrumb">
+              <Link to="/" className="hover:text-primary whitespace-nowrap">Home</Link>
               <span className="text-muted-foreground/50">›</span>
 
-              <Link to={categoryLink} className="hover:text-primary">{categoryPath.category}</Link>
+              <Link to={categoryLink} className="hover:text-primary whitespace-nowrap">{categoryPath.category}</Link>
 
               {categoryPath.subcategory && (
                 <>
                   <span className="text-muted-foreground/50">›</span>
-                  <Link to={subcategoryLink} className="hover:text-primary">{categoryPath.subcategory}</Link>
+                  <Link to={subcategoryLink} className="hover:text-primary whitespace-nowrap">{categoryPath.subcategory}</Link>
                 </>
               )}
 
               {categoryPath.child && (
                 <>
-                  <span className="text-muted-foreground/50">›</span>
-                  <Link to={childLink} className="hover:text-primary">{categoryPath.child}</Link>
+                  <span className="text-muted-foreground/50 hidden sm:inline">›</span>
+                  <Link to={childLink} className="hover:text-primary whitespace-nowrap hidden sm:inline">{categoryPath.child}</Link>
                 </>
               )}
 
-              <span className="text-muted-foreground/50">›</span>
-              <span className="text-foreground truncate max-w-xs font-medium">{product.title}</span>
+              <span className="text-muted-foreground/50 hidden sm:inline">›</span>
+              <span className="text-foreground truncate max-w-[120px] sm:max-w-xs font-medium hidden sm:inline">{product.title}</span>
             </nav>
           );
         })()}
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-8">
           {/* Images */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <div className="aspect-square bg-white rounded-lg overflow-hidden relative flex items-center justify-center">
               {product.images.edges[selectedImage] && (
                 <img
                   src={product.images.edges[selectedImage].node.url}
                   alt={product.title}
                   className="w-full h-full object-contain p-2"
+                  loading="eager"
                 />
               )}
             </div>
             {product.images.edges.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 {product.images.edges.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`w-16 h-16 rounded-lg overflow-hidden border-2 flex-shrink-0 bg-white flex items-center justify-center ${
-                      selectedImage === idx ? 'border-primary' : 'border-transparent'
+                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden border-2 flex-shrink-0 bg-white flex items-center justify-center ${
+                      selectedImage === idx ? 'border-primary' : 'border-border'
                     }`}
                   >
-                    <img src={img.node.url} alt="" className="w-full h-full object-contain p-0.5" />
+                    <img src={img.node.url} alt="" className="w-full h-full object-contain p-0.5" loading="lazy" />
                   </button>
                 ))}
               </div>
@@ -260,18 +261,18 @@ const ProductDetail = () => {
           </div>
 
           {/* Product Info */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {/* Free Shipping - Simple inline text like reference */}
-            <div className="bg-warning/10 px-4 py-2.5 rounded-lg flex items-center justify-between">
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-primary" />
-                  <span className="text-primary font-medium">Free shipping</span>
+            <div className="bg-warning/10 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm flex-wrap">
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary flex-shrink-0" />
+                  <span className="text-primary font-medium whitespace-nowrap">Free shipping</span>
                 </div>
-                <span className="text-muted-foreground">|</span>
-                <div className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-foreground" />
-                  <span className="text-foreground">$5.00 Credit for delay</span>
+                <span className="text-muted-foreground hidden sm:inline">|</span>
+                <div className="flex items-center gap-1 sm:gap-1.5">
+                  <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-foreground flex-shrink-0" />
+                  <span className="text-foreground whitespace-nowrap">$5.00 Credit for delay</span>
                 </div>
               </div>
               {/* Share Button */}
@@ -357,10 +358,10 @@ const ProductDetail = () => {
               </Popover>
             </div>
 
-            <h1 className="text-xl md:text-2xl font-display font-bold">{product.title}</h1>
+            <h1 className="text-lg sm:text-xl md:text-2xl font-display font-bold leading-tight">{product.title}</h1>
             
             {/* Sold count & Rating */}
-            <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm flex-wrap">
               <span className="text-muted-foreground">{soldCount.toLocaleString()}+ sold</span>
               <span className="text-muted-foreground">|</span>
               <span className="text-foreground">4.8 ★★★★★</span>
@@ -368,24 +369,24 @@ const ProductDetail = () => {
 
             {/* Top Seller Badge - Only show if not from Clearance/Flash Deals */}
             {showTopSellerBanner && (
-              <div className="inline-flex items-center gap-2 bg-warning/20 text-warning px-3 py-2 rounded-lg">
-                <Award className="w-5 h-5" />
+              <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-warning/20 text-warning px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-sm">
+                <Award className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
                 <span className="font-bold">#{topSellerRank} Best Seller</span>
-                <span className="text-sm">in {getCategoryFromTags(product.tags || [], product.productType)}</span>
+                <span className="text-xs sm:text-sm hidden sm:inline">in {getCategoryFromTags(product.tags || [], product.productType)}</span>
               </div>
             )}
             
             {/* Price */}
-            <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-deal">
+            <div className="flex flex-wrap items-baseline gap-2 sm:gap-3">
+              <span className="text-2xl sm:text-3xl font-bold text-deal">
                 ${price.toFixed(2)}
               </span>
               {compareAtPrice && compareAtPrice > price && (
                 <>
-                  <span className="text-lg text-muted-foreground line-through">
+                  <span className="text-sm sm:text-lg text-muted-foreground line-through">
                     RRP ${compareAtPrice.toFixed(2)}
                   </span>
-                  <span className="bg-deal/10 text-deal px-2 py-1 rounded text-sm font-bold">
+                  <span className="bg-deal/10 text-deal px-1.5 sm:px-2 py-0.5 sm:py-1 rounded text-xs sm:text-sm font-bold">
                     -{discount}% limited time
                   </span>
                 </>
@@ -393,10 +394,10 @@ const ProductDetail = () => {
             </div>
 
             {/* Deal Countdown */}
-            <div className="bg-gradient-to-r from-deal/90 to-warning/90 text-primary-foreground px-4 py-2.5 rounded-lg">
-              <div className="flex items-center justify-between">
+            <div className="bg-gradient-to-r from-deal/90 to-warning/90 text-primary-foreground px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg">
+              <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-sm">Big sale</span>
+                  <span className="font-semibold text-xs sm:text-sm">Big sale</span>
                   <span className="opacity-80 text-xs">|</span>
                   <span className="text-xs">Ends in</span>
                 </div>
@@ -406,15 +407,15 @@ const ProductDetail = () => {
 
             {/* Variants */}
             {product.options.length > 0 && product.options[0].name !== 'Title' && (
-              <div className="space-y-4 p-4 bg-muted/50 rounded-xl border border-border">
+              <div className="space-y-3 sm:space-y-4 p-3 sm:p-4 bg-muted/50 rounded-xl border border-border">
                 {product.options.map((option) => (
                   <div key={option.name}>
-                    <label className="block text-sm font-medium mb-2">{option.name}</label>
-                    <div className="flex flex-wrap gap-2">
+                    <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">{option.name}</label>
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {option.values.map((value) => (
                         <button
                           key={value}
-                          className="px-4 py-2 border rounded-lg hover:border-primary transition-colors bg-card"
+                          className="px-3 sm:px-4 py-1.5 sm:py-2 border rounded-lg hover:border-primary transition-colors bg-card text-sm"
                         >
                           {value}
                         </button>
@@ -425,18 +426,18 @@ const ProductDetail = () => {
 
                 {/* Quantity */}
                 <div>
-                  <label className="block text-sm font-medium mb-2">Qty</label>
-                  <div className="flex items-center gap-3">
+                  <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Qty</label>
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <span className="w-12 text-center font-medium">{quantity}</span>
+                    <span className="w-10 sm:w-12 text-center font-medium">{quantity}</span>
                     <button
                       onClick={() => setQuantity(quantity + 1)}
-                      className="w-10 h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -446,31 +447,31 @@ const ProductDetail = () => {
             )}
 
             {/* Add to Cart Button */}
-            <Button variant="cta" size="lg" className="w-full" onClick={handleAddToCart}>
+            <Button variant="cta" size="lg" className="w-full text-sm sm:text-base" onClick={handleAddToCart}>
               <ShoppingCart className="w-4 h-4 mr-2" />
               Add to Cart
               {discount && <span className="ml-2 text-xs opacity-90">{discount}% OFF</span>}
             </Button>
 
             {/* Shipping Info */}
-            <div className="space-y-3 p-4 bg-card rounded-xl border border-border">
-              <div className="flex items-start gap-3">
-                <Truck className="w-5 h-5 text-primary mt-0.5" />
-                <div>
-                  <p className="font-medium text-primary">Free shipping for this item</p>
-                  <p className="text-sm text-muted-foreground">
+            <div className="space-y-2 sm:space-y-3 p-3 sm:p-4 bg-card rounded-xl border border-border">
+              <div className="flex items-start gap-2 sm:gap-3">
+                <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="font-medium text-primary text-sm sm:text-base">Free shipping for this item</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Delivery: {shippingEstimate.startDate} - {shippingEstimate.endDate}
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-3">
-                <Globe className="w-5 h-5 text-muted-foreground mt-0.5" />
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    Courier company: {shippingEstimate.courier}
+              <div className="flex items-start gap-2 sm:gap-3">
+                <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Courier: {shippingEstimate.courier}
                   </p>
-                  <p className="text-sm text-muted-foreground flex items-center gap-1">
-                    Shipping to: <span className="text-lg">🇺🇸</span> United States
+                  <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-1">
+                    Shipping to: <span className="text-base sm:text-lg">🇺🇸</span> United States
                   </p>
                 </div>
               </div>

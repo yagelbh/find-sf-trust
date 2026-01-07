@@ -45,15 +45,15 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
-      <div className="bg-secondary py-3">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between gap-4 lg:gap-5">
+      <div className="bg-secondary py-2 sm:py-3">
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-5">
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
+              className="lg:hidden p-1.5 sm:p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors flex-shrink-0"
             >
-              <Menu className="w-6 h-6 text-secondary-foreground" />
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-secondary-foreground" />
             </button>
 
             {/* Logo - Blend into header background */}
@@ -62,7 +62,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 <img 
                   src={findsfaeLogo} 
                   alt="Findsfae" 
-                  className="h-16 sm:h-18 lg:h-20 w-auto object-contain mix-blend-lighten"
+                  className="h-10 sm:h-14 lg:h-20 w-auto object-contain mix-blend-lighten"
                 />
               </Link>
             </div>
@@ -136,11 +136,8 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               </div>
             </form>
 
-            {/* Spacer for mobile */}
-            <div className="flex-1 sm:hidden" />
-
             {/* Actions - Clear hierarchy: Cart > Account > Wishlist */}
-            <div className="flex items-center gap-0.5 sm:gap-1">
+            <div className="flex items-center gap-0 sm:gap-1 flex-shrink-0">
               {/* Sign in / Register - Bolder, clearer */}
               <button
                 onClick={onAuthClick}
@@ -156,7 +153,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               {/* Wishlist - Lower emphasis */}
               <Link 
                 to="/wishlist"
-                className="relative flex items-center p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
+                className="relative flex items-center p-1.5 sm:p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
               >
                 <Heart className="w-4 h-4 text-secondary-foreground/40 stroke-[1.5]" />
               </Link>
@@ -164,11 +161,11 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               {/* Cart - Primary action, larger & prominent */}
               <Link 
                 to="/cart"
-                className="relative flex items-center p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
+                className="relative flex items-center p-1.5 sm:p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
               >
-                <ShoppingCart className="w-6 h-6 text-secondary-foreground" />
+                <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 text-secondary-foreground" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-0.5 right-0 min-w-[18px] h-[18px] px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+                  <span className="absolute -top-0.5 right-0 min-w-[16px] h-[16px] sm:min-w-[18px] sm:h-[18px] px-1 bg-primary text-primary-foreground text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
                     {totalItems}
                   </span>
                 )}
