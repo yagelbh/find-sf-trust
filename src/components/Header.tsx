@@ -38,9 +38,9 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
 
   const mobileNavLinks = [
     { to: '/', label: 'Home', icon: Home },
-    { to: '/top-sellers', label: 'Best Sellers', icon: Flame },
-    { to: '/flash-deals', label: '2026 Deals', icon: Tag },
-    { to: '/clearance', label: 'Clearance', icon: Tag },
+    { to: '/top-sellers', label: '👍 Best Sellers', icon: Flame },
+    { to: '/flash-deals', label: '🎉 2026 Deals', icon: Tag },
+    { to: '/clearance', label: '✂️ Clearance', icon: Tag },
   ];
 
   return (
@@ -73,21 +73,21 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 to="/top-sellers"
                 className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
               >
-                Best Sellers
+                👍 Best Sellers
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/flash-deals"
                 className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
               >
-                2026 Deals
+                🎉 2026 Deals
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/clearance"
                 className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
               >
-                Clearance
+                ✂️ Clearance
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <button 
