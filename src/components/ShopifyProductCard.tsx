@@ -178,20 +178,8 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
           {node.title}
         </h3>
 
-        {/* Rating placeholder */}
-        <div className="flex items-center gap-1">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star 
-                key={i}
-                className={`w-3 h-3 ${i < 4 ? 'fill-warning text-warning' : 'text-muted'}`}
-              />
-            ))}
-          </div>
-          <span className="text-xs text-muted-foreground">
-            4.5 (100+)
-          </span>
-        </div>
+        {/* (No reviews shown) */}
+        <div className="h-4" />
       </div>
     </Link>
   );
