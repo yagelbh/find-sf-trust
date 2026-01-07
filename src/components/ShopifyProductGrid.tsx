@@ -125,27 +125,27 @@ const ShopifyProductGrid = () => {
   }
 
   return (
-    <section className="py-6">
-      <div className="container mx-auto px-4">
+    <section className="py-6 overflow-hidden">
+      <div className="container mx-auto px-3 sm:px-4">
         {/* Pill-style Category Bar */}
-        <div className="relative mb-8">
+        <div className="relative mb-6 sm:mb-8">
           <button 
             onClick={() => scrollCategories('left')}
-            className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-lg rounded-full flex items-center justify-center hover:bg-muted transition-colors border border-border"
+            className="absolute -left-1 sm:-left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 sm:w-8 sm:h-8 bg-card shadow-lg rounded-full flex items-center justify-center hover:bg-muted transition-colors border border-border"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
           
           <div 
             ref={scrollRef}
-            className="flex gap-3 overflow-x-auto scrollbar-hide px-8 py-2"
+            className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide px-6 sm:px-8 py-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categoryBar.map((cat) => (
               <button
                 key={cat.name}
                 onClick={() => setActiveCategory(cat.name)}
-                className={`px-5 py-2.5 rounded-full border text-sm font-medium whitespace-nowrap transition-all ${
+                className={`px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border text-xs sm:text-sm font-medium whitespace-nowrap transition-all ${
                   activeCategory === cat.name 
                     ? 'bg-foreground text-background border-foreground' 
                     : 'bg-card text-foreground border-border hover:border-foreground/50'
@@ -158,9 +158,9 @@ const ShopifyProductGrid = () => {
 
           <button 
             onClick={() => scrollCategories('right')}
-            className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-card shadow-lg rounded-full flex items-center justify-center hover:bg-muted transition-colors border border-border"
+            className="absolute -right-1 sm:-right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 sm:w-8 sm:h-8 bg-card shadow-lg rounded-full flex items-center justify-center hover:bg-muted transition-colors border border-border"
           >
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
 
@@ -173,7 +173,7 @@ const ShopifyProductGrid = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
             {displayedProducts.map((product) => (
               <ShopifyProductCard key={product.node.id} product={product} />
             ))}

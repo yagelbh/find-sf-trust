@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, Minus, Plus, Trash2, ShoppingBag, ExternalLink, Loader2 } from 'lucide-react';
 import TopBar from '@/components/TopBar';
@@ -103,11 +103,6 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
 const Cart = () => {
   const { items, clearCart, getTotalItems, getTotalPrice, initiateCheckout, isLoading } = useCartStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
-
-  // Scroll to top when page loads
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   const handleCheckout = async () => {
     if (items.length === 0) return;
