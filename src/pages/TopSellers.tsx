@@ -74,8 +74,8 @@ const TopSellerCard = ({ product, rank }: { product: ShopifyProduct; rank: numbe
         </div>
       </div>
       
-      <div className="p-3 flex flex-col flex-1">
-        <h3 className="font-medium text-foreground line-clamp-2 mb-2 text-sm min-h-[2.5rem]">
+      <div className="p-3 flex flex-col flex-1 min-w-0">
+        <h3 className="font-medium text-foreground line-clamp-2 mb-2 text-sm leading-snug break-words">
           {node.title}
         </h3>
         
