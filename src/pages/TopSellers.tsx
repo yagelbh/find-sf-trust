@@ -260,7 +260,7 @@ const TopSellers = () => {
       {/* Time Filters */}
       <div className="border-b border-border bg-card sticky top-[72px] z-40">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-2 py-3 overflow-x-auto scrollbar-hide touch-pan-x">
             {timeFilters.map((filter) => (
               <button
                 key={filter.id}
@@ -281,7 +281,7 @@ const TopSellers = () => {
       {/* Category Filters */}
       <div className="border-b border-border bg-muted/50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-2 py-2 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-2 py-2 overflow-x-auto scrollbar-hide touch-pan-x">
             <span className="text-sm font-medium text-muted-foreground mr-2">Filter by category:</span>
             {categoryFilters.map((cat) => (
               <button

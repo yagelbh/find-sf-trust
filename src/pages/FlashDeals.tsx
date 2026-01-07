@@ -192,7 +192,7 @@ const FlashDeals = () => {
           
           <div 
             id="category-tabs"
-            className="flex gap-2 py-4 overflow-x-auto scrollbar-hide px-8 md:px-0 md:justify-center"
+            className="flex gap-2 py-4 overflow-x-auto scrollbar-hide px-8 md:px-0 md:justify-center touch-pan-x"
           >
             {categoryTabs.map((tab) => (
               <button
