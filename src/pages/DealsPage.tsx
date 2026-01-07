@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ChevronLeft, Truck, Tag, Flame, Star, Sparkles, Loader2 } from 'lucide-react';
+import { ChevronLeft, Truck, Tag, Flame, Star, Sparkles, Loader2, Package, Zap, Clock } from 'lucide-react';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -12,58 +12,64 @@ import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
 interface DealConfig {
   title: string;
   subtitle: string;
-  gradientFrom: string;
-  gradientTo: string;
+  accentColor: string;
+  bgColor: string;
   icon: React.ReactNode;
-  badgeText?: string;
-  description: string;
+  tag: string; // Shopify tag to filter by
+  emptyMessage: string;
+  badge?: { text: string; color: string };
 }
 
 const dealConfigs: Record<string, DealConfig> = {
   'fast-delivery': {
-    title: 'Local Warehouse',
-    subtitle: 'Fast Delivery From $1.99',
-    gradientFrom: 'from-emerald-500',
-    gradientTo: 'to-green-600',
-    icon: <Truck className="w-8 h-8" />,
-    badgeText: '🚚 Ships in 24-48 hours',
-    description: 'Products shipped from local warehouses for lightning-fast delivery',
+    title: 'Fast Delivery',
+    subtitle: 'Ships in 24-48 hours from local warehouse',
+    accentColor: 'text-emerald-600',
+    bgColor: 'bg-emerald-50',
+    icon: <Truck className="w-6 h-6 text-emerald-600" />,
+    tag: 'fast-delivery',
+    emptyMessage: 'No fast delivery items available yet. Products tagged "fast-delivery" in AutoDS will appear here.',
+    badge: { text: 'Quick Ship', color: 'bg-emerald-100 text-emerald-700' },
   },
   'price-drop': {
     title: 'Price Drop',
-    subtitle: 'Save Up To $50',
-    gradientFrom: 'from-amber-400',
-    gradientTo: 'to-orange-500',
-    icon: <Tag className="w-8 h-8" />,
-    badgeText: '🏷️ Prices just dropped!',
-    description: 'Catch these price drops before they go back up',
+    subtitle: 'Catch these deals before prices go back up',
+    accentColor: 'text-amber-600',
+    bgColor: 'bg-amber-50',
+    icon: <Tag className="w-6 h-6 text-amber-600" />,
+    tag: 'price-drop',
+    emptyMessage: 'No price drops right now. Tag products with "price-drop" in AutoDS to show them here.',
+    badge: { text: 'Reduced', color: 'bg-amber-100 text-amber-700' },
   },
   'popular': {
     title: 'Popular Products',
-    subtitle: 'Best Selling Items',
-    gradientFrom: 'from-orange-500',
-    gradientTo: 'to-amber-600',
-    icon: <Star className="w-8 h-8" />,
-    badgeText: '⭐ Top Rated',
-    description: 'Our most loved products with thousands of happy customers',
+    subtitle: 'Best selling items loved by our customers',
+    accentColor: 'text-orange-600',
+    bgColor: 'bg-orange-50',
+    icon: <Star className="w-6 h-6 text-orange-500" />,
+    tag: 'popular',
+    emptyMessage: 'No popular products yet. Tag your best sellers with "popular" in AutoDS.',
+    badge: { text: 'Trending', color: 'bg-orange-100 text-orange-700' },
   },
   'hot-deals': {
     title: 'Hot Deals',
-    subtitle: 'Score Big Savings',
-    gradientFrom: 'from-yellow-400',
-    gradientTo: 'to-amber-500',
-    icon: <Flame className="w-8 h-8 text-rose-600" />,
-    badgeText: '🔥 Selling Fast!',
-    description: 'Limited time offers that are too hot to miss',
+    subtitle: 'Limited time offers selling fast',
+    accentColor: 'text-rose-600',
+    bgColor: 'bg-rose-50',
+    icon: <Flame className="w-6 h-6 text-rose-500" />,
+    tag: 'hot-deals',
+    emptyMessage: 'No hot deals available. Add the "hot-deals" tag to products in AutoDS.',
+    badge: { text: 'Hot!', color: 'bg-rose-100 text-rose-700' },
   },
   'crazy-discounts': {
     title: 'Crazy Discounts',
-    subtitle: 'Up to 80% Off',
-    gradientFrom: 'from-orange-500',
-    gradientTo: 'to-red-500',
-    icon: <Sparkles className="w-8 h-8" />,
-    badgeText: '💥 Unbelievable Prices',
-    description: 'Our biggest discounts on quality products',
+    subtitle: 'Our biggest markdowns - up to 80% off',
+    accentColor: 'text-purple-600',
+    bgColor: 'bg-purple-50',
+    icon: <Sparkles className="w-6 h-6 text-purple-500" />,
+    tag: 'crazy-discount',
+    emptyMessage: 'No crazy discounts yet. Tag products with "crazy-discount" in AutoDS for massive savings.',
+    badge: { text: 'Mega Sale', color: 'bg-purple-100 text-purple-700' },
   },
 };
 
@@ -80,7 +86,9 @@ const DealsPage = () => {
     const loadProducts = async () => {
       setLoading(true);
       try {
-        const data = await fetchProducts(24);
+        // Filter by Shopify tag for this deal type
+        const query = `tag:${config.tag}`;
+        const data = await fetchProducts(24, query);
         setProducts(data);
       } catch (error) {
         console.error('Failed to load products:', error);
@@ -89,7 +97,7 @@ const DealsPage = () => {
       }
     };
     loadProducts();
-  }, [dealType]);
+  }, [dealType, config.tag]);
 
   useEffect(() => {
     const handleOpenCartDrawer = () => setShowCartDrawer(true);
@@ -97,7 +105,6 @@ const DealsPage = () => {
     return () => window.removeEventListener('openCartDrawer', handleOpenCartDrawer);
   }, []);
 
-  // Update page title
   useEffect(() => {
     document.title = `${config.title} | Findsfae`;
   }, [config.title]);
@@ -111,55 +118,38 @@ const DealsPage = () => {
         currentCountry={{ name: 'United States', flag: '🇺🇸', currency: 'USD' }}
       />
 
-      {/* Hero Banner */}
-      <div className={`bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo} text-white py-8 relative overflow-hidden`}>
-        {/* Background decorations */}
-        <div className="absolute inset-0">
-          <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-black/10 rounded-full blur-2xl" />
-          {/* Confetti */}
-          <div className="absolute top-8 right-[20%] w-3 h-3 bg-yellow-300/60 rounded-full animate-pulse" />
-          <div className="absolute top-16 right-[15%] w-2 h-2 bg-white/40 rounded-full" />
-          <div className="absolute bottom-8 left-[30%] w-2 h-2 bg-white/50 rounded-full" />
-          <div className="absolute top-12 left-[25%] w-1.5 h-1.5 bg-yellow-200/50 rounded-full" />
-        </div>
-
-        <div className="container mx-auto px-4 relative z-10">
+      {/* Compact Page Header */}
+      <div className={`${config.bgColor} border-b border-border`}>
+        <div className="container mx-auto px-4 py-5">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 mb-4">
-            <Link to="/" className="hover:opacity-80 flex items-center gap-1">
-              <ChevronLeft className="w-5 h-5" />
-              <span className="text-sm opacity-90">Home</span>
+          <div className="flex items-center gap-2 mb-3 text-sm">
+            <Link to="/" className="text-muted-foreground hover:text-foreground flex items-center gap-1">
+              <ChevronLeft className="w-4 h-4" />
+              Home
             </Link>
-            <span className="text-sm opacity-60">/</span>
-            <span className="text-sm font-medium">{config.title}</span>
+            <span className="text-muted-foreground">/</span>
+            <span className={`font-medium ${config.accentColor}`}>{config.title}</span>
           </div>
 
-          {/* Badge */}
-          {config.badgeText && (
-            <div className="inline-block bg-white/90 text-gray-800 text-xs font-bold px-4 py-1.5 rounded-full mb-4">
-              {config.badgeText}
-            </div>
-          )}
-
-          {/* Title & Icon */}
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
+          {/* Title Row */}
+          <div className="flex items-center gap-3">
+            <div className={`p-2.5 rounded-xl ${config.bgColor} border border-current/10`}>
               {config.icon}
             </div>
             <div>
-              <h1 className="text-3xl md:text-4xl font-black tracking-tight">
+              <h1 className={`text-xl md:text-2xl font-bold ${config.accentColor}`}>
                 {config.title}
               </h1>
-              <p className="text-lg md:text-xl font-semibold opacity-90">
+              <p className="text-sm text-muted-foreground">
                 {config.subtitle}
               </p>
             </div>
+            {config.badge && (
+              <span className={`ml-auto px-3 py-1 rounded-full text-xs font-semibold ${config.badge.color}`}>
+                {config.badge.text}
+              </span>
+            )}
           </div>
-
-          <p className="mt-4 text-sm md:text-base opacity-80 max-w-xl">
-            {config.description}
-          </p>
         </div>
       </div>
 
@@ -170,19 +160,34 @@ const DealsPage = () => {
             <Loader2 className="w-10 h-10 text-primary animate-spin" />
           </div>
         ) : products.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="p-4 bg-muted rounded-full w-fit mx-auto mb-4">
+          <div className="text-center py-16 max-w-md mx-auto">
+            <div className={`p-4 ${config.bgColor} rounded-full w-fit mx-auto mb-4`}>
               {config.icon}
             </div>
-            <h2 className="text-xl font-semibold mb-2">No Products Available</h2>
-            <p className="text-muted-foreground">Check back soon for amazing deals!</p>
+            <h2 className="text-lg font-semibold mb-2">No Products Yet</h2>
+            <p className="text-muted-foreground text-sm mb-6">
+              {config.emptyMessage}
+            </p>
+            <div className="bg-muted/50 rounded-lg p-4 text-left text-sm">
+              <p className="font-medium mb-2">💡 How to add products here:</p>
+              <p className="text-muted-foreground">
+                When importing products via AutoDS, add the tag <code className="bg-background px-1.5 py-0.5 rounded text-xs font-mono">{config.tag}</code> to your products. They'll automatically appear on this page.
+              </p>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {products.map((product) => (
-              <ShopifyProductCard key={product.node.id} product={product} />
-            ))}
-          </div>
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-sm text-muted-foreground">
+                {products.length} product{products.length !== 1 ? 's' : ''} found
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {products.map((product) => (
+                <ShopifyProductCard key={product.node.id} product={product} />
+              ))}
+            </div>
+          </>
         )}
       </main>
 
