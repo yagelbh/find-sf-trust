@@ -96,7 +96,7 @@ const VariantSelectionDrawer = ({
           </SheetHeader>
           
           {/* Product Preview */}
-          <div className="flex gap-4">
+          <div className="flex gap-4 min-w-0">
             <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0 relative">
               <img 
                 src={imageUrl} 
@@ -114,11 +114,11 @@ const VariantSelectionDrawer = ({
                 ${price.toFixed(2)}
               </p>
               {selectedVariant && (
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-muted-foreground mt-1 break-words whitespace-normal leading-snug">
                   {selectedVariant.selectedOptions.map(o => o.value).join(' / ')}
                 </p>
               )}
-              <p className="text-xs text-muted-foreground mt-2 line-clamp-2">
+              <p className="text-xs text-muted-foreground mt-2 line-clamp-2 break-words whitespace-normal leading-snug">
                 {product.title}
               </p>
             </div>

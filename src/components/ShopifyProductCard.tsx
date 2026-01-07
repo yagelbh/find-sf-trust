@@ -174,7 +174,7 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
         </div>
 
         {/* Name */}
-        <h3 className="text-xs sm:text-sm text-foreground line-clamp-2 mb-1 sm:mb-2 min-h-[32px] sm:min-h-[40px]">
+        <h3 className="text-xs sm:text-sm text-foreground line-clamp-2 mb-1 sm:mb-2 leading-snug break-words">
           {node.title}
         </h3>
 
