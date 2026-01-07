@@ -233,12 +233,12 @@ const ProductDetail = () => {
         <div className="grid md:grid-cols-2 gap-8">
           {/* Images */}
           <div className="space-y-4">
-            <div className="aspect-square bg-muted rounded-lg overflow-hidden relative">
+            <div className="aspect-square bg-white rounded-lg overflow-hidden relative flex items-center justify-center">
               {product.images.edges[selectedImage] && (
                 <img
                   src={product.images.edges[selectedImage].node.url}
                   alt={product.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain p-2"
                 />
               )}
             </div>
@@ -248,11 +248,11 @@ const ProductDetail = () => {
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`w-16 h-16 rounded-lg overflow-hidden border-2 flex-shrink-0 ${
+                    className={`w-16 h-16 rounded-lg overflow-hidden border-2 flex-shrink-0 bg-white flex items-center justify-center ${
                       selectedImage === idx ? 'border-primary' : 'border-transparent'
                     }`}
                   >
-                    <img src={img.node.url} alt="" className="w-full h-full object-cover" />
+                    <img src={img.node.url} alt="" className="w-full h-full object-contain p-0.5" />
                   </button>
                 ))}
               </div>
