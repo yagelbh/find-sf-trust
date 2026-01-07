@@ -138,7 +138,7 @@ const ShopifyProductGrid = () => {
           
           <div 
             ref={scrollRef}
-            className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide px-6 sm:px-8 py-2"
+            className="flex gap-2 sm:gap-3 overflow-x-auto scrollbar-hide px-6 sm:px-8 py-2 touch-pan-x"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {categoryBar.map((cat) => (

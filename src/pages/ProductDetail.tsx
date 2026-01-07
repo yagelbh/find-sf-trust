@@ -204,7 +204,7 @@ const ProductDetail = () => {
             : '';
 
           return (
-            <nav className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 overflow-x-auto scrollbar-hide" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-6 overflow-x-auto scrollbar-hide touch-pan-x" aria-label="Breadcrumb">
               <Link to="/" className="hover:text-primary whitespace-nowrap">Home</Link>
               <span className="text-muted-foreground/50">›</span>
 
@@ -244,7 +244,7 @@ const ProductDetail = () => {
               )}
             </div>
             {product.images.edges.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide touch-pan-x">
                 {product.images.edges.map((img, idx) => (
                   <button
                     key={idx}
