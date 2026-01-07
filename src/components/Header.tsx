@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, User, Heart, ShoppingCart, ChevronDown, Menu, X, Home, Flame, Tag, Grid3X3 } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, ChevronDown, Menu, X, Home, Flame, Tag, Grid3X3, ThumbsUp, PartyPopper, Scissors } from 'lucide-react';
 import findsfaeLogo from '@/assets/findsfae-logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/stores/cartStore';
@@ -37,10 +37,10 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
   };
 
   const mobileNavLinks = [
-    { to: '/', label: 'Home', icon: Home },
-    { to: '/top-sellers', label: '👍 Best Sellers', icon: Flame },
-    { to: '/flash-deals', label: '🎉 2026 Deals', icon: Tag },
-    { to: '/clearance', label: '✂️ Clearance', icon: Tag },
+    { to: '/', label: 'Home', icon: Home, emoji: null },
+    { to: '/top-sellers', label: 'Best Sellers', icon: Flame, emoji: '🔥' },
+    { to: '/flash-deals', label: '2026 Deals', icon: Tag, emoji: '🎊' },
+    { to: '/clearance', label: 'Clearance', icon: Tag, emoji: '✂️' },
   ];
 
   return (
@@ -71,23 +71,32 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
             <nav className="hidden lg:flex items-center gap-4 relative">
               <Link 
                 to="/top-sellers"
-                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
+                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group flex items-center gap-1.5"
               >
-                👍 Best Sellers
+                <span className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-sm">
+                  <ThumbsUp className="w-3 h-3 text-white fill-white" />
+                </span>
+                Best Sellers
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/flash-deals"
-                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
+                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group flex items-center gap-1.5"
               >
-                🎉 2026 Deals
+                <span className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-sm">
+                  <PartyPopper className="w-3 h-3 text-white" />
+                </span>
+                2026 Deals
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <Link 
                 to="/clearance"
-                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group"
+                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group flex items-center gap-1.5"
               >
-                ✂️ Clearance
+                <span className="w-5 h-5 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-sm">
+                  <Scissors className="w-3 h-3 text-white" />
+                </span>
+                Clearance
                 <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
               </Link>
               <button 
