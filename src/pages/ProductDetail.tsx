@@ -358,13 +358,13 @@ const ProductDetail = () => {
               </Popover>
             </div>
 
-            <h1 className="text-lg sm:text-xl md:text-2xl font-display font-bold leading-tight">{product.title}</h1>
+            <h1 className="text-lg sm:text-xl md:text-2xl font-display font-bold leading-tight break-words hyphens-auto [overflow-wrap:anywhere] max-w-full">
+              {product.title}
+            </h1>
             
-            {/* Sold count & Rating */}
+            {/* Sold count */}
             <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm flex-wrap">
               <span className="text-muted-foreground">{soldCount.toLocaleString()}+ sold</span>
-              <span className="text-muted-foreground">|</span>
-              <span className="text-foreground">4.8 ★★★★★</span>
             </div>
 
             {/* Top Seller Badge - Only show if not from Clearance/Flash Deals */}

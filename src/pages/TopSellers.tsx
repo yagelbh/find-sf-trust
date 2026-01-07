@@ -103,15 +103,8 @@ const TopSellerCard = ({ product, rank }: { product: ShopifyProduct; rank: numbe
           )}
         </div>
 
-        {/* Rating */}
-        <div className="flex items-center gap-1 mb-3">
-          <div className="flex">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-3 h-3 ${i < Math.floor(parseFloat(rating)) ? 'fill-warning text-warning' : 'text-muted'}`} />
-            ))}
-          </div>
-          <span className="text-xs text-muted-foreground">{rating} ({reviews.toLocaleString()})</span>
-        </div>
+        {/* (No reviews shown) */}
+        <div className="h-4" />
 
         {/* Spacer to push button to bottom */}
         <div className="flex-1" />
