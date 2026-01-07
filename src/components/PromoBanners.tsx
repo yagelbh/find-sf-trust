@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Truck, Tag, Flame, Star, Sparkles } from 'lucide-react';
 
 interface PromoBanner {
@@ -65,13 +66,10 @@ const banners: PromoBanner[] = [
 ];
 
 const PromoBannerCard = ({ banner }: { banner: PromoBanner }) => {
-  const handleShopNow = () => {
-    window.open(banner.link, '_blank');
-  };
-
   return (
-    <div
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${banner.gradientFrom} ${banner.gradientTo} p-5 h-48 flex flex-col justify-end group hover:scale-[1.02] hover:shadow-xl transition-all duration-300`}
+    <Link
+      to={banner.link}
+      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${banner.gradientFrom} ${banner.gradientTo} p-5 h-48 flex flex-col justify-end group hover:scale-[1.02] hover:shadow-xl transition-all duration-300 block`}
     >
       {/* Background decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -96,15 +94,12 @@ const PromoBannerCard = ({ banner }: { banner: PromoBanner }) => {
           </p>
         )}
 
-        <button 
-          onClick={handleShopNow}
-          className="mt-3 bg-gray-900 text-white text-sm font-bold px-5 py-2 rounded-full hover:bg-gray-800 transition-colors inline-flex items-center gap-1 group-hover:gap-2"
-        >
+        <span className="mt-3 bg-gray-900 text-white text-sm font-bold px-5 py-2 rounded-full inline-flex items-center gap-1 group-hover:gap-2">
           SHOP NOW
           <span className="transition-transform group-hover:translate-x-1">▶</span>
-        </button>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 };
 
