@@ -10,26 +10,17 @@ import {
 const Footer = () => {
   const companyLinks = [
     "About Findsfae",
-    "Affiliate & Influencer Program",
     "Contact us",
-    "Careers",
-    "Press",
-    "Sustainability Program",
   ];
 
   const customerLinks = [
     "Return and refund policy",
-    "Intellectual property policy",
     "Shipping info",
-    "Report suspicious activity",
   ];
 
   const helpLinks = [
     "Support center & FAQ",
-    "Safety center",
     "Purchase protection",
-    "Sitemap",
-    "Partner with Findsfae",
   ];
 
   const paymentMethods = [
