@@ -42,9 +42,9 @@ const DealProductCard = ({ product }: { product: ShopifyProduct }) => {
   return (
     <Link 
       to={`/product/${node.handle}`}
-      className="group bg-card rounded-lg overflow-hidden border border-border hover:shadow-xl hover:border-primary/20 transition-all duration-300"
+      className="group bg-card rounded-lg overflow-hidden border border-border hover:shadow-xl hover:border-primary/20 transition-all duration-300 flex flex-col h-full"
     >
-      <div className="relative aspect-square bg-white overflow-hidden">
+      <div className="relative aspect-square bg-white overflow-hidden flex-shrink-0">
         <img 
           src={imageUrl} 
           alt={node.title}
@@ -69,7 +69,7 @@ const DealProductCard = ({ product }: { product: ShopifyProduct }) => {
         </button>
       </div>
       
-      <div className="p-3">
+      <div className="p-3 flex flex-col flex-1">
         <h3 className="font-medium text-foreground line-clamp-2 text-sm mb-2 group-hover:text-primary transition-colors min-h-[2.5rem]">
           {node.title}
         </h3>
@@ -83,8 +83,11 @@ const DealProductCard = ({ product }: { product: ShopifyProduct }) => {
           </span>
         </div>
 
+        {/* Spacer to push content to bottom */}
+        <div className="flex-1" />
+
         {/* Sold count & Add to cart */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mt-auto">
           <span className="text-xs text-muted-foreground">
             {soldCount.toFixed(1)}K+ sold
           </span>

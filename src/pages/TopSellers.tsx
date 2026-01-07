@@ -54,9 +54,9 @@ const TopSellerCard = ({ product, rank }: { product: ShopifyProduct; rank: numbe
   return (
     <Link 
       to={`/product/${node.handle}?source=top-sellers&rank=${rank}`}
-      className="bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all group"
+      className="bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all group flex flex-col h-full"
     >
-      <div className="relative aspect-square bg-muted overflow-hidden">
+      <div className="relative aspect-square bg-muted overflow-hidden flex-shrink-0">
         <img 
           src={imageUrl} 
           alt={node.title}
@@ -74,8 +74,8 @@ const TopSellerCard = ({ product, rank }: { product: ShopifyProduct; rank: numbe
         </div>
       </div>
       
-      <div className="p-3">
-        <h3 className="font-medium text-foreground line-clamp-2 mb-2 text-sm">
+      <div className="p-3 flex flex-col flex-1">
+        <h3 className="font-medium text-foreground line-clamp-2 mb-2 text-sm min-h-[2.5rem]">
           {node.title}
         </h3>
         
@@ -113,9 +113,12 @@ const TopSellerCard = ({ product, rank }: { product: ShopifyProduct; rank: numbe
           <span className="text-xs text-muted-foreground">{rating} ({reviews.toLocaleString()})</span>
         </div>
 
+        {/* Spacer to push button to bottom */}
+        <div className="flex-1" />
+
         <button
           onClick={handleAddToCart}
-          className="w-full py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors text-sm"
+          className="w-full py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:bg-primary/90 transition-colors text-sm mt-auto"
         >
           Add to Cart
         </button>
