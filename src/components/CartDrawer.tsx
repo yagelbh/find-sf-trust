@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Minus, Plus, Trash2, ShoppingCart, Check } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -10,18 +10,12 @@ interface CartDrawerProps {
 }
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
-  const navigate = useNavigate();
   const { items, updateQuantity, removeItem, getTotalPrice } = useCartStore();
   const totalPrice = getTotalPrice();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleGoToCart = () => {
-    onClose();
-    navigate('/cart');
-  };
-
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
+    <Sheet open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <SheetContent className="w-[320px] sm:w-[380px] flex flex-col p-0 bg-card">
         {/* Header */}
         <SheetHeader className="px-4 py-3 border-b border-border bg-primary">
@@ -46,11 +40,13 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
         {/* Go to Cart Button */}
         <div className="px-4 py-3 border-b border-border">
           <Button
-            onClick={handleGoToCart}
+            asChild
             disabled={items.length === 0}
             className="w-full bg-deal hover:bg-deal/90 text-primary-foreground font-semibold py-3 rounded-full"
           >
-            Go to cart
+            <Link to="/cart" onClick={onClose}>
+              Go to cart
+            </Link>
           </Button>
         </div>
 

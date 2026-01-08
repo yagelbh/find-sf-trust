@@ -124,6 +124,13 @@ const ProductDetail = () => {
     loadProduct();
   }, [handle]);
 
+  // Listen for cart drawer open events (standardized behavior across pages)
+  useEffect(() => {
+    const handleOpenCartDrawer = () => setShowCartDrawer(true);
+    window.addEventListener('openCartDrawer', handleOpenCartDrawer);
+    return () => window.removeEventListener('openCartDrawer', handleOpenCartDrawer);
+  }, []);
+
   const handleAddToCart = () => {
     // Always show the variant drawer for option selection
     setShowVariantDrawer(true);
@@ -144,8 +151,8 @@ const ProductDetail = () => {
       selectedOptions: variant.selectedOptions,
     });
 
-    // Open cart drawer after adding
-    window.dispatchEvent(new CustomEvent('openCartDrawer'));
+    // We intentionally do NOT auto-open the cart drawer here.
+    // The VariantSelectionDrawer's primary CTA navigates users to /cart for a standard flow.
 
     toast.success('Added to cart!', {
       description: `${product.title} x${qty}`,

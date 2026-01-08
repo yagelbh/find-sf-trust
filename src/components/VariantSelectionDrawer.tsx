@@ -3,6 +3,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Minus, Plus, Clock, Check, AlertCircle } from 'lucide-react';
 import { ShopifyProduct } from '@/lib/shopify';
+import { useNavigate } from 'react-router-dom';
 
 interface VariantSelectionDrawerProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ const VariantSelectionDrawer = ({
   onAddToCart,
   selectedVariantId 
 }: VariantSelectionDrawerProps) => {
+  const navigate = useNavigate();
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState(1);
   const [showError, setShowError] = useState(false);
@@ -79,16 +81,22 @@ const VariantSelectionDrawer = ({
       setShowError(true);
       return;
     }
-    
+
+    // 1) Add to cart
     onAddToCart(selectedVariant.id, quantity);
+
+    // 2) Close drawer
     onClose();
+
+    // 3) Navigate after state has flushed
+    setTimeout(() => navigate('/cart'), 0);
   };
 
   // Check if option requires selection
   const hasOptions = product.options.length > 0 && product.options[0].name !== 'Title';
 
   return (
-    <Sheet open={isOpen} onOpenChange={onClose}>
+    <Sheet open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
       <SheetContent side="bottom" className="h-auto max-h-[85vh] rounded-t-2xl p-0">
         <div className="p-4 border-b border-border">
           <SheetHeader>
