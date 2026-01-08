@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { Flame, ChevronRight, Heart, ShoppingCart, Sparkles, Zap } from 'lucide-react';
-import { fetchProducts, ShopifyProduct } from '@/lib/shopify';
+import { ShopifyProduct } from '@/lib/shopify';
+import { useFeaturedProducts } from '@/hooks/useShopifyProducts';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
@@ -18,13 +19,14 @@ const seededRandom = (seed: string) => {
   return Math.abs(hash) / 2147483647;
 };
 
-const FeaturedCard = ({ product, discount, soldCount }: { 
+const FeaturedCard = memo(({ product, discount, soldCount }: { 
   product: ShopifyProduct; 
   discount: number;
   soldCount: number;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const addItem = useCartStore(state => state.addItem);
   const { node } = product;
   const price = parseFloat(node.priceRange.minVariantPrice.amount);
@@ -74,10 +76,16 @@ const FeaturedCard = ({ product, discount, soldCount }: {
       </div>
 
       <div className="relative aspect-square bg-white overflow-hidden">
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-muted animate-pulse" />
+        )}
         <img 
           src={imageUrl} 
           alt={node.title}
-          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
+          loading="lazy"
+          decoding="async"
+          className={`w-full h-full object-contain transition-transform duration-300 group-hover:scale-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => setImageLoaded(true)}
         />
         
         {/* Discount Badge */}
@@ -153,25 +161,12 @@ const FeaturedCard = ({ product, discount, soldCount }: {
       </div>
     </Link>
   );
-};
+});
+
+FeaturedCard.displayName = 'FeaturedCard';
 
 const FeaturedProductsRow = () => {
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchProducts(6);
-        setProducts(data);
-      } catch (error) {
-        console.error('Failed to load featured products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useFeaturedProducts();
 
   // Generate unique data for each product
   const productData = useMemo(() => {

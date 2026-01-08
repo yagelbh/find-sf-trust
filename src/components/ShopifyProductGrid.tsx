@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { ShopifyProduct, fetchProducts, getCategoryFromTags } from '@/lib/shopify';
+import { useState, useRef, useMemo, useEffect } from 'react';
+import { getCategoryFromTags } from '@/lib/shopify';
+import { useShopifyProducts } from '@/hooks/useShopifyProducts';
 import ShopifyProductCard from './ShopifyProductCard';
 import { Loader2, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import { categories as allCategories } from '@/data/categories';
@@ -7,9 +8,7 @@ import { categories as allCategories } from '@/data/categories';
 const PRODUCTS_PER_PAGE = 10;
 
 const ShopifyProductGrid = () => {
-  const [products, setProducts] = useState<ShopifyProduct[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { products, loading, error } = useShopifyProducts(50);
   const [activeCategory, setActiveCategory] = useState("Recommended");
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_PAGE);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -19,22 +18,6 @@ const ShopifyProductGrid = () => {
     { name: "Recommended" },
     ...allCategories.map(cat => ({ name: cat.name }))
   ];
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchProducts(50);
-        setProducts(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load products');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
-  }, []);
 
   // Filter products by category
   const filteredProducts = useMemo(() => {
