@@ -1,5 +1,5 @@
-import { Star, Heart, Truck, ShoppingCart, Clock, Award, Flame } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { memo, useState, useMemo } from 'react';
+import { Heart, Truck, ShoppingCart, Clock, Award, Flame } from 'lucide-react';
 import { ShopifyProduct } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
@@ -11,7 +11,18 @@ interface ShopifyProductCardProps {
   topSellerRank?: number;
 }
 
-const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank }: ShopifyProductCardProps) => {
+// Seeded random for consistent values per product
+const seededRandom = (seed: string) => {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    const char = seed.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash) / 2147483647;
+};
+
+const ShopifyProductCard = memo(({ product, showTopSellerRank = false, topSellerRank }: ShopifyProductCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const addItem = useCartStore(state => state.addItem);
@@ -36,14 +47,15 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
   const isClearance = tags.some(tag => tag.toLowerCase().includes('clearance'));
   const isTimeLimited = tags.some(tag => tag.toLowerCase().includes('time-limited') || tag.toLowerCase().includes('flash'));
 
-  // Randomized indicator - either "days left" or "sold count"
+  // Consistent indicator per product using seeded random
   const indicator = useMemo(() => {
-    const showDaysLeft = Math.random() > 0.5;
+    const random = seededRandom(node.id);
+    const showDaysLeft = random > 0.5;
     if (showDaysLeft) {
-      const daysLeft = Math.floor(Math.random() * 7) + 1;
+      const daysLeft = Math.floor(seededRandom(node.id + 'days') * 7) + 1;
       return { type: 'days', value: daysLeft, text: `Last ${daysLeft} days` };
     } else {
-      const soldCount = Math.floor(Math.random() * 50) + 5;
+      const soldCount = Math.floor(seededRandom(node.id + 'sold') * 50) + 5;
       const soldDisplay = soldCount > 20 ? `${Math.floor(soldCount / 10) * 10}K+` : `${soldCount * 100}+`;
       return { type: 'sold', value: soldCount, text: `${soldDisplay} sold` };
     }
@@ -86,6 +98,8 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
         <img 
           src={imageUrl} 
           alt={node.title}
+          loading="lazy"
+          decoding="async"
           className={`w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
         />
@@ -183,6 +197,8 @@ const ShopifyProductCard = ({ product, showTopSellerRank = false, topSellerRank 
       </div>
     </Link>
   );
-};
+});
+
+ShopifyProductCard.displayName = 'ShopifyProductCard';
 
 export default ShopifyProductCard;
