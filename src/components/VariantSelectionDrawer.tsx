@@ -3,7 +3,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Button } from '@/components/ui/button';
 import { Minus, Plus, Clock, Check, AlertCircle } from 'lucide-react';
 import { ShopifyProduct } from '@/lib/shopify';
-import { useNavigate } from 'react-router-dom';
 
 interface VariantSelectionDrawerProps {
   isOpen: boolean;
@@ -20,7 +19,6 @@ const VariantSelectionDrawer = ({
   onAddToCart,
   selectedVariantId 
 }: VariantSelectionDrawerProps) => {
-  const navigate = useNavigate();
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState(1);
   const [showError, setShowError] = useState(false);
@@ -82,14 +80,9 @@ const VariantSelectionDrawer = ({
       return;
     }
 
-    // 1) Add to cart
+    // Add to cart and let parent handle checkout redirect
     onAddToCart(selectedVariant.id, quantity);
-
-    // 2) Close drawer
     onClose();
-
-    // 3) Navigate after state has flushed
-    setTimeout(() => navigate('/cart'), 0);
   };
 
   // Check if option requires selection
@@ -181,36 +174,35 @@ const VariantSelectionDrawer = ({
             </div>
           )}
 
-          {/* Quantity */}
-          <div className="mt-4">
-            <label className="text-sm font-medium mb-2 block">Qty</label>
-            <div className="flex items-center gap-3">
+        </div>
+
+        {/* Quantity + Add to Cart - Inline like reference */}
+        <div className="p-4 border-t border-border bg-background">
+          <div className="flex items-stretch gap-0 rounded-lg overflow-hidden border border-[#b5a48b]">
+            {/* Quantity controls */}
+            <div className="flex items-center bg-[#b5a48b]">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="w-10 h-10 rounded-lg border-2 border-border flex items-center justify-center hover:bg-muted bg-card"
+                className="w-10 h-12 flex items-center justify-center text-white hover:bg-[#a08b6f] transition-colors"
               >
                 <Minus className="w-4 h-4" />
               </button>
-              <span className="w-12 text-center font-bold text-lg">{quantity}</span>
+              <span className="w-8 text-center font-medium text-white">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="w-10 h-10 rounded-lg border-2 border-border flex items-center justify-center hover:bg-muted bg-card"
+                className="w-10 h-12 flex items-center justify-center text-white hover:bg-[#a08b6f] transition-colors"
               >
                 <Plus className="w-4 h-4" />
               </button>
-              <span className="text-sm text-muted-foreground ml-2">Added</span>
             </div>
+            {/* Add to Cart button */}
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 h-12 bg-[#b5a48b] text-white font-semibold text-sm uppercase tracking-wider hover:bg-[#a08b6f] transition-colors"
+            >
+              ADD TO CART
+            </button>
           </div>
-        </div>
-
-        {/* Add to Cart Button */}
-        <div className="p-4 border-t border-border bg-background">
-          <Button 
-            onClick={handleAddToCart}
-            className="w-full h-14 bg-deal hover:bg-deal/90 text-primary-foreground font-bold text-lg rounded-full"
-          >
-            Go to cart
-          </Button>
         </div>
       </SheetContent>
     </Sheet>
