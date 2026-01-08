@@ -136,28 +136,21 @@ const ProductDetail = () => {
     setShowVariantDrawer(true);
   };
 
-  const handleVariantAddToCart = (variantId: string, qty: number) => {
+  const handleVariantAddToCart = async (variantId: string, qty: number) => {
     if (!product) return;
     
     const variant = product.variants.edges.find(v => v.node.id === variantId)?.node;
     if (!variant) return;
 
-    addItem({
-      product: { node: product },
-      variantId: variant.id,
-      variantTitle: variant.title,
-      price: variant.price,
-      quantity: qty,
-      selectedOptions: variant.selectedOptions,
-    });
-
-    // We intentionally do NOT auto-open the cart drawer here.
-    // The VariantSelectionDrawer's primary CTA navigates users to /cart for a standard flow.
-
-    toast.success('Added to cart!', {
-      description: `${product.title} x${qty}`,
-      position: 'top-center',
-    });
+    // Skip adding to cart state - go directly to checkout
+    try {
+      const { createCheckout } = await import('@/lib/shopify');
+      const checkoutUrl = await createCheckout([{ variantId, quantity: qty }]);
+      window.open(checkoutUrl, '_blank');
+    } catch (error) {
+      console.error('Checkout failed:', error);
+      toast.error('Checkout failed. Please try again.');
+    }
   };
 
   if (loading) {
@@ -431,34 +424,35 @@ const ProductDetail = () => {
                   </div>
                 ))}
 
-                {/* Quantity */}
-                <div>
-                  <label className="block text-xs sm:text-sm font-medium mb-1.5 sm:mb-2">Qty</label>
-                  <div className="flex items-center gap-2 sm:gap-3">
-                    <button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="w-10 sm:w-12 text-center font-medium">{quantity}</span>
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border flex items-center justify-center hover:bg-muted bg-card"
-                    >
-                      <Plus className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
               </div>
             )}
 
-            {/* Add to Cart Button */}
-            <Button variant="cta" size="lg" className="w-full text-sm sm:text-base" onClick={handleAddToCart}>
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              Add to Cart
-              {discount && <span className="ml-2 text-xs opacity-90">{discount}% OFF</span>}
-            </Button>
+            {/* Quantity + Add to Cart - Inline like reference */}
+            <div className="flex items-stretch gap-0 rounded-lg overflow-hidden border border-[#b5a48b]">
+              {/* Quantity controls */}
+              <div className="flex items-center bg-[#b5a48b]">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-10 h-12 flex items-center justify-center text-white hover:bg-[#a08b6f] transition-colors"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="w-8 text-center font-medium text-white">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="w-10 h-12 flex items-center justify-center text-white hover:bg-[#a08b6f] transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+              {/* Add to Cart button */}
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 h-12 bg-[#b5a48b] text-white font-semibold text-sm sm:text-base uppercase tracking-wider hover:bg-[#a08b6f] transition-colors"
+              >
+                ADD TO CART
+              </button>
+            </div>
 
             {/* Shipping Info */}
             <div className="space-y-2 sm:space-y-3 p-3 sm:p-4 bg-card rounded-xl border border-border">
