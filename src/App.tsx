@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ScrollToTop from "@/components/ScrollToTop";
 import Index from "./pages/Index";
@@ -20,6 +20,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const RedirectLegacyProductUrl = () => {
+  const { handle } = useParams<{ handle?: string }>();
+  return <Navigate to={handle ? `/product/${handle}` : "/"} replace />;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -30,7 +35,16 @@ const App = () => (
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
+
+            {/* Product routes */}
             <Route path="/product/:handle" element={<ProductDetail />} />
+
+            {/* Shopify-style URLs (from admin/preview links) */}
+            <Route path="/products/:handle" element={<RedirectLegacyProductUrl />} />
+
+            {/* Shopify preview URLs sometimes copied from the admin */}
+            <Route path="/online_store_preview" element={<Navigate to="/" replace />} />
+
             <Route path="/flash-deals" element={<FlashDeals />} />
             <Route path="/clearance" element={<Clearance />} />
             <Route path="/top-sellers" element={<TopSellers />} />
