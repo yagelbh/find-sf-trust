@@ -1,9 +1,8 @@
-import { useState, useEffect } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Minus, Plus, Trash2, ShoppingCart, Check, Loader2 } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingCart, Check } from 'lucide-react';
 import { useCartStore } from '@/stores/cartStore';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -11,12 +10,14 @@ interface CartDrawerProps {
 }
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
-  const { items, isLoading, updateQuantity, removeItem, initiateCheckout, getTotalPrice } = useCartStore();
+  const navigate = useNavigate();
+  const { items, updateQuantity, removeItem, getTotalPrice } = useCartStore();
   const totalPrice = getTotalPrice();
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  const handleCheckout = async () => {
-    await initiateCheckout();
+  const handleGoToCart = () => {
+    onClose();
+    navigate('/cart');
   };
 
   return (
@@ -42,21 +43,14 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
           </div>
         </div>
 
-        {/* Checkout Button */}
+        {/* Go to Cart Button */}
         <div className="px-4 py-3 border-b border-border">
           <Button
-            onClick={handleCheckout}
-            disabled={items.length === 0 || isLoading}
+            onClick={handleGoToCart}
+            disabled={items.length === 0}
             className="w-full bg-deal hover:bg-deal/90 text-primary-foreground font-semibold py-3 rounded-full"
           >
-            {isLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              'Go to cart'
-            )}
+            Go to cart
           </Button>
         </div>
 
