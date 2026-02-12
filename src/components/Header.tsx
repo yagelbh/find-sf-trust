@@ -62,7 +62,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 <img 
                   src={findsfaeLogo} 
                   alt="Findsfae" 
-                  className="h-10 sm:h-14 lg:h-20 w-auto object-contain mix-blend-lighten"
+                  className="h-12 sm:h-16 lg:h-24 w-auto object-contain mix-blend-lighten drop-shadow-[0_0_12px_rgba(255,165,0,0.3)]"
                 />
               </Link>
             </div>
@@ -189,7 +189,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
               <img 
                 src={findsfaeLogo} 
                 alt="Findsfae" 
-                className="h-8 w-auto object-contain"
+                className="h-10 w-auto object-contain"
               />
             </SheetTitle>
           </SheetHeader>
