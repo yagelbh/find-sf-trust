@@ -45,9 +45,9 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
 
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
-      <div className="bg-secondary py-2 sm:py-3">
+      <div className="bg-secondary py-2.5 sm:py-3">
         <div className="container mx-auto px-3 sm:px-4">
-          <div className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-5">
+          <div className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-6">
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
@@ -62,7 +62,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
                 <img 
                   src={findsfaeLogo} 
                   alt="Findsfae" 
-                  className="h-12 sm:h-16 lg:h-24 w-auto object-contain mix-blend-lighten drop-shadow-[0_0_12px_rgba(255,165,0,0.3)]"
+                  className="h-10 sm:h-14 lg:h-16 w-auto object-contain"
                 />
               </Link>
             </div>
