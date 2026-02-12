@@ -1,30 +1,24 @@
-import { Truck, RefreshCw, Shield } from 'lucide-react';
+import { Truck, RotateCcw, ShieldCheck } from 'lucide-react';
 
 const TopBar = () => {
   const benefits = [
-    { icon: Truck, text: "Free shipping", shortText: "Free ship" },
-    { icon: RefreshCw, text: "Free returns", shortText: "Returns" },
-    { icon: Shield, text: "Delivery guarantee", shortText: "Guarantee" },
+    { icon: Truck, text: "Free shipping on orders $29+" },
+    { icon: RotateCcw, text: "Easy 30-day returns" },
+    { icon: ShieldCheck, text: "Secure checkout guaranteed" },
   ];
 
   return (
-    <div className="bg-secondary text-secondary-foreground overflow-hidden">
-      <div className="container mx-auto px-2 sm:px-4">
-        <div className="flex items-center justify-center py-2 sm:py-2.5">
-          <div className="flex items-center justify-center gap-2 sm:gap-6 lg:gap-12 xl:gap-16">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center gap-1 sm:gap-2.5">
-                {index > 0 && (
-                  <div className="h-6 sm:h-8 w-px bg-secondary-foreground/30 mr-1 sm:mr-0" />
-                )}
-                <benefit.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-primary flex-shrink-0" strokeWidth={2} />
-                <span className="font-bold text-secondary-foreground text-[11px] sm:text-sm lg:text-base tracking-tight whitespace-nowrap">
-                  <span className="hidden sm:inline">{benefit.text}</span>
-                  <span className="sm:hidden">{benefit.shortText}</span>
-                </span>
-              </div>
-            ))}
-          </div>
+    <div className="bg-secondary text-secondary-foreground/80 text-xs">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-center gap-6 py-2">
+          {benefits.map((b, i) => (
+            <div key={i} className="flex items-center gap-1.5">
+              {i > 0 && <span className="hidden sm:inline text-secondary-foreground/20 mr-4">|</span>}
+              <b.icon className="w-3.5 h-3.5 text-primary" strokeWidth={2.5} />
+              <span className="hidden sm:inline font-medium tracking-wide">{b.text}</span>
+              <span className="sm:hidden font-medium">{b.text.split(' ').slice(0, 2).join(' ')}</span>
+            </div>
+          ))}
         </div>
       </div>
     </div>

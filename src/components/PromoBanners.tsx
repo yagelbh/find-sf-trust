@@ -1,114 +1,32 @@
 import { Link } from 'react-router-dom';
-import { Truck, Tag, Flame, Star, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
-interface PromoBanner {
-  id: string;
-  title: string;
-  subtitle: string;
-  gradientFrom: string;
-  gradientTo: string;
-  textColor: string;
-  icon: React.ReactNode;
-  link: string;
-}
-
-const banners: PromoBanner[] = [
-  {
-    id: 'fast-delivery',
-    title: 'Fast Delivery',
-    subtitle: 'FROM $1.99',
-    gradientFrom: 'from-emerald-500',
-    gradientTo: 'to-green-600',
-    textColor: 'text-white',
-    icon: <Truck className="w-12 h-12 text-white/30 absolute bottom-4 left-4" />,
-    link: '/deals/fast-delivery',
-  },
-  {
-    id: 'price-drop',
-    title: 'PRICE DROP',
-    subtitle: 'Limited Time',
-    gradientFrom: 'from-amber-400',
-    gradientTo: 'to-orange-500',
-    textColor: 'text-white',
-    icon: <Tag className="w-12 h-12 text-white/30 absolute bottom-4 right-4" />,
-    link: '/deals/price-drop',
-  },
-  {
-    id: 'popular',
-    title: 'POPULAR',
-    subtitle: 'PRODUCTS',
-    gradientFrom: 'from-orange-500',
-    gradientTo: 'to-amber-600',
-    textColor: 'text-white',
-    icon: <Star className="w-10 h-10 text-yellow-300/50 absolute top-4 left-4" />,
-    link: '/deals/popular',
-  },
-  {
-    id: 'hot-deals',
-    title: 'HOT DEALS',
-    subtitle: 'Score Big',
-    gradientFrom: 'from-yellow-400',
-    gradientTo: 'to-amber-500',
-    textColor: 'text-rose-600',
-    icon: <Flame className="w-14 h-14 text-orange-600/30 absolute bottom-2 right-2" />,
-    link: '/deals/hot-deals',
-  },
-  {
-    id: 'crazy-discounts',
-    title: 'CRAZY',
-    subtitle: 'DISCOUNTS',
-    gradientFrom: 'from-orange-500',
-    gradientTo: 'to-red-500',
-    textColor: 'text-white',
-    icon: <Sparkles className="w-10 h-10 text-yellow-300/50 absolute top-4 right-4" />,
-    link: '/deals/crazy-discounts',
-  },
+const banners = [
+  { id: 'fast-delivery', title: 'Fast Delivery', subtitle: 'From $1.99', bg: 'bg-emerald-600', link: '/deals/fast-delivery' },
+  { id: 'price-drop', title: 'Price Drop', subtitle: 'Limited time', bg: 'bg-amber-500', link: '/deals/price-drop' },
+  { id: 'popular', title: 'Most Popular', subtitle: 'Trending now', bg: 'bg-rose-500', link: '/deals/popular' },
+  { id: 'hot-deals', title: 'Hot Deals', subtitle: 'Up to 60% off', bg: 'bg-violet-600', link: '/deals/hot-deals' },
 ];
-
-const PromoBannerCard = ({ banner }: { banner: PromoBanner }) => {
-  return (
-    <Link
-      to={banner.link}
-      className={`relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br ${banner.gradientFrom} ${banner.gradientTo} p-3 sm:p-5 h-32 sm:h-48 flex flex-col justify-end group hover:scale-[1.02] hover:shadow-xl transition-all duration-300 block`}
-    >
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-        <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-black/10 rounded-full blur-xl" />
-        <div className="absolute top-3 right-8 w-2 h-2 bg-yellow-300/60 rounded-full" />
-        <div className="absolute top-10 right-4 w-1.5 h-1.5 bg-white/40 rounded-full" />
-        <div className="absolute bottom-12 right-12 w-1 h-1 bg-white/50 rounded-full" />
-      </div>
-
-      {/* Icon - hide on mobile */}
-      <div className="hidden sm:block">{banner.icon}</div>
-
-      {/* Content */}
-      <div className="relative z-10">
-        <h3 className={`text-lg sm:text-2xl md:text-3xl font-black ${banner.textColor} leading-none tracking-tight`}>
-          {banner.title}
-        </h3>
-        {banner.subtitle && (
-          <p className={`text-sm sm:text-xl md:text-2xl font-black ${banner.textColor} leading-tight tracking-tight`}>
-            {banner.subtitle}
-          </p>
-        )}
-
-        <span className="mt-2 sm:mt-3 bg-gray-900 text-white text-[10px] sm:text-sm font-bold px-3 sm:px-5 py-1 sm:py-2 rounded-full inline-flex items-center gap-1 group-hover:gap-2">
-          SHOP NOW
-          <span className="transition-transform group-hover:translate-x-1">▶</span>
-        </span>
-      </div>
-    </Link>
-  );
-};
 
 const PromoBanners = () => {
   return (
-    <section className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 overflow-hidden">
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
-        {banners.map((banner) => (
-          <PromoBannerCard key={banner.id} banner={banner} />
+    <section className="container mx-auto px-4 py-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {banners.map((b) => (
+          <Link
+            key={b.id}
+            to={b.link}
+            className={`${b.bg} rounded-xl p-5 sm:p-6 text-white group hover:scale-[1.02] transition-transform relative overflow-hidden`}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+            <div className="relative z-10">
+              <p className="text-white/70 text-xs font-medium font-body uppercase tracking-wider">{b.subtitle}</p>
+              <h3 className="text-xl sm:text-2xl font-bold mt-1">{b.title}</h3>
+              <span className="inline-flex items-center gap-1 mt-3 text-xs font-semibold bg-black/20 px-3 py-1.5 rounded-full font-body group-hover:bg-black/30 transition-colors">
+                Shop now <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </span>
+            </div>
+          </Link>
         ))}
       </div>
     </section>

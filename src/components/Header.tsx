@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, User, Heart, ShoppingCart, ChevronDown, Menu, X, Home, Flame, Tag, Grid3X3, ThumbsUp, PartyPopper, Scissors } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, Menu, X, Home, Flame, Tag, Grid3X3 } from 'lucide-react';
 import findsfaeLogo from '@/assets/findsfae-logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore } from '@/stores/cartStore';
@@ -21,9 +21,7 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -36,136 +34,59 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
     }
   };
 
-  const mobileNavLinks = [
-    { to: '/', label: 'Home', icon: Home, emoji: null },
-    { to: '/top-sellers', label: 'Best Sellers', icon: Flame, emoji: '🔥' },
-    { to: '/flash-deals', label: '2026 Deals', icon: Tag, emoji: '🎊' },
-    { to: '/clearance', label: 'Clearance', icon: Tag, emoji: '✂️' },
+  const navLinks = [
+    { to: '/top-sellers', label: 'Best Sellers' },
+    { to: '/flash-deals', label: 'New Deals' },
+    { to: '/clearance', label: 'Clearance' },
   ];
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
-      <div className="bg-secondary py-2.5 sm:py-3">
-        <div className="container mx-auto px-3 sm:px-4">
-          <div className="flex items-center justify-between gap-2 sm:gap-4 lg:gap-6">
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="lg:hidden p-1.5 sm:p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors flex-shrink-0"
-            >
-              <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-secondary-foreground" />
+    <header className={`sticky top-0 z-50 transition-shadow duration-300 ${isScrolled ? 'shadow-lg' : ''}`}>
+      {/* Main Header */}
+      <div className="bg-secondary">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center gap-4 lg:gap-6 h-16 lg:h-[72px]">
+            {/* Mobile menu */}
+            <button onClick={() => setIsMobileMenuOpen(true)} className="lg:hidden text-secondary-foreground/80 hover:text-secondary-foreground">
+              <Menu className="w-6 h-6" />
             </button>
 
-            {/* Logo - Blend into header background */}
-            <div className="flex-shrink-0">
-              <Link to="/" className="flex items-center">
-                <img 
-                  src={findsfaeLogo} 
-                  alt="Findsfae" 
-                  className="h-10 sm:h-14 lg:h-16 w-auto object-contain"
-                />
-              </Link>
-            </div>
+            {/* Logo */}
+            <Link to="/" className="flex-shrink-0">
+              <img src={findsfaeLogo} alt="Findsfae" className="h-10 sm:h-12 lg:h-14 w-auto object-contain" />
+            </Link>
 
-            {/* Navigation Links - With hover/active states */}
-            <nav className="hidden lg:flex items-center gap-4 relative">
-              <Link 
-                to="/top-sellers"
-                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group flex items-center gap-1.5"
-              >
-                <span className="w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-sm">
-                  <ThumbsUp className="w-3 h-3 text-white fill-white" />
-                </span>
-                Best Sellers
-                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
-              </Link>
-              <Link 
-                to="/flash-deals"
-                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group flex items-center gap-1.5"
-              >
-                <span className="w-5 h-5 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-sm">
-                  <PartyPopper className="w-3 h-3 text-white" />
-                </span>
-                2026 Deals
-                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
-              </Link>
-              <Link 
-                to="/clearance"
-                className="text-sm font-medium text-secondary-foreground/90 hover:text-secondary-foreground hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.2)] transition-all whitespace-nowrap relative group flex items-center gap-1.5"
-              >
-                <span className="w-5 h-5 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-sm">
-                  <Scissors className="w-3 h-3 text-white" />
-                </span>
-                Clearance
-                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-full"></span>
-              </Link>
-              <button 
-                className={`text-sm font-semibold transition-all flex items-center gap-1 whitespace-nowrap relative ${
-                  isCategoryMenuOpen 
-                    ? 'text-secondary-foreground drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]' 
-                    : 'text-secondary-foreground/90 hover:text-secondary-foreground'
-                }`}
-                onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
-              >
-                <span className="relative">
-                  Categories
-                  <span className={`absolute -bottom-0.5 left-0 h-0.5 bg-primary rounded-full transition-all ${
-                    isCategoryMenuOpen ? 'w-full' : 'w-0'
-                  }`}></span>
-                </span>
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isCategoryMenuOpen ? 'rotate-180' : ''}`} />
-              </button>
-            </nav>
-
-            {/* Search - Hero element with enhanced button */}
-            <form onSubmit={handleSearch} className="hidden sm:block flex-1 max-w-xl lg:max-w-2xl">
-              <div className="relative">
+            {/* Search */}
+            <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-2xl">
+              <div className="relative w-full">
                 <input
                   type="text"
-                  placeholder="Search millions of products..."
+                  placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-11 pl-5 pr-14 rounded-full border-2 border-transparent bg-card text-foreground placeholder:text-muted-foreground/70 focus:border-primary focus:bg-card outline-none transition-all text-[15px] shadow-sm"
+                  className="w-full h-10 lg:h-11 pl-4 pr-12 rounded-lg bg-secondary-foreground/10 text-secondary-foreground placeholder:text-secondary-foreground/40 border border-secondary-foreground/10 focus:border-primary focus:bg-secondary-foreground/15 outline-none transition-all text-sm"
                 />
-                <button 
-                  type="submit"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors shadow-md border border-primary/80"
-                >
+                <button type="submit" className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-9 rounded-md bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors">
                   <Search className="w-4 h-4" />
                 </button>
               </div>
             </form>
 
-            {/* Actions - Clear hierarchy: Cart > Account > Wishlist */}
-            <div className="flex items-center gap-0 sm:gap-1 flex-shrink-0">
-              {/* Sign in / Register - Bolder, clearer */}
-              <button
-                onClick={onAuthClick}
-                className="hidden sm:flex items-center gap-2 px-3 py-2 text-secondary-foreground hover:bg-secondary-foreground/15 rounded-lg transition-colors group"
-              >
+            {/* Actions */}
+            <div className="flex items-center gap-1 ml-auto">
+              <button onClick={onAuthClick} className="hidden md:flex items-center gap-2 px-3 py-2 text-secondary-foreground/80 hover:text-secondary-foreground rounded-lg transition-colors">
                 <User className="w-5 h-5" />
-                <div className="hidden md:flex flex-col items-start leading-tight">
-                  <span className="text-xs font-semibold group-hover:text-primary transition-colors">Sign in / Register</span>
-                  <span className="text-[10px] text-secondary-foreground/70">Orders & Account</span>
-                </div>
+                <span className="text-sm font-medium">Account</span>
               </button>
 
-              {/* Wishlist - Lower emphasis */}
-              <Link 
-                to="/wishlist"
-                className="relative flex items-center p-1.5 sm:p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
-              >
-                <Heart className="w-4 h-4 text-secondary-foreground/40 stroke-[1.5]" />
+              <Link to="/wishlist" className="relative p-2 text-secondary-foreground/60 hover:text-secondary-foreground transition-colors">
+                <Heart className="w-5 h-5" />
               </Link>
 
-              {/* Cart - Primary action, larger & prominent */}
-              <Link 
-                to="/cart"
-                className="relative flex items-center p-1.5 sm:p-2 hover:bg-secondary-foreground/10 rounded-lg transition-colors"
-              >
-                <ShoppingCart className="w-5 h-5 sm:w-6 sm:h-6 text-secondary-foreground" />
+              <Link to="/cart" className="relative p-2 text-secondary-foreground hover:text-primary transition-colors">
+                <ShoppingCart className="w-5 h-5" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-0.5 right-0 min-w-[16px] h-[16px] sm:min-w-[18px] sm:h-[18px] px-1 bg-primary text-primary-foreground text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
                     {totalItems}
                   </span>
                 )}
@@ -175,84 +96,81 @@ const Header = ({ onAuthClick, onCountryClick, currentCountry }: HeaderProps) =>
         </div>
       </div>
 
-      {/* Category Mega Menu */}
-      <CategoryMegaMenu 
-        isOpen={isCategoryMenuOpen} 
-        onClose={() => setIsCategoryMenuOpen(false)} 
-      />
+      {/* Navigation Bar */}
+      <div className="bg-secondary border-t border-secondary-foreground/10">
+        <div className="container mx-auto px-4">
+          <nav className="hidden lg:flex items-center gap-1 h-10">
+            <button
+              className={`px-3 py-1.5 text-sm font-semibold rounded-md transition-colors font-body ${isCategoryMenuOpen ? 'bg-primary text-primary-foreground' : 'text-secondary-foreground/90 hover:bg-secondary-foreground/10'}`}
+              onClick={() => setIsCategoryMenuOpen(!isCategoryMenuOpen)}
+            >
+              <Grid3X3 className="w-4 h-4 inline mr-1.5 -mt-0.5" />
+              All Categories
+            </button>
 
-      {/* Mobile Menu Sheet */}
-      <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-        <SheetContent side="left" className="w-[300px] p-0">
-          <SheetHeader className="p-4 border-b border-border">
-            <SheetTitle className="text-left">
-              <img 
-                src={findsfaeLogo} 
-                alt="Findsfae" 
-                className="h-10 w-auto object-contain"
+            <span className="w-px h-5 bg-secondary-foreground/15 mx-1" />
+
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="px-3 py-1.5 text-sm font-medium text-secondary-foreground/80 hover:text-secondary-foreground hover:bg-secondary-foreground/10 rounded-md transition-colors font-body"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Mobile search */}
+          <form onSubmit={handleSearch} className="sm:hidden py-2">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-9 pl-4 pr-10 rounded-lg bg-secondary-foreground/10 text-secondary-foreground placeholder:text-secondary-foreground/40 border border-secondary-foreground/10 focus:border-primary outline-none text-sm"
               />
-            </SheetTitle>
-          </SheetHeader>
-
-          <div className="flex flex-col h-full">
-            {/* Mobile Search */}
-            <form onSubmit={handleSearch} className="p-4 border-b border-border">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-10 pl-4 pr-12 rounded-full border-2 border-border bg-card focus:border-primary outline-none transition-all text-sm"
-                />
-                <button 
-                  type="submit"
-                  className="absolute right-1 top-1 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center"
-                >
-                  <Search className="w-4 h-4" />
-                </button>
-              </div>
-            </form>
-
-            {/* Navigation Links */}
-            <nav className="flex-1 p-4 space-y-1">
-              {mobileNavLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors text-foreground font-medium"
-                >
-                  <link.icon className="w-5 h-5 text-muted-foreground" />
-                  {link.label}
-                </Link>
-              ))}
-              
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  setIsCategoryMenuOpen(true);
-                }}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors text-foreground font-medium w-full"
-              >
-                <Grid3X3 className="w-5 h-5 text-muted-foreground" />
-                All Categories
-              </button>
-            </nav>
-
-            {/* Account Section */}
-            <div className="p-4 border-t border-border">
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  onAuthClick();
-                }}
-                className="flex items-center gap-3 w-full px-4 py-3 rounded-lg bg-primary text-primary-foreground font-semibold"
-              >
-                <User className="w-5 h-5" />
-                Sign in / Register
+              <button type="submit" className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-8 rounded bg-primary text-primary-foreground flex items-center justify-center">
+                <Search className="w-3.5 h-3.5" />
               </button>
             </div>
+          </form>
+        </div>
+      </div>
+
+      <CategoryMegaMenu isOpen={isCategoryMenuOpen} onClose={() => setIsCategoryMenuOpen(false)} />
+
+      {/* Mobile Menu */}
+      <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+        <SheetContent side="left" className="w-[280px] p-0">
+          <SheetHeader className="p-4 border-b">
+            <SheetTitle className="text-left">
+              <img src={findsfaeLogo} alt="Findsfae" className="h-9 w-auto object-contain" />
+            </SheetTitle>
+          </SheetHeader>
+          <nav className="p-3 space-y-0.5">
+            {[
+              { to: '/', label: 'Home', icon: Home },
+              { to: '/top-sellers', label: 'Best Sellers', icon: Flame },
+              { to: '/flash-deals', label: 'New Deals', icon: Tag },
+              { to: '/clearance', label: 'Clearance', icon: Tag },
+            ].map((link) => (
+              <Link key={link.to} to={link.to} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors text-sm font-medium">
+                <link.icon className="w-4 h-4 text-muted-foreground" />
+                {link.label}
+              </Link>
+            ))}
+            <button onClick={() => { setIsMobileMenuOpen(false); setIsCategoryMenuOpen(true); }} className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-muted transition-colors text-sm font-medium w-full">
+              <Grid3X3 className="w-4 h-4 text-muted-foreground" />
+              All Categories
+            </button>
+          </nav>
+          <div className="p-3 mt-auto border-t">
+            <button onClick={() => { setIsMobileMenuOpen(false); onAuthClick(); }} className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm">
+              <User className="w-4 h-4" />
+              Sign in / Register
+            </button>
           </div>
         </SheetContent>
       </Sheet>
